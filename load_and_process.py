@@ -5,8 +5,9 @@ import numpy as np
 # import scipy
 
 # 362 total patients with DX1 = penile fracture
-TOTAL_FRACTURES = 399
-TOTAL_MALE_PATIENTS =  31091020  # total patients
+TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
+TOTAL_MALE_PATIENTS =  13797122    
+# TOTAL_ALL_PATIENTS = 31091020  # total patients
 
 def load_and_format():
     # if os.path.isfile('NEDS_2012_CORE_Control.csv') and os.path.isfile('NEDS_2012_CORE_Patients.csv'):
@@ -37,6 +38,7 @@ def load_and_format():
                     elif line[isfemale_index] == '0':
                         control_writer.writerow(line)
                         total_patients += 1
+    print num_patients
     print total_patients
     return data_type
 
@@ -46,7 +48,7 @@ def make_surrogate_data(num_samples):
         get_and_save_control_rows(control_indices,i)
 
     def get_and_save_control_rows(indices,i):
-        with open('control_patients_{0}.csv'.format(str(i)),'w') as outputfile:
+        with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
             outputwriter = csv.writer(outputfile)
             with open('NEDS_2012_CORE_Control.csv','r') as control_file:
                 control_reader = csv.reader(control_file)
@@ -55,7 +57,7 @@ def make_surrogate_data(num_samples):
                     if line_number in indices:
                         outputwriter.writerow(line)
                     line_number += 1
-        print("done with surrogate number {0}".format(str(i)))
+        print "done with surrogate number {0}".format(str(i))
 
 def get_data_type():
     data_labels = {}
@@ -69,9 +71,8 @@ def get_data_type():
     return data_type
 
 def main():
-    load_and_format()
-    # make_surrogate_data(1000)
-    # bootstrap(sdkjf,1000)
+    # load_and_format()
+    make_surrogate_data(1000)
 
 if __name__ == '__main__':
     main()
