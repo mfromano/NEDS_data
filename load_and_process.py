@@ -1,7 +1,7 @@
 import os
 import csv
 import numpy as np
-import scipy
+# import scipy
 
 # 362 total patients with DX1 = penile fracture
 TOTAL_FRACTURES = 399
@@ -42,6 +42,23 @@ def load_and_format():
                         control_writer.writerow(line)
                         total_patients += 1
     return data_type
+
+def make_surrogate_data():
+    for i in range(len(num_samples)):
+        control_indices = np.random.randint(0,TOTAL_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
+        control_column = get_control_column(control_indices)
+        control_statistic.append(statistic(control_column))
+
+    def get_control_column(indices):
+        column = []
+        with open('NEDS_2012_CORE_Control.csv','r') as control_file:
+            control_reader = csv.reader(control_file)
+            line_number = 0
+            for line in control_reader:
+                if line_number in indices:
+                    column.append(line[col_number])
+                line_number += 1
+        return column
 
 def bootstrap(col_number,num_samples, statistic):
 
