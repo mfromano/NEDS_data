@@ -22,7 +22,7 @@ def load_and_format():
     DX15_index = int(data_type.index('DX15'))
     isfemale_index = int(data_type.index('FEMALE'))
     penile_fracture_code = '95913'
-    
+
     with open('NEDS_2012_CORE_Control.csv','w') as control_file:
         control_writer = csv.writer(control_file,delimiter=',')
         with open('NEDS_2012_CORE_Patients.csv','w') as patient_file:
@@ -34,11 +34,11 @@ def load_and_format():
                 total_men = 0
                 for line in csv_reader:
                     if penile_fracture_code in line[np.arange(DX1_index,DX15_index)]:
-                        if line[isfemale_index] == 0
+                        if line[isfemale_index] == 0:
                             num_patients += 1
                             filewriter.writerow(line)
                             total_patients += 1
-                    else if line[isfemale_index] == 0:
+                    elif line[isfemale_index] == 0:
                         control_writer.writerow(line)
                         total_patients += 1
     return data_type
@@ -78,7 +78,7 @@ def bootstrap(col_number,num_samples, statistic):
 
 def main():
     data_type = load_and_format()
-    bootstrap(sdkjf,1000)
+    # bootstrap(sdkjf,1000)
 
 if __name__ == '__main__':
     main()
