@@ -43,7 +43,7 @@ def load_and_format():
     return data_type
 
 def make_surrogate_data(start,finish):
-    samples = np.array(start,finish)
+    samples = np.arange(start,finish)
     def get_and_save_control_rows(indices,i):
             with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
                 outputwriter = csv.writer(outputfile)
