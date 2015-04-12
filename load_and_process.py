@@ -9,7 +9,7 @@ TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entri
 TOTAL_MALE_PATIENTS =  13797122    
 # TOTAL_ALL_PATIENTS = 31091020  # total patients
 
-def load_and_format(start, finish):
+def load_and_format():
     # if os.path.isfile('NEDS_2012_CORE_Control.csv') and os.path.isfile('NEDS_2012_CORE_Patients.csv'):
     #     return
     data_type = get_data_type()
@@ -41,8 +41,9 @@ def load_and_format(start, finish):
     print num_patients
     print total_patients
     return data_type
+
+def make_surrogate_data(start,finish):
     samples = np.array(start,finish)
-def make_surrogate_data(indices):
     def get_and_save_control_rows(indices,i):
             with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
                 outputwriter = csv.writer(outputfile)
@@ -52,6 +53,7 @@ def make_surrogate_data(indices):
                     for line in control_reader:
                         if line_number in indices:
                             outputwriter.writerow(line)
+
                         elif line_number > max(indices):
                             return
                         line_number += 1
@@ -74,7 +76,7 @@ def get_data_type():
 
 def main():
     # load_and_format()
-    make_surrogate_data(56,999)
+    make_surrogate_data(55,999)
 
 if __name__ == '__main__':
     main()
