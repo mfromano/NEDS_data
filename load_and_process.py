@@ -43,20 +43,23 @@ def load_and_format():
     return data_type
 
 def make_surrogate_data(num_samples):
+
+    def get_and_save_control_rows(indices,i):
+            with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
+                outputwriter = csv.writer(outputfile)
+                with open('NEDS_2012_CORE_Control.csv','r') as control_file:
+                    control_reader = csv.reader(control_file)
+                    line_number = 0
+                    for line in control_reader:
+                        if line_number in indices:
+                            outputwriter.writerow(line)
+                        line_number += 1
+
     for i in range(num_samples):
         control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
         get_and_save_control_rows(control_indices,i)
 
-    def get_and_save_control_rows(indices,i):
-        with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
-            outputwriter = csv.writer(outputfile)
-            with open('NEDS_2012_CORE_Control.csv','r') as control_file:
-                control_reader = csv.reader(control_file)
-                line_number = 0
-                for line in control_reader:
-                    if line_number in indices:
-                        outputwriter.writerow(line)
-                    line_number += 1
+    
         print "done with surrogate number {0}".format(str(i))
 
 def get_data_type():
