@@ -37,6 +37,7 @@ def load_and_format():
                     elif line[isfemale_index] == 0:
                         control_writer.writerow(line)
                         total_patients += 1
+    print total_patients
     return data_type
 
 def make_surrogate_data(num_samples):
