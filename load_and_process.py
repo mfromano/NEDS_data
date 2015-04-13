@@ -1,7 +1,12 @@
+from __future__ import print_function
+from __future__ import division
+
 import os
 import os.path
+import sys
 import csv
 import numpy as np
+import logging
 # import scipy
 
 # 362 total patients with DX1 = penile fracture
@@ -38,8 +43,8 @@ def load_and_format():
                     elif line[isfemale_index] == '0':
                         control_writer.writerow(line)
                         total_patients += 1
-    print num_patients
-    print total_patients
+    print(num_patients)
+    print(total_patients)
     return data_type
 
 def make_surrogate_data(start,finish):
@@ -54,14 +59,14 @@ def make_surrogate_data(start,finish):
                         if line_number in indices:
                             outputwriter.writerow(line)
 
-                        elif line_number > max(indices):
-                            return
                         line_number += 1
 
     for i in samples:
         control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
+
         get_and_save_control_rows(control_indices,i)
-        print "done with surrogate number {0}".format(str(i))
+        print("done with surrogate number {0}".format(str(i)))
+
 
 def get_data_type():
     data_labels = {}
@@ -76,7 +81,7 @@ def get_data_type():
 
 def main():
     # load_and_format()
-    make_surrogate_data(55,999)
+    make_surrogate_data(0,1000)
 
 if __name__ == '__main__':
     main()
