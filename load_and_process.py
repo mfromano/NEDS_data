@@ -63,10 +63,8 @@ def make_surrogate_data(start,finish):
 
     for i in samples:
         control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
-
         get_and_save_control_rows(control_indices,i)
         print("done with surrogate number {0}".format(str(i)))
-
 
 def get_data_type():
     data_labels = {}
@@ -79,9 +77,24 @@ def get_data_type():
             data_type.append(currline[0])
     return data_type
 
+def average_age(filename):
+    data_type = get_data_type()
+    age_index = int(data_type.index('AGE'))
+    total_age = 0
+    num_patients = 0
+    with open(filename,'r') as currfile:
+        reader = csv.reader(currfile)
+        for row in reader:
+            num_patients+=1
+            total_age+=int(row[age_index])
+    return total_age/num_patients
+
+
+
 def main():
     # load_and_format()
-    make_surrogate_data(0,1000)
+    # make_surrogate_data(0,1000)
+    print(average_age('NEDS_2012_CORE_Patients.csv'))
 
 if __name__ == '__main__':
     main()
