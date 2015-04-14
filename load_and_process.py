@@ -94,13 +94,13 @@ def get_ed_supplement_from_core(filename):
         for entry in reader:
             if entry[key_index_supplement] in key_list:
                 entry_list[key_list.index(entry[key_index_supplement])] = entry
-
+    print(entry_list)
     outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
     with open(outputfile,'w') as output:
         writer = csv.writer(output)
         for item in entry_list:
             writer.writerow(item)
-
+    sys.exit(0)
     return outputfile
 
 def make_surrogate_data(start,finish):
@@ -329,12 +329,12 @@ def total_payer2(filename,code):
     return total_patients
 
 def main():
+
     start, finish = int(sys.argv[1]), int(sys.argv[2])
-    print(str(start) + ' ' + str(finish))
-    # load_and_format()
-    convert_surrogate_to_core(start, finish)
-    # get_bootstrap_statistic(total_payer1,1)
-    # make_surrogate_data(644,700)
+    make_surrogate_data(start,finish)
+    # print(str(start) + ' ' + str(finish))
+    # convert_surrogate_to_core(start, finish)
+    # print(get_bootstrap_statistic(total_payer1,1))
 
 
 if __name__ == '__main__':
