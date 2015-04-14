@@ -1,1 +1,0 @@
-dat = read.csv('NEDS_2012_CORE.csv', header=FALSE)
