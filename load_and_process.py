@@ -94,7 +94,6 @@ def get_ed_supplement_from_core(filename):
         for entry in reader:
             if entry[key_index_supplement] in key_list:
                 entry_list[key_list.index(entry[key_index_supplement])] = entry
-                sys.exit(0)
 
     outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
     with open(outputfile,'w') as output:
