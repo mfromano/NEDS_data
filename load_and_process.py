@@ -15,6 +15,15 @@ TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entri
 TOTAL_MALE_PATIENTS =  13797122    
 # TOTAL_ALL_PATIENTS = 31091020  # total patients
 
+'''
+The next function separates the patient file into male patients with corpus
+collosum fractures and male patients without these fractures. USE CAUTION:
+this classifies a patient as having a corpus collosum fracture is any of his
+DX values qualify. Also, oddly, it appears as though 9 non-male patients
+have collosal fractures.....
+
+'''
+
 def load_and_format():
     if os.path.isfile('NEDS_2012_CORE_Control.csv') and os.path.isfile('NEDS_2012_CORE_Patients.csv'):
         return
@@ -51,7 +60,6 @@ def load_and_format():
 ''' The next function generates surrogate data.
     TODO: make sure no missing vals
 '''
-
 def make_surrogate_data(start,finish):
     samples = np.arange(start,finish)
     def get_and_save_control_rows(indices,i):
@@ -88,12 +96,11 @@ def make_surrogate_replacement(num):
                     line_number += 1
     control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
     get_and_save_control_rows(control_indices,num)
-
+    return 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(num),str(TOTAL_FRACTURES))
 
 ''' The next function returns a list containing the data types for each column
     of the NEDS Core data file
 '''
-
 def get_data_type():
     data_labels = {}
     data_type = []
@@ -109,17 +116,28 @@ def get_data_type():
 ''' The next series of functions require input of a filename to load and some code
     They return the respective test statistic. Code significance is commented above each. 
 '''
-
 def get_bootstrap_statistic(stat_func, code):
     test_stat = stat_func('NEDS_2012_CORE_Patients.csv', code)
     random_stat = []
 
     for i in range(1000):
-        file_name = 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
-        random_stat.append(stat_func(file_name,code))
+        try:
+            file_name = 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
+            random_stat.append(stat_func(file_name,code))
+        except:
+            try:
+                print('Trying to generate a replacement file for iteration i= {0}'.format(str(i),) )
+                file_name = make_surrogate_replacement(i)
+                random_stat.append(stat_func(file_name,code))
+            except:
+                return None
 
     return percentile(random_stat,test_stat)
 
+'''
+Takes a list of statistics from random samples with replacement and a test
+statistic. Returns the percentile of the test statistic
+'''
 def percentile(list, value):
     num_below = 0
     for item in list.sort():
