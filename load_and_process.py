@@ -337,7 +337,7 @@ def main():
 
 
 if __name__ == '__main__':
-    cd = os.path.currdir
+    cd = os.getcwd()
     os.chdir(os.path.pardir)
     main()
     os.chdir(cd)
