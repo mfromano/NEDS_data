@@ -60,6 +60,39 @@ def load_and_format():
 ''' The next function generates surrogate data.
     TODO: make sure no missing vals
 '''
+
+''' This takes as input the name of a core data file and generates a list of
+    supplement entries that correspond to the entries in the core data file
+'''
+def get_ed_supplement_from_core(filename):
+    
+    data_type = get_data_type()
+    data_type_supplement = get_data_type_ed_supplement()
+    
+    key_index = int(data_type.index('KEY_ED'))
+    key_list = []
+    with open(filename) as currentfile:
+        reader = csv.reader(currentfile)
+        for entry in reader:
+            key_list.append(entry[key_index])
+
+    key_index_supplement = int(data_type_supplement.index('KEY_ED'))
+
+    entry_list = [None]*int(filename[len(filename)-7:len(filename)-4])
+
+    with open('NEDS_2012_CORE.csv','r') as data_file:
+        reader = csv.reader(data_file)
+        for entry in reader:
+            if entry[key_index_supplement] in key_list:
+                entry_list[key_list.index(entry[key_index_supplement])] = entry
+
+    outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
+    with open(outputfile,'w') as output:
+        writer = csv.writer(output)
+        writer.writerows(entry_list)
+
+    return outputfile
+
 def make_surrogate_data(start,finish):
     samples = np.arange(start,finish)
     def get_and_save_control_rows(indices,i):
@@ -79,6 +112,10 @@ def make_surrogate_data(start,finish):
         get_and_save_control_rows(control_indices,i)
         print("done with surrogate number {0}".format(str(i)))
 
+def convert_surrogate_to_core():
+    for i in range(1000):
+        filename = 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)) 
+        get_ed_supplement_from_core(filename)
 
 '''
 If a surrogate file is messed up, use this one. THIS IS UNTESTED. TODO: test
@@ -112,6 +149,17 @@ def get_data_type():
             data_type.append(currline[0])
     return data_type
 
+''' The next function returns a list containing the data types for each column
+    of the NEDS ED Supplement data file
+'''
+def get_data_type_ed_supplement():
+    data_type = []
+    with open('NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
+        for f in read_file:
+            currline = f.split('\"')[:2]
+            currline[0] = currline[0].strip()
+            data_type.append(currline[0])
+    return data_type
 
 ''' The next series of functions require input of a filename to load and some code
     They return the respective test statistic. Code significance is commented above each. 
@@ -280,8 +328,8 @@ def total_payer2(filename,code):
 
 
 def main():
-    load_and_format()
-    # make_surrogate_data(0,1000)
+    # load_and_format()
+    convert_surrogate_to_core()
     get_bootstrap_statistic(total_payer1,1)
 
 
