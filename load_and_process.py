@@ -7,7 +7,7 @@ import sys
 import csv
 import numpy as np
 import logging
-from scipy import stats
+# from scipy import stats
 # import scipy
 
 # 362 total patients with DX1 = penile fracture
@@ -108,8 +108,9 @@ def make_surrogate_data(start,finish):
         make_surrogate_replacement(i)
         print("done with surrogate number {0}".format(str(i)))
 
-def convert_surrogate_to_core():
-    for i in range(1000):
+def convert_surrogate_to_core(start,finish):
+    samples = np.arange(start,finish)
+    for i in samples:
         filename = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)) 
         get_ed_supplement_from_core(filename)
 
@@ -186,12 +187,12 @@ def get_bootstrap_statistic(stat_func, code):
 Takes a list of statistics from random samples with replacement and a test
 statistic. Returns the percentile of the test statistic
 '''
-def percentile(list, value):
+def percentile(sample_list, value):
     num_below = 0
-    for item in list.sort():
-        if item < value:
+    for sample in sample_list.sort():
+        if sample < value:
             num_below += 1
-    return float(num_below)/float(len(list))
+    return float(num_below)/float(len(sample_list))
 
 '''
 Hopefully self explanatory...gets the average age from a file
@@ -327,9 +328,10 @@ def total_payer2(filename,code):
     return total_patients
 
 def main():
-    load_and_format()
-    # convert_surrogate_to_core()
-    # make_surrogate_replacement(202)
+    start, finish = int(sys.argv[1]), int(sys.argv[2])
+    print(str(start) + ' ' + str(finish))
+    # load_and_format()
+    convert_surrogate_to_core(start, finish)
     # get_bootstrap_statistic(total_payer1,1)
     # make_surrogate_data(644,700)
 
