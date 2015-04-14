@@ -25,24 +25,31 @@ have collosal fractures.....
 '''
 
 def load_and_format():
-    if os.path.isfile('NEDS_2012_CORE_Control.csv') and os.path.isfile('NEDS_2012_CORE_Patients.csv'):
-        return
+    # Next line gets the type of data for each entry in the core file
     data_type = get_data_type()
 
+    # The next few lines get the indices for the specific entries
     injury_index = int(data_type.index('INJURY'))
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
     isfemale_index = int(data_type.index('FEMALE'))
     penile_fracture_code = '95913'
 
+    # open the Core Control file. We will write to this all of the patient
+    # records that do not contain a broken penis DX*
     with open('NEDS_2012_CORE_Control.csv','w') as control_file:
         control_writer = csv.writer(control_file,delimiter=',')
+        # open the Core Patient file. We will write to this all of the patient
+        # records that do contain a broken penis DX
         with open('NEDS_2012_CORE_Patients.csv','w') as patient_file:
             filewriter = csv.writer(patient_file,delimiter=',')
             with open('NEDS_2012_CORE.csv','r') as data_file:
                 csv_reader = csv.reader(data_file)
+                # num_patients stores the number of patients with a broken penis
                 num_patients = 0
+                # total_patients stores total male patients
                 total_patients = 0
+                # 
                 for line in csv_reader:
                     if penile_fracture_code in line[DX1_index:DX15_index]:
                         if line[isfemale_index] == '0':
@@ -50,6 +57,8 @@ def load_and_format():
                             filewriter.writerow(line)
 
                             total_patients += 1
+                        else:
+                            print('non-male patient!')
                     elif line[isfemale_index] == '0':
                         control_writer.writerow(line)
                         total_patients += 1
@@ -68,7 +77,7 @@ def get_ed_supplement_from_core(filename):
     
     data_type = get_data_type()
     data_type_supplement = get_data_type_ed_supplement()
-    
+
     key_index = int(data_type.index('KEY_ED'))
     key_list = []
     with open(filename) as currentfile:
@@ -95,26 +104,13 @@ def get_ed_supplement_from_core(filename):
 
 def make_surrogate_data(start,finish):
     samples = np.arange(start,finish)
-    def get_and_save_control_rows(indices,i):
-            with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
-                outputwriter = csv.writer(outputfile)
-                with open('NEDS_2012_CORE_Control.csv','r') as control_file:
-                    control_reader = csv.reader(control_file)
-                    line_number = 0
-                    for line in control_reader:
-                        if line_number in indices:
-                            outputwriter.writerow(line)
-
-                        line_number += 1
-
     for i in samples:
-        control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
-        get_and_save_control_rows(control_indices,i)
+        make_surrogate_replacement(i)
         print("done with surrogate number {0}".format(str(i)))
 
 def convert_surrogate_to_core():
     for i in range(1000):
-        filename = 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)) 
+        filename = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)) 
         get_ed_supplement_from_core(filename)
 
 '''
@@ -122,7 +118,7 @@ If a surrogate file is messed up, use this one. THIS IS UNTESTED. TODO: test
 '''
 def make_surrogate_replacement(num):
     def get_and_save_control_rows(indices,i):
-        with open('control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
+        with open('control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
             outputwriter = csv.writer(outputfile)
             with open('NEDS_2012_CORE_Control.csv','r') as control_file:
                 control_reader = csv.reader(control_file)
@@ -133,7 +129,7 @@ def make_surrogate_replacement(num):
                     line_number += 1
     control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
     get_and_save_control_rows(control_indices,num)
-    return 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(num),str(TOTAL_FRACTURES))
+    return 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(num),str(TOTAL_FRACTURES))
 
 ''' The next function returns a list containing the data types for each column
     of the NEDS Core data file
@@ -170,15 +166,19 @@ def get_bootstrap_statistic(stat_func, code):
 
     for i in range(1000):
         try:
-            file_name = 'control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
+            file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
             random_stat.append(stat_func(file_name,code))
         except:
+            print('Couldnt load file!')
             try:
                 print('Trying to generate a replacement file for iteration i= {0}'.format(str(i),) )
                 file_name = make_surrogate_replacement(i)
                 random_stat.append(stat_func(file_name,code))
             except:
+                print('Couldn\'t generate replacement')
                 return None
+        print('Done with {0}'.format(str(i),))
+
 
     return percentile(random_stat,test_stat)
 
@@ -326,11 +326,12 @@ def total_payer2(filename,code):
     print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients
 
-
 def main():
-    # load_and_format()
-    convert_surrogate_to_core()
-    get_bootstrap_statistic(total_payer1,1)
+    load_and_format()
+    # convert_surrogate_to_core()
+    # make_surrogate_replacement(202)
+    # get_bootstrap_statistic(total_payer1,1)
+    # make_surrogate_data(644,700)
 
 
 if __name__ == '__main__':
