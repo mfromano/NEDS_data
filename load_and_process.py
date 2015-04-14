@@ -9,8 +9,7 @@ import numpy as np
 import logging
 # from scipy import stats
 # import scipy
-cd = os.path.currdir
-os.chdir(os.path.pardir)
+
 # 362 total patients with DX1 = penile fracture
 TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
 TOTAL_MALE_PATIENTS =  13797122    
@@ -335,8 +334,10 @@ def main():
     convert_surrogate_to_core(start, finish)
     # get_bootstrap_statistic(total_payer1,1)
     # make_surrogate_data(644,700)
-    os.chdir(cd)
 
 
 if __name__ == '__main__':
+    cd = os.path.currdir
+    os.chdir(os.path.pardir)
     main()
+    os.chdir(cd)
