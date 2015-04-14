@@ -88,20 +88,19 @@ def get_ed_supplement_from_core(filename):
     key_index_supplement = int(data_type_supplement.index('KEY_ED'))
 
     total_patients = int(filename[len(filename)-7:len(filename)-4])
-
     entry_list = [None]*total_patients
-
     with open('NEDS_2012_ED.csv','r') as data_file:
         reader = csv.reader(data_file)
         for entry in reader:
             if entry[key_index_supplement] in key_list:
                 entry_list[key_list.index(entry[key_index_supplement])] = entry
+                sys.exit(0)
 
     outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
-
     with open(outputfile,'w') as output:
         writer = csv.writer(output)
-        writer.writerows(entry_list)
+        for item in entry_list:
+            writer.writerow(item)
 
     return outputfile
 
@@ -118,7 +117,7 @@ def convert_surrogate_to_core(start,finish):
         get_ed_supplement_from_core(filename)
 
 '''
-If a surrogate file is messed up, use this one. THIS IS UNTESTED. TODO: test
+If a surrogate file is messed up, use this one.
 '''
 def make_surrogate_replacement(num):
     def get_and_save_control_rows(indices,i):
@@ -158,7 +157,6 @@ def get_data_type_ed_supplement():
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
-            print(currline)
             data_type.append(currline[0])
     return data_type
 
