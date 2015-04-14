@@ -91,14 +91,14 @@ def get_ed_supplement_from_core(filename):
 
     entry_list = [None]*total_patients
 
-    with open('NEDS_2012_CORE_ED.csv','r') as data_file:
+    with open('NEDS_2012_ED.csv','r') as data_file:
         reader = csv.reader(data_file)
         for entry in reader:
             if entry[key_index_supplement] in key_list:
                 entry_list[key_list.index(entry[key_index_supplement])] = entry
 
     outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
-    
+
     with open(outputfile,'w') as output:
         writer = csv.writer(output)
         writer.writerows(entry_list)
