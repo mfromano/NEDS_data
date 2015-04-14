@@ -87,15 +87,18 @@ def get_ed_supplement_from_core(filename):
 
     key_index_supplement = int(data_type_supplement.index('KEY_ED'))
 
-    entry_list = [None]*int(filename[len(filename)-7:len(filename)-4])
+    total_patients = int(filename[len(filename)-7:len(filename)-4])
 
-    with open('NEDS_2012_CORE.csv','r') as data_file:
+    entry_list = [None]*total_patients
+
+    with open('NEDS_2012_CORE_ED.csv','r') as data_file:
         reader = csv.reader(data_file)
         for entry in reader:
             if entry[key_index_supplement] in key_list:
                 entry_list[key_list.index(entry[key_index_supplement])] = entry
 
     outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
+    
     with open(outputfile,'w') as output:
         writer = csv.writer(output)
         writer.writerows(entry_list)
@@ -155,6 +158,7 @@ def get_data_type_ed_supplement():
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
+            print(currline)
             data_type.append(currline[0])
     return data_type
 
