@@ -7,7 +7,7 @@ import sys
 import csv
 import numpy as np
 import logging
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # from scipy import stats
 # import scipy
 
