@@ -66,28 +66,28 @@ def cleaned_ed_supplement(data_entry):
 '''
     Next method is getter method. Returns the keys for each of the entries in the ED supplement
 '''
-def get_ed_keys():
-    filename = 'NEDS_2012_ED.csv'
-    data_type_supplement = get_data_type_ed_supplement()
-    key_index = int(data_type_supplement('KEY_ED'))
-    key_list = []
-    with open(filename,'r') as datafile:
-        reader = csv.reader(datafile)
+# def get_ed_keys():
+#     filename = 'NEDS_2012_ED.csv'
+#     data_type_supplement = get_data_type_ed_supplement()
+#     key_index = int(data_type_supplement('KEY_ED'))
+#     key_list = []
+#     with open(filename,'r') as datafile:
+#         reader = csv.reader(datafile)
 
 
-        for line in reader:
-            # BE CAREFUL WITH NEXT LINE: which columns do people need in order to be included????
+#         for line in reader:
+#             # BE CAREFUL WITH NEXT LINE: which columns do people need in order to be included????
 
-            if :
-                key_list.append(line[key_index])
-    return key_list
+#             if :
+#                 key_list.append(line[key_index])
+#     return key_list
 
-'''
-    Next method creates a file that contains only those names that contain associated
-    supplementary files
-'''
-def get_core_with_supplement():
-    ed_keys = get_ed_keys()
+# '''
+#     Next method creates a file that contains only those names that contain associated
+#     supplementary files
+# '''
+# def get_core_with_supplement():
+#     ed_keys = get_ed_keys()
 
 
 
