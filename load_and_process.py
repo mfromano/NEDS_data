@@ -7,13 +7,89 @@ import sys
 import csv
 import numpy as np
 import logging
+import matplotlib.pyplot as plt
 # from scipy import stats
 # import scipy
+
+# Okay, so only 268 patients have supplement files....does this match with num of inpatients?
 
 # 362 total patients with DX1 = penile fracture
 TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
 TOTAL_MALE_PATIENTS =  13797122    
-# TOTAL_ALL_PATIENTS = 31091020  # total patients
+# TOTAL_ALL_PATIENTS = 31,091,020  # total patients
+
+def clean_raw_data():
+    with open('NEDS_2012_CORE.csv') as raw_file:
+        reader = csv.reader(raw_file)
+        with open('core_cleaned.csv','wb') as cleaned_file:
+            writer = csv.writer(cleaned_file)
+            for line in reader:
+                writer.writerow(cleaned_core(line))
+    
+    print('Done with core!')
+
+    with open('NEDS_2012_ED.csv') as raw_file:
+        reader = csv.reader(raw_file)
+        with open('ed_cleaned.csv','wb') as cleaned_file:
+            writer = csv.writer(cleaned_file)
+            for line in reader:
+                writer.writerow(cleaned_core(line))
+
+def cleaned_core(data_entry):
+
+    # The next few lines will get the null values to replace
+    null_vals = []
+    with open('Core_missing_vals.txt') as inputfile:
+        for line in inputfile:
+            m = re.search('(?<=\().*(?=\=SYSMIS\))',line)
+            null_vals.append(m.group(0).split(' '))
+
+    # Go through list of entries and replace missing values with nones
+    for i in range(len(data_entry)):
+        if data_entry[i] in null_vals[i]:
+            data_entry[i] = None
+    return data_entry
+
+def cleaned_ed_supplement(data_entry):
+    # The next few lines will get the null values to replace
+    null_vals = []
+    with open('ED_supplement_missing_vals.txt') as inputfile:
+        for line in inputfile:
+            m = re.search('(?<=\().*(?=\=SYSMIS\))',line)
+            null_vals.append(m.group(0).split(' '))
+
+    # Go through list of entries and replace missing values with nones
+    for i in range(len(data_entry)):
+        if data_entry[i] in null_vals[i]:
+            data_entry[i] = None
+    return data_entry
+'''
+    Next method is getter method. Returns the keys for each of the entries in the ED supplement
+'''
+def get_ed_keys():
+    filename = 'NEDS_2012_ED.csv'
+    data_type_supplement = get_data_type_ed_supplement()
+    key_index = int(data_type_supplement('KEY_ED'))
+    key_list = []
+    with open(filename,'r') as datafile:
+        reader = csv.reader(datafile)
+
+
+        for line in reader:
+            # BE CAREFUL WITH NEXT LINE: which columns do people need in order to be included????
+
+            if :
+                key_list.append(line[key_index])
+    return key_list
+
+'''
+    Next method creates a file that contains only those names that contain associated
+    supplementary files
+'''
+def get_core_with_supplement():
+    ed_keys = get_ed_keys()
+
+
 
 '''
 The next function separates the patient file into male patients with corpus
@@ -83,24 +159,27 @@ def get_ed_supplement_from_core(filename):
     with open(filename) as currentfile:
         reader = csv.reader(currentfile)
         for entry in reader:
-            key_list.append(entry[key_index])
-
+            if int(entry[key_index]) > 0:
+                key_list.append(entry[key_index])
+            else:
+                print('Missing key value for file: {0}'.format(filename,))
+                return None
     key_index_supplement = int(data_type_supplement.index('KEY_ED'))
-
-    total_patients = int(filename[len(filename)-7:len(filename)-4])
-    entry_list = [None]*total_patients
+    total_patients = TOTAL_FRACTURES
+    # entry_list = [None]*total_patients
+    entry_list = []
     with open('NEDS_2012_ED.csv','r') as data_file:
         reader = csv.reader(data_file)
         for entry in reader:
             if entry[key_index_supplement] in key_list:
-                entry_list[key_list.index(entry[key_index_supplement])] = entry
-    print(entry_list)
+                entry_list.append(entry)
+    print(len(entry_list))
     outputfile = filename[:(len(filename)-4)]+'_ed_supplement.csv'
+    
     with open(outputfile,'w') as output:
         writer = csv.writer(output)
         for item in entry_list:
             writer.writerow(item)
-    sys.exit(0)
     return outputfile
 
 def make_surrogate_data(start,finish):
@@ -109,7 +188,7 @@ def make_surrogate_data(start,finish):
         make_surrogate_replacement(i)
         print("done with surrogate number {0}".format(str(i)))
 
-def convert_surrogate_to_core(start,finish):
+def convert_core_to_supplement(start,finish):
     samples = np.arange(start,finish)
     for i in samples:
         filename = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)) 
@@ -162,25 +241,43 @@ def get_data_type_ed_supplement():
 ''' The next series of functions require input of a filename to load and some code
     They return the respective test statistic. Code significance is commented above each. 
 '''
-def get_bootstrap_statistic(stat_func, code):
-    test_stat = stat_func('NEDS_2012_CORE_Patients.csv', code)
+def get_bootstrap_statistic(stat_func, code=None):
+    if code is not None:
+        test_stat = stat_func('NEDS_2012_CORE_Patients.csv', code)
+    else:
+        test_stat = stat_func('NEDS_2012_CORE_Patients.csv')
+    print("Test statistic: {0}".format(str(test_stat),))
     random_stat = []
 
     for i in range(1000):
         try:
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
-            random_stat.append(stat_func(file_name,code))
-        except:
-            print('Couldnt load file!')
-            try:
-                print('Trying to generate a replacement file for iteration i= {0}'.format(str(i),) )
-                file_name = make_surrogate_replacement(i)
+            if code is not None:
                 random_stat.append(stat_func(file_name,code))
-            except:
-                print('Couldn\'t generate replacement')
-                return None
-        print('Done with {0}'.format(str(i),))
+            else:
+                random_stat.append(stat_func(file_name))
+        except:
+            # print('Couldnt load file!')
+            # try:
+            #     print('Trying to generate a replacement file for iteration i= {0}'.format(str(i),) )
+            #     file_name = make_surrogate_replacement(i)
+            #     random_stat.append(stat_func(file_name,code))
+            # except:
+            #     print('Couldn\'t generate replacement')
+            return None
+        # print('Done with {0}'.format(str(i),))
+    numbins = 50
+    h = np.histogram(random_stat,bins=numbins)
+    lineheight = max(h[0])*1.25
+    plt.hist(random_stat,bins=numbins)
+    plt.plot([test_stat, test_stat], [0, lineheight])
+    x1, x2, y1, y2 = plt.axis()
+    plt.axis((x1,x2,0, lineheight))
+    plt.title('Distribution of bootstrapped stat')
+    plt.xlabel('Value')
+    plt.ylabel('Count')
 
+    plt.show()
 
     return percentile(random_stat,test_stat)
 
@@ -190,7 +287,7 @@ statistic. Returns the percentile of the test statistic
 '''
 def percentile(sample_list, value):
     num_below = 0
-    for sample in sample_list.sort():
+    for sample in sorted(sample_list):
         if sample < value:
             num_below += 1
     return float(num_below)/float(len(sample_list))
@@ -209,12 +306,13 @@ def average_age(filename):
         reader = csv.reader(currfile)
         for row in reader:
             try:
-                if row[age_index] is not '':
+                if row[age_index] is not '' and int(row[age_index]) > 0:
                     num_patients +=1
                     total_age+=int(row[age_index])
             except:
                 missing_patients += 1
-    print("Total number of missing patients: {0}".format(missing_patients,))
+    if missing_patients > 0:
+        print("Total number of missing patients: {0}".format(missing_patients,))
     return float(total_age)/float(num_patients)
 
 
@@ -261,10 +359,11 @@ unknown, (99) ED visit in which patient was discharged
 alive, destination unknown (but not admitted)
 '''
 def total_ed_event(filename, code):
-    if code not in [1, 2, 3, 9, 98, 99]:
+    choices = [1, 2, 3, 9, 98, 99]
+    if code not in choices:
         return None
     data_type = get_data_type()
-    edevent_index = int(data_type.index('EDevent'))
+    edevent_index = int(data_type.index('EDEVENT'))
     total_patients = 0
     missing_patients = 0
 
@@ -275,9 +374,11 @@ def total_ed_event(filename, code):
                 if int(row[edevent_index]) == code:
                     total_patients += 1
             except:
-                if row[EDevent] == '':
+                if row[EDevent] == '' or int(row[EDevent]) < 0:
                     missing_patients += 1
-    print("Total number of missing patients: {0}".format(missing_patients,))
+    if missing_patients > 0:
+        print("Total number of missing patients: {0}".format(str(missing_patients),))
+
     return total_patients
 
 '''
@@ -286,7 +387,8 @@ Medicaid, (3) private including HMO, (4) self-pay, (5) no
 charge, (6) other
 '''
 def total_payer1(filename,code):
-    if code not in [1, 2, 3, 4, 5, 6]:
+    choices = [1, 2, 3, 4, 5, 6]
+    if code not in choices:
         return None
     data_type = get_data_type()
     payer1_index = int(data_type.index('PAY1'))
@@ -299,10 +401,11 @@ def total_payer1(filename,code):
                 if int(row[payer1_index]) == code:
                     total_patients += 1
             except:
-                if row[payer1_index] == '':
+                if row[payer1_index] == '' or int(row[payer1_index]) < 0:
                     missing_patients += 1
-    print("Total number of missing patients: {0}".format(missing_patients,))
-    return total_patients
+    if missing_patients > 0:
+        print("Total number of missing patients: {0}".format(missing_patients,))
+    return total_patients, len(choices)
 
 '''
 Expected secondary payer, uniform: (1) Medicare, (2)
@@ -310,7 +413,8 @@ Medicaid, (3) private including HMO, (4) self-pay, (5) no
 charge, (6) other
 '''
 def total_payer2(filename,code):
-    if code not in [1, 2, 3, 4, 5, 6]:
+    choices = [1, 2, 3, 4, 5, 6]
+    if code not in choices:
         return None
     data_type = get_data_type()
     payer2_index = int(data_type.index('PAY2'))
@@ -325,16 +429,22 @@ def total_payer2(filename,code):
             except:
                 if row[payer2_index] == '':
                     missing_patients += 1
-    print("Total number of missing patients: {0}".format(missing_patients,))
-    return total_patients
+    if missing_patients > 0:
+        print("Total number of missing patients: {0}".format(missing_patients,))
+    return total_patients, len(choices)
 
 def main():
 
-    start, finish = int(sys.argv[1]), int(sys.argv[2])
-    make_surrogate_data(start,finish)
-    # print(str(start) + ' ' + str(finish))
-    # convert_surrogate_to_core(start, finish)
-    # print(get_bootstrap_statistic(total_payer1,1))
+    # start, finish = int(sys.argv[1]), int(sys.argv[2])
+    # make_surrogate_data(start,finish)
+    # convert_core_to_supplement(start, finish)
+    # stat = get_bootstrap_statistic(total_ed_event,1)
+    # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
+    # choices for ed = [1, 2, 3, 9, 98, 99]
+    clean_raw_data()
+    # stat = get_bootstrap_statistic(average_age)
+    # print(stat < 0.025)
+    # print((1-stat) < (0.025))
 
 
 if __name__ == '__main__':

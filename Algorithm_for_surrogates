@@ -1,0 +1,9 @@
+1. Select supplement entry
+2. Get key
+3. Add key to list
+4. For all keys in list:
+    get appropriate row in core file
+    if FEMALE == 0:
+        write to file
+5. Repeat the analysis for these files
+Problems:
