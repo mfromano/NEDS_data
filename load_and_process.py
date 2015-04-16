@@ -7,6 +7,7 @@ import sys
 import csv
 import numpy as np
 import logging
+import re
 # import matplotlib.pyplot as plt
 # from scipy import stats
 # import scipy
@@ -18,49 +19,63 @@ TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entri
 TOTAL_MALE_PATIENTS =  13797122    
 # TOTAL_ALL_PATIENTS = 31,091,020  # total patients
 
-def clean_raw_data():
+def clean_core_data():
     with open('NEDS_2012_CORE.csv') as raw_file:
         reader = csv.reader(raw_file)
-        with open('core_cleaned.csv','wb') as cleaned_file:
+        with open('core_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
             for line in reader:
                 writer.writerow(cleaned_core(line))
     
     print('Done with core!')
-
+def clean_ed_data():
     with open('NEDS_2012_ED.csv') as raw_file:
         reader = csv.reader(raw_file)
-        with open('ed_cleaned.csv','wb') as cleaned_file:
+        with open('ed_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
             for line in reader:
                 writer.writerow(cleaned_core(line))
+    print('Done with ED!')
 
+# FIX THIS SHIT!!!!!!!
 def cleaned_core(data_entry):
-
+    data_type = get_data_type()
     # The next few lines will get the null values to replace
     null_vals = []
+    label_list = []
     with open('Core_missing_vals.txt') as inputfile:
         for line in inputfile:
             m = re.search('(?<=\().*(?=\=SYSMIS\))',line)
+            label = re.search('(?<=\s)\S*(?!=\s)',line)
+            label_list.append(label.group(0))
             null_vals.append(m.group(0).split(' '))
 
     # Go through list of entries and replace missing values with nones
-    for i in range(len(data_entry)):
-        if data_entry[i] in null_vals[i]:
+    # Go through all of the indices in the list of missing value data types
+    for i in range(len(label_list)):
+        # get the corresponding index in the Core file for this data type
+        core_index = data_type.index(label_list[i])
+        # if the value in this index equals the 
+        if data_entry[core_index] in null_vals[i]:
             data_entry[i] = None
     return data_entry
 
 def cleaned_ed_supplement(data_entry):
     # The next few lines will get the null values to replace
+    data_type = get_data_type_ed_supplement()
     null_vals = []
+    label_list = []
     with open('ED_supplement_missing_vals.txt') as inputfile:
         for line in inputfile:
             m = re.search('(?<=\().*(?=\=SYSMIS\))',line)
+            label = re.search('(?<=\s)\S*(?!=\s)',line)
+            label_list.append(label.group(0))
             null_vals.append(m.group(0).split(' '))
 
     # Go through list of entries and replace missing values with nones
     for i in range(len(data_entry)):
-        if data_entry[i] in null_vals[i]:
+        ed_index = data_type.index(label_list[i])
+        if data_entry[ed_index] in null_vals[i]:
             data_entry[i] = None
     return data_entry
 '''
@@ -441,7 +456,8 @@ def main():
     # stat = get_bootstrap_statistic(total_ed_event,1)
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
-    clean_raw_data()
+    clean_core_data()
+    clean_ed_data()
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
     # print((1-stat) < (0.025))
