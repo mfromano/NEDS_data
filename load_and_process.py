@@ -25,6 +25,7 @@ def clean_core_data():
         with open('core_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
             for line in reader:
+                print(line)
                 writer.writerow(cleaned_core(line))
     print('Done with core!')
 
@@ -34,6 +35,7 @@ def clean_ed_data():
         with open('ed_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
             for line in reader:
+                print(line)
                 writer.writerow(cleaned_ed_supplement(line))
     print('Done with ED!')
 
@@ -43,6 +45,7 @@ def clean_ip_data():
         with open('ip_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
             for line in reader:
+                print(line)
                 writer.writerow(cleaned_ip_supplement(line))
     print('Done with IP!')
 
@@ -491,7 +494,7 @@ def main():
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
     clean_core_data()
-    # clean_ed_data()
+    clean_ed_data()
     # clean_ip_data()
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
