@@ -26,8 +26,8 @@ def clean_core_data():
             writer = csv.writer(cleaned_file)
             for line in reader:
                 writer.writerow(cleaned_core(line))
-    
     print('Done with core!')
+
 def clean_ed_data():
     with open('NEDS_2012_ED.csv') as raw_file:
         reader = csv.reader(raw_file)
@@ -90,6 +90,7 @@ def cleaned_ed_supplement(data_entry):
 def cleaned_ip_supplement(data_entry):
         # The next few lines will get the null values to replace
     data_type = get_data_type_ip_supplement()
+    print(data_type)
     null_vals = []
     label_list = []
     with open('IP_supplement_missing_vals.txt') as inputfile:
@@ -489,9 +490,9 @@ def main():
     # stat = get_bootstrap_statistic(total_ed_event,1)
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
-    # clean_core_data()
-    clean_ed_data()
-    clean_ip_data()
+    clean_core_data()
+    # clean_ed_data()
+    # clean_ip_data()
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
     # print((1-stat) < (0.025))
