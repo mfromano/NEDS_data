@@ -34,10 +34,18 @@ def clean_ed_data():
         with open('ed_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
             for line in reader:
-                writer.writerow(cleaned_core(line))
+                writer.writerow(cleaned_ed_supplement(line))
     print('Done with ED!')
 
-# FIX THIS SHIT!!!!!!!
+def clean_ip_data():
+    with open('NEDS_2012_IP.csv') as raw_file:
+        reader = csv.reader(raw_file)
+        with open('ip_cleaned.csv','w') as cleaned_file:
+            writer = csv.writer(cleaned_file)
+            for line in reader:
+                writer.writerow(cleaned_ip_supplement(line))
+    print('Done with IP!')
+
 def cleaned_core(data_entry):
     data_type = get_data_type()
     # The next few lines will get the null values to replace
@@ -78,6 +86,25 @@ def cleaned_ed_supplement(data_entry):
         if data_entry[ed_index] in null_vals[i]:
             data_entry[i] = None
     return data_entry
+
+def cleaned_ip_supplement(data_entry):
+        # The next few lines will get the null values to replace
+    data_type = get_data_type_ip_supplement()
+    null_vals = []
+    label_list = []
+    with open('IP_supplement_missing_vals.txt') as inputfile:
+        for line in inputfile:
+            m = re.search('(?<=\().*(?=\=SYSMIS\))',line)
+            label = re.search('(?<=\s)\S*(?!=\s)',line)
+            label_list.append(label.group(0))
+            null_vals.append(m.group(0).split(' '))
+
+    # Go through list of entries and replace missing values with nones
+    for i in range(len(data_entry)):
+        ed_index = data_type.index(label_list[i])
+        if data_entry[ed_index] in null_vals[i]:
+            data_entry[i] = None
+    return data_entry
 '''
     Next method is getter method. Returns the keys for each of the entries in the ED supplement
 '''
@@ -88,11 +115,8 @@ def cleaned_ed_supplement(data_entry):
 #     key_list = []
 #     with open(filename,'r') as datafile:
 #         reader = csv.reader(datafile)
-
-
 #         for line in reader:
 #             # BE CAREFUL WITH NEXT LINE: which columns do people need in order to be included????
-
 #             if :
 #                 key_list.append(line[key_index])
 #     return key_list
@@ -247,6 +271,15 @@ def get_data_type():
 def get_data_type_ed_supplement():
     data_type = []
     with open('NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
+        for f in read_file:
+            currline = f.split('\"')[:2]
+            currline[0] = currline[0].strip()
+            data_type.append(currline[0])
+    return data_type
+
+def get_data_type_ip_supplement():
+    data_type = []
+    with open('NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
@@ -456,8 +489,9 @@ def main():
     # stat = get_bootstrap_statistic(total_ed_event,1)
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
-    clean_core_data()
+    # clean_core_data()
     clean_ed_data()
+    clean_ip_data()
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
     # print((1-stat) < (0.025))
