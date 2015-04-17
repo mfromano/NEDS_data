@@ -493,9 +493,9 @@ def main():
     # stat = get_bootstrap_statistic(total_ed_event,1)
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
-    clean_core_data()
+    # clean_core_data()
     clean_ed_data()
-    # clean_ip_data()
+    clean_ip_data()
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
     # print((1-stat) < (0.025))
