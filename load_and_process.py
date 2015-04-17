@@ -84,7 +84,7 @@ def cleaned_ed_supplement(data_entry):
             null_vals.append(m.group(0).split(' '))
 
     # Go through list of entries and replace missing values with nones
-    for i in range(len(data_entry)):
+    for i in range(len(label_list)):
         ed_index = data_type.index(label_list[i])
         if data_entry[ed_index] in null_vals[i]:
             data_entry[i] = None
@@ -104,7 +104,7 @@ def cleaned_ip_supplement(data_entry):
             null_vals.append(m.group(0).split(' '))
 
     # Go through list of entries and replace missing values with nones
-    for i in range(len(data_entry)):
+    for i in range(len(label_list)):
         ed_index = data_type.index(label_list[i])
         if data_entry[ed_index] in null_vals[i]:
             data_entry[i] = None
