@@ -136,7 +136,7 @@ def average_age(filename):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
-            if row[age_index] is not None:
+            if row[age_index] is not None and row[age_index] is not '':
                 print(row[age_index])
                 num_patients +=1
                 total_age+=int(row[age_index])
