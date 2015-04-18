@@ -38,10 +38,10 @@ def total_with(filename, code, index_begin, index_end=None):
             if index_end is None:
                 for line in reader:
                     try:
-                        if code == int(line[index]):
+                        if code == int(line[index_begin]):
                             total_with_stat += 1
                     except:
-                        if line[index] is None:
+                        if line[index_begin] is None:
                             total_missing += 1
             else:
                 for line in reader:
