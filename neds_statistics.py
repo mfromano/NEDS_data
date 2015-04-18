@@ -377,8 +377,8 @@ def average_los(filename):
     return float(los_total)/float(num_patients)
 
 def main():
-    print(total_ed_event('cleaned_data/core_patients_cleaned.csv',2)
-    print(total_ed_event('cleaned_data/core_patients_cleaned.csv',3)
+    print(total_ed_event('cleaned_data/core_patients_cleaned.csv',2))
+    print(total_ed_event('cleaned_data/core_patients_cleaned.csv',3))
     print(average_los('cleaned_data/ip_patients_cleaned.csv'))
     # print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
 
