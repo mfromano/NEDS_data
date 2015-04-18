@@ -22,14 +22,16 @@ URETHRAL_INJURY_CODES = ('8670','8671')
 '''
 ''' Descriptive statistics
     Average length of stay for admitted patients with erectile fracture: 1.38 days
+
     Average cost of stay: $24098.25 (3 missing patients)
-    36 patients with closed urethral injury / 122 inpatients
+
+    36 patients with closed urethral injury / 122 inpatients (can't check to see if nones....)
+
     Total in quarters (1 missing val):
     Quarter 1: 91
     Quarter 2: 105
     Quarter 3: 114
     Quarter 4: 79
-
 
     Median household income quartiles for patient's ZIP Code.
     For 2012, the median income quartiles are defined as:
@@ -53,7 +55,6 @@ def total_with(filename, code, index_begin, index_end=None):
             reader = csv.reader(inputfile)
             if index_end is None:
                 for line in reader:
-                    print(line[index_begin])
                     try:
                         if code == int(line[index_begin]):
                             total_with_stat += 1
@@ -124,6 +125,14 @@ def average_age(filename):
     num_patients = 0
     missing_patients = 0
 
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
+
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -157,6 +166,13 @@ def total_disposition(filename, code):
     total_patients = 0
     missing_patients = 0
 
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -189,6 +205,13 @@ def total_ed_event(filename, code):
     total_patients = 0
     missing_patients = 0
 
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -216,6 +239,15 @@ def total_payer1(filename,code):
     payer1_index = int(data_type.index('PAY1'))
     total_patients = 0
     missing_patients = 0
+
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
+
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -242,6 +274,15 @@ def total_payer2(filename,code):
     payer2_index = int(data_type.index('PAY2'))
     total_patients = 0
     missing_patients = 0
+
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
+
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -307,6 +348,15 @@ def total_with_urethral_injury(filename):
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
     num_with_ui = [0,0]
+
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
+
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
@@ -323,6 +373,13 @@ def total_with_urethral_injury(filename):
     and (4) $63,000 or more.
 '''
 def total_with_median_income(filename,code):
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     data_type = get_data_type()
     ZIPINC_QRTL_index = int(data_type.index('ZIPINC_QRTL'))
     num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index)
@@ -331,6 +388,13 @@ def total_with_median_income(filename,code):
 ''' 
 '''
 def total_in_quarter(filename,code):
+    if filename == 'control':
+        filename = 'cleaned_data/core_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/core_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     data_type = get_data_type()
     DQTR_index = int(data_type.index('DQTR'))
     num_in_dqtr = total_with(filename,code,DQTR_index)
@@ -340,12 +404,18 @@ def total_in_quarter(filename,code):
     ICD-9-CM procedures performed in ED
 '''
 def total_with_procedure_ed(filename,code):
+    if filename == 'control':
+        filename = 'cleaned_data/ed_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/ed_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     data_type = get_data_type_ed_supplement()
     PR_ED1_index = int(data_type.index('PR_ED1'))
     PR_ED9_index = int(data_type.index('PR_ED9'))
     num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index)
     return num_with_procedure
-
 
 ''' 
     ICD-9-CM procedures coded on ED admissions.
@@ -353,6 +423,13 @@ def total_with_procedure_ed(filename,code):
     or during the hospital stay.
 '''
 def total_with_procedure_all(filename,code):
+    if filename == 'control':
+        filename = 'cleaned_data/ip_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/ip_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     data_type = get_data_type_ip_supplement()
     PR_IP1_index = int(data_type.index('PR_IP1'))
     PR_IP9_index = int(data_type.index('PR_IP9'))
@@ -360,6 +437,13 @@ def total_with_procedure_all(filename,code):
     return num_with_procedure
 
 def average_charges_ip(filename):
+    if filename == 'control':
+        filename = 'cleaned_data/ip_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/ip_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     data_type = get_data_type_ip_supplement()
     TOTCHG_IP_index = int(data_type.index('TOTCHG_IP'))
     total_charges = 0
@@ -378,6 +462,14 @@ def average_charges_ip(filename):
     return float(total_charges)/float(num_patients)
 
 def average_los(filename):
+
+    if filename == 'control':
+        filename = 'cleaned_data/ip_controls_cleaned'
+    elif filename == 'patient':
+        filename = 'cleaned_data/ip_patients_cleaned'
+    else:
+        print('Invalid filename')
+        return None
     data_type = get_data_type_ip_supplement()
     LOS_IP_index = int(data_type.index('LOS_IP'))
     los_total = 0
@@ -395,18 +487,27 @@ def average_los(filename):
     print('Missing patients: {0}'.format(str(missing_patients),))
     return float(los_total)/float(num_patients)
 
-def main():
-    print('Total in quarters:')
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
+def test_erectile_fracture_code():
+    filename = 'cleaned_data/core_patients_cleaned'
+    DX1_index = int(data_type.index('DX1'))
+    DX15_index = int(data_type.index('DX15'))
+    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
 
-    print('Total with median incomes:')
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
+def main():
+    print(test_erectile_fracture_code)
+    print(average_age('control'))
+    print(average_age('patient'))
+    # print('Total in quarters:')
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
+
+    # print('Total with median incomes:')
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
 
 if __name__ == '__main__':
     main()
