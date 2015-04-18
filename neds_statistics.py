@@ -488,6 +488,7 @@ def average_los(filename):
     return float(los_total)/float(num_patients)
 
 def test_erectile_fracture_code():
+    data_type = get_data_type()
     filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
