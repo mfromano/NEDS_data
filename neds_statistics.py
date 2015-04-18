@@ -128,7 +128,7 @@ def average_age(filename):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -169,7 +169,7 @@ def total_disposition(filename, code):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -208,7 +208,7 @@ def total_ed_event(filename, code):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -243,7 +243,7 @@ def total_payer1(filename,code):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -278,7 +278,7 @@ def total_payer2(filename,code):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -352,7 +352,7 @@ def total_with_urethral_injury(filename):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -376,7 +376,7 @@ def total_with_median_income(filename,code):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -391,7 +391,7 @@ def total_in_quarter(filename,code):
     if filename == 'control':
         filename = 'cleaned_data/core_controls_cleaned'
     elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned'
+        filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
         print('Invalid filename')
         return None
@@ -488,7 +488,7 @@ def average_los(filename):
     return float(los_total)/float(num_patients)
 
 def test_erectile_fracture_code():
-    filename = 'cleaned_data/core_patients_cleaned'
+    filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
     return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
