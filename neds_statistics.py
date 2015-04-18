@@ -23,7 +23,7 @@ URETHRAL_INJURY_CODES = ('8670','8671')
 ''' Descriptive statistics
     Average length of stay for admitted patients with erectile fracture: 1.38 days
     Average cost of stay: $24098.25 (3 missing patients)
-
+    36 patients with closed urethral injury / 122 inpatients
 '''
 
 '''
@@ -379,7 +379,17 @@ def average_los(filename):
     return float(los_total)/float(num_patients)
 
 def main():
-    print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
+    print('Total in quarters:')
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
+
+    print('Total with median incomes:')
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
 
 if __name__ == '__main__':
     main()
