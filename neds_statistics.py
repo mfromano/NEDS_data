@@ -13,6 +13,14 @@ TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entri
 TOTAL_MALE_PATIENTS = 13797122   
 PENILE_FRACTURE_CODE = '95913'
 URETHRAL_INJURY_CODES = ('8670','8671')
+'''
+    Number of entries in files:
+    in ed_patients_cleaned: 268
+    in ed_controls_cleaned: 26617273
+    in ip_patients_cleaned: 122
+    in ip_controls_cleaned: 4473357
+'''
+
 
 '''
     General getter method for a particular stat
@@ -364,3 +372,10 @@ def average_los(filename):
                 missing_patients +=1
     print('Missing patients: {0}'.format(str(missing_patients),))
     return float(los_total)/float(num_patients)
+
+def main():
+    average_los('cleaned_data/ip_patients_cleaned.csv')
+    average_charges_ip('cleaned_data/ip_patients_cleaned.csv')
+
+if __name__ == '__main__':
+    main()
