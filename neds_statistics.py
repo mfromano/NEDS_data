@@ -352,7 +352,7 @@ def average_charges_ip(filename):
         for line in reader:
             try:
                 total_charges += float(line[TOTCHG_IP_index])
-                print(total_charges)
+                print(float(line[TOTCHG_IP_index]))
                 num_patients += 1
             except:
                 missing_patients +=1
