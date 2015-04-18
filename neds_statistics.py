@@ -56,7 +56,7 @@ def total_with(filename, code, index_begin, index_end=None):
 def get_data_type():
     data_labels = {}
     data_type = []
-    with open('NEDS_2012_Labels_Core.txt','r') as read_file:
+    with open('raw_data/NEDS_2012_Labels_Core.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
@@ -70,7 +70,7 @@ def get_data_type():
 '''
 def get_data_type_ed_supplement():
     data_type = []
-    with open('NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
+    with open('raw_data/NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
@@ -79,7 +79,7 @@ def get_data_type_ed_supplement():
 
 def get_data_type_ip_supplement():
     data_type = []
-    with open('NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
+    with open('raw_data/NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
