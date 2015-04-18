@@ -206,7 +206,7 @@ def get_ed_supplement_from_core(filename):
 
 def divide_ip_supplement():
     data_type = get_data_type()
-    key_ed_index_core = int(data_type.find('KEY_ED'))
+    key_ed_index_core = int(data_type.index('KEY_ED'))
     key_ed_patients = []
 
     with open('core_patients_cleaned.csv') as core_file:
@@ -215,7 +215,7 @@ def divide_ip_supplement():
             key_ed_patients.append(line[key_ed_index_core])
 
     ip_data_type = get_data_type_ip_supplement() 
-    key_ed_index = int(ip_data_type.find('KEY_ED'))
+    key_ed_index = int(ip_data_type.index('KEY_ED'))
     with open('ip_cleaned.csv','r') as core_file:
         read_file = csv.reader(core_file)
         with open('ip_patients_cleaned.csv','w') as patient_file:
@@ -231,9 +231,9 @@ def divide_ip_supplement():
 
 def divide_ed_supplement():
     data_type = get_data_type()
-    key_ed_index_core = int(data_type.find('KEY_ED'))
+    key_ed_index_core = int(data_type.index('KEY_ED'))
     ed_data_type = get_data_type_ed_supplement() 
-    key_ed_index = int(ed_data_type.find('KEY_ED'))
+    key_ed_index = int(ed_data_type.index('KEY_ED'))
     key_ed_patients = []
     with open('core_patients_cleaned.csv') as core_file:
         reader = csv.reader(core_file)
@@ -320,7 +320,7 @@ def get_data_type_ip_supplement():
 
 
 def main():
-    load_and_format()
+    # load_and_format()
     divide_ip_supplement()
     divide_ed_supplement()
     # start, finish = int(sys.argv[1]), int(sys.argv[2])
