@@ -221,7 +221,7 @@ def divide_ip_supplement():
         with open('ip_patients_cleaned.csv','w') as patient_file:
             write_file = csv.writer(patient_file)
             with open('ip_controls_cleaned.csv','w') as control_file:
-                write_control = csv.writer(control_files)
+                write_control = csv.writer(control_file)
                 for line in read_file:
                     if line[key_ed_index] in key_ed_patients:
                         write_file.writerow(line)
@@ -244,7 +244,7 @@ def divide_ed_supplement():
         with open('ed_patients_cleaned.csv','w') as patient_file:
             write_file = csv.writer(patient_file)
             with open('ed_controls_cleaned.csv','w') as control_file:
-                write_control = csv.writer(control_files)
+                write_control = csv.writer(control_file)
                 for line in read_file:
                     if line[key_ed_index] in key_ed_patients:
                         write_file.writerow(line)
