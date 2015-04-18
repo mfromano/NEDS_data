@@ -42,7 +42,7 @@ def total_with(filename, code, index_begin, index_end=None):
             else:
                 for line in reader:
                     try:
-                        if str(code) in line[index_begin:index_end]):
+                        if str(code) in line[index_begin:index_end]:
                             total_with_stat += 1
                     except:
                             total_missing += 1
