@@ -307,8 +307,7 @@ def total_with_median_income(filename,code):
     num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index)
     return num_with_zip_inc
 
-'''
-    Coded (1) Jan - Mar, (2) Apr - Jun, (3) Jul - Sep, (4) Oct – Dec
+''' 
 '''
 def total_in_quarter(filename,code):
     data_type = get_data_type()
