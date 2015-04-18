@@ -136,11 +136,11 @@ def average_age(filename):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
-            try:
-                if row[age_index] is not None:
-                    num_patients +=1
-                    total_age+=int(row[age_index])
-            except:
+            if row[age_index] is not None:
+                print(row[age_index])
+                num_patients +=1
+                total_age+=int(row[age_index])
+            else:
                 missing_patients += 1
     if missing_patients > 0:
         print("Total number of missing patients: {0}".format(missing_patients,))
@@ -492,12 +492,12 @@ def test_erectile_fracture_code():
     filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
-    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
+    assert(total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index) == 390)
 
 def main():
-    print(test_erectile_fracture_code())
-    # print(average_age('control'))
-    # print(average_age('patient'))
+    # print(test_erectile_fracture_code())
+    print(average_age('control'))
+    print(average_age('patient'))
     # print('Total in quarters:')
     # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
     # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
