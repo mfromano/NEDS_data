@@ -42,6 +42,11 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     2) 106
     3) 93
     4) 67
+    
+    Average_age is 39.0 for patients, 37.6 for other patients (not significantly different.
+        ***387 missing patients in control data set here***
+
+
 '''
 
 '''
@@ -142,8 +147,7 @@ def average_age(filename):
                 total_age+=int(row[age_index])
             else:
                 missing_patients += 1
-    if missing_patients > 0:
-        print("Total number of missing patients: {0}".format(missing_patients,))
+    print("Total number of missing patients: {0}".format(missing_patients,))
     return float(total_age)/float(num_patients)
 
 
@@ -181,8 +185,7 @@ def total_disposition(filename, code):
                 if int(row[transfer_index]) == code:
                     total_patients += 1
             except:
-                if row[transfer_index] is None:
-                    missing_patients += 1
+                missing_patients += 1
     print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients
 
@@ -219,8 +222,7 @@ def total_ed_event(filename, code):
                 if int(row[edevent_index]) == code:
                     total_patients += 1
             except:
-                if row[EDevent] is None:
-                    missing_patients += 1
+                missing_patients += 1
     if missing_patients > 0:
         print("Total number of missing patients: {0}".format(str(missing_patients),))
 
