@@ -20,7 +20,9 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     in ip_patients_cleaned: 122
     in ip_controls_cleaned: 4473357
 '''
-
+''' Descriptive statistics
+    Average length of stay for admitted patients with erectile fracture: 
+'''
 
 '''
     General getter method for a particular stat
@@ -373,8 +375,8 @@ def average_los(filename):
     return float(los_total)/float(num_patients)
 
 def main():
-    average_los('cleaned_data/ip_patients_cleaned.csv')
-    average_charges_ip('cleaned_data/ip_patients_cleaned.csv')
+    print(average_los('cleaned_data/ip_patients_cleaned.csv'))
+    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
 
 if __name__ == '__main__':
     main()
