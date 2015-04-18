@@ -86,7 +86,7 @@ def get_data_type_ip_supplement():
             data_type.append(currline[0])
     return data_type
 
-    def percentile(sample_list, value):
+def percentile(sample_list, value):
     num_below = 0
     for sample in sorted(sample_list):
         if sample < value:
