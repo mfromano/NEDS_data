@@ -46,6 +46,21 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     Average_age is 39.0 for patients, 37.6 for other patients (not significantly different.
         ***387 missing patients in control data set here***
 
+    Type of ED event: (1) ED visit in which the patient is
+    treated and released, (2) ED visit in which the patient is
+    admitted to this same hospital, (3) ED visit in which the
+    patient is transferred to another short-term hospital, (9)
+    ED visit in which the patient died in the ED, (98) ED
+    visits in which patient was not admitted, destination
+    unknown, (99) ED visit in which patient was discharged
+    alive, destination unknown (but not admitted)
+
+    1) 233
+    2) 122
+    3) 34
+    9) 0
+    98) 1
+    99) 0
 
 '''
 
