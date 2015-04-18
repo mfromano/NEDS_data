@@ -494,7 +494,9 @@ def test_erectile_fracture_code():
     assert(total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index) == 390)
 
 def main():
-    print(total_ed_event('patient',2))
+    choices = [1, 2, 3, 4, 5, 6]
+    for choice in choices:
+        print(total_ed_event('patient',choice))
     # print(test_erectile_fracture_code())
     # print(average_age('control'))
     # print(average_age('patient'))
