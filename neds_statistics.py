@@ -284,7 +284,7 @@ def get_bootstrap_statistic(stat_func, code=None):
 def total_with_urethral_injury(filename):
     data_type = get_data_type()
     DX1_index = int(data_type.index('DX1'))
-    DX15_index = int(data_type.index('DX15')))
+    DX15_index = int(data_type.index('DX15'))
     num_with_ui = [0,0]
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
