@@ -126,7 +126,7 @@ def average_age(filename):
     missing_patients = 0
 
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -167,7 +167,7 @@ def total_disposition(filename, code):
     missing_patients = 0
 
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -206,7 +206,7 @@ def total_ed_event(filename, code):
     missing_patients = 0
 
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -241,7 +241,7 @@ def total_payer1(filename,code):
     missing_patients = 0
 
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -276,7 +276,7 @@ def total_payer2(filename,code):
     missing_patients = 0
 
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -350,7 +350,7 @@ def total_with_urethral_injury(filename):
     num_with_ui = [0,0]
 
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -374,7 +374,7 @@ def total_with_urethral_injury(filename):
 '''
 def total_with_median_income(filename,code):
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
@@ -389,7 +389,7 @@ def total_with_median_income(filename,code):
 '''
 def total_in_quarter(filename,code):
     if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned'
+        filename = 'cleaned_data/core_controls_cleaned.csv'
     elif filename == 'patient':
         filename = 'cleaned_data/core_patients_cleaned.csv'
     else:
