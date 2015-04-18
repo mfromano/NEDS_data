@@ -24,7 +24,7 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     Average length of stay for admitted patients with erectile fracture: 1.38 days
     Average cost of stay: $24098.25 (3 missing patients)
     36 patients with closed urethral injury / 122 inpatients
-    Total in quarters (no missing vals):
+    Total in quarters (1 missing val):
     Quarter 1: 91
     Quarter 2: 105
     Quarter 3: 114
@@ -35,7 +35,7 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     For 2012, the median income quartiles are defined as:
     1) $1 - $38,999; (2) $39,000 - $47,999; (3) $48,000 - $62,999;
     and (4) $63,000 or more.
-    Total with median incomes (no missing vals):
+    Total with median incomes (9 missing vals):
     1) 115
     2) 106
     3) 93
@@ -53,9 +53,9 @@ def total_with(filename, code, index_begin, index_end=None):
             reader = csv.reader(inputfile)
             if index_end is None:
                 for line in reader:
+                    print(line[index_begin])
                     try:
                         if code == int(line[index_begin]):
-                            print(line[index_begin])
                             total_with_stat += 1
                     except:
                         if line[index_begin] is None:
