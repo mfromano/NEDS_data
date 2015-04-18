@@ -350,11 +350,11 @@ def average_charges_ip(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            try:
+            if float(line[TOTCHG_IP_index]) >= 0:
                 total_charges += float(line[TOTCHG_IP_index])
                 print(float(line[TOTCHG_IP_index]))
                 num_patients += 1
-            except:
+            else:
                 missing_patients +=1
     print('Missing patients: {0}'.format(str(missing_patients),))
     return float(total_charges)/float(num_patients)
@@ -369,6 +369,7 @@ def average_los(filename):
         reader = csv.reader(inputfile)
         for line in reader:
             try:
+                print(float(line[LOS_IP_index]))
                 los_total += float(line[LOS_IP_index])
                 num_patients += 1
             except:
@@ -378,6 +379,6 @@ def average_los(filename):
 
 def main():
     print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
-
+    print(average_los('cleaned_data/ip_patients_cleaned.csv'))
 if __name__ == '__main__':
     main()
