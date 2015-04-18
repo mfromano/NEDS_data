@@ -379,7 +379,7 @@ def average_los(filename):
     return float(los_total)/float(num_patients)
 
 def main():
-    print(total_with_urethral_injury('data_cleaned/core_patients_cleaned.csv'))
+    print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
 
 if __name__ == '__main__':
     main()
