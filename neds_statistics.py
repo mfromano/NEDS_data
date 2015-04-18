@@ -9,8 +9,40 @@ import numpy as np
 import logging
 import re
 
+TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
+TOTAL_MALE_PATIENTS = 13797122   
+PENILE_FRACTURE_CODE = '95913'
+URETHRAL_INJURY_CODES = ('8670','8671')
 
-''' The next function returns a list containing the data types for each column
+'''
+    General getter method for a particular stat
+'''
+def total_with(filename, code, index_begin, index_end=None):
+
+    total_with_stat = 0
+    total_missing = 0
+    with open(filename) as inputfile:
+            reader = csv.reader(inputfile)
+            if index_end is None:
+                for line in reader:
+                    try:
+                        if code == int(line[index]):
+                            total_with_stat += 1
+                    except:
+                        if line[index] is None:
+                            total_missing += 1
+            else:
+                for line in reader:
+                    try:
+                        if str(code) in line[index_begin:index_end]):
+                            total_with_stat += 1
+                    except:
+                            total_missing += 1
+    print('Total number of Nones: {0}'.format(str(total_missing),))
+    return total_with_stat
+
+''' 
+    The next function returns a list containing the data types for each column
     of the NEDS Core data file
 '''
 def get_data_type():
@@ -24,7 +56,8 @@ def get_data_type():
             data_type.append(currline[0])
     return data_type
 
-''' The next function returns a list containing the data types for each column
+''' 
+    The next function returns a list containing the data types for each column
     of the NEDS ED Supplement data file
 '''
 def get_data_type_ed_supplement():
@@ -53,7 +86,7 @@ def get_data_type_ip_supplement():
     return float(num_below)/float(len(sample_list))
 
 '''
-Hopefully self explanatory...gets the average age from a file
+    Hopefully self explanatory...gets the average age from a file
 '''
 def average_age(filename):
     data_type = get_data_type()
@@ -76,16 +109,16 @@ def average_age(filename):
     return float(total_age)/float(num_patients)
 
 
-'''
-Disposition from ED: (1) routine, (2) transfer to shortterm
-hospital, (5) other transfers, including skilled
-nursing facility, intermediate care, and another type of
-facility, (6) home health care, (7) against medical
-advice, (9) admitted as an inpatient to this hospital, (20)
-died in ED, (21) Discharged/transferred to court/law
-enforcement , (98) not admitted, destination unknown,
-(99) discharged alive, destination unknown (but not
-admitted)
+''' 
+    Disposition from ED: (1) routine, (2) transfer to shortterm
+    hospital, (5) other transfers, including skilled
+    nursing facility, intermediate care, and another type of
+    facility, (6) home health care, (7) against medical
+    advice, (9) admitted as an inpatient to this hospital, (20)
+    died in ED, (21) Discharged/transferred to court/law
+    enforcement , (98) not admitted, destination unknown,
+    (99) discharged alive, destination unknown (but not
+    admitted)
 '''
 def total_disposition(filename, code):
     if code not in [1, 2, 5, 6, 7, 9, 20, 21, 98, 99]:
@@ -108,15 +141,15 @@ def total_disposition(filename, code):
     print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients
 
-'''
-Type of ED event: (1) ED visit in which the patient is
-treated and released, (2) ED visit in which the patient is
-admitted to this same hospital, (3) ED visit in which the
-patient is transferred to another short-term hospital, (9)
-ED visit in which the patient died in the ED, (98) ED
-visits in which patient was not admitted, destination
-unknown, (99) ED visit in which patient was discharged
-alive, destination unknown (but not admitted)
+''' 
+    Type of ED event: (1) ED visit in which the patient is
+    treated and released, (2) ED visit in which the patient is
+    admitted to this same hospital, (3) ED visit in which the
+    patient is transferred to another short-term hospital, (9)
+    ED visit in which the patient died in the ED, (98) ED
+    visits in which patient was not admitted, destination
+    unknown, (99) ED visit in which patient was discharged
+    alive, destination unknown (but not admitted)
 '''
 def total_ed_event(filename, code):
     choices = [1, 2, 3, 9, 98, 99]
@@ -142,9 +175,9 @@ def total_ed_event(filename, code):
     return total_patients
 
 '''
-Expected primary payer, uniform: (1) Medicare, (2)
-Medicaid, (3) private including HMO, (4) self-pay, (5) no
-charge, (6) other
+    Expected primary payer, uniform: (1) Medicare, (2)
+    Medicaid, (3) private including HMO, (4) self-pay, (5) no
+    charge, (6) other
 '''
 def total_payer1(filename,code):
     choices = [1, 2, 3, 4, 5, 6]
@@ -168,9 +201,9 @@ def total_payer1(filename,code):
     return total_patients, len(choices)
 
 '''
-Expected secondary payer, uniform: (1) Medicare, (2)
-Medicaid, (3) private including HMO, (4) self-pay, (5) no
-charge, (6) other
+    Expected secondary payer, uniform: (1) Medicare, (2)
+    Medicaid, (3) private including HMO, (4) self-pay, (5) no
+    charge, (6) other
 '''
 def total_payer2(filename,code):
     choices = [1, 2, 3, 4, 5, 6]
@@ -193,7 +226,8 @@ def total_payer2(filename,code):
         print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients, len(choices)
 
-''' The next series of functions require input of a filename to load and some code
+''' 
+    The next series of functions require input of a filename to load and some code
     They return the respective test statistic. Code significance is commented above each. 
 '''
 def get_bootstrap_statistic(stat_func, code=None):
@@ -234,5 +268,99 @@ def get_bootstrap_statistic(stat_func, code=None):
 
     plt.show()
 
-    return percentile(random_stat,test_stat
+    return percentile(random_stat,test_stat)
 
+'''
+    Next function gets total with concomitant urethral injuries
+'''
+def total_with_urethral_injury(filename):
+    data_type = get_data_type()
+    DX1_index = int(data_type.index('DX1'))
+    DX15_index = int(data_type.index('DX15')))
+    num_with_ui = [0,0]
+    with open(filename) as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
+                num_with_ui[0] += 1
+            elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
+                num_with_ui[1] += 1
+    return num_with_ui
+
+''' 
+    Median household income quartiles for patient's ZIP Code.
+    For 2012, the median income quartiles are defined as:
+    1) $1 - $38,999; (2) $39,000 - $47,999; (3) $48,000 - $62,999;
+    and (4) $63,000 or more.
+'''
+def total_with_median_income(filename,code):
+    data_type = get_data_type()
+    ZIPINC_QRTL_index = int(data_type.index('ZIPINC_QRTL'))
+    num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index)
+    return num_with_zip_inc
+
+'''
+    Coded: (1) Jan - Mar, (2) Apr - Jun, (3) Jul - Sep, (4) Oct – Dec
+'''
+def total_in_quarter(filename,code):
+    data_type = get_data_type()
+    DQTR_index = int(data_type.index('DQTR'))
+    num_in_dqtr = total_with(filename,code,DQTR_index)
+    return num_in_dqtr
+
+''' 
+    ICD-9-CM procedures performed in ED
+'''
+def total_with_procedure_ed(filename,code):
+    data_type = get_data_type_ed_supplement()
+    PR_ED1_index = int(data_type.index('PR_ED1'))
+    PR_ED9_index = int(data_type.index('PR_ED9'))
+    num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index)
+    return num_with_procedure
+
+
+''' 
+    ICD-9-CM procedures coded on ED admissions.
+    Procedure may have been performed in the ED
+    or during the hospital stay.
+'''
+def total_with_procedure_all(filename,code):
+    data_type = get_data_type_ip_supplement()
+    PR_IP1_index = int(data_type.index('PR_IP1'))
+    PR_IP9_index = int(data_type.index('PR_IP9'))
+    num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index)
+    return num_with_procedure
+
+def average_charges_ip(filename):
+    data_type = get_data_type_ip_supplement()
+    TOTCHG_IP_index = int(data_type.index('TOTCHG_IP'))
+    total_charges = 0
+    num_patients = 0
+    missing_patients = 0
+    with open(filename) as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            try:
+                total_charges += float(line[TOTCHG_IP_index])
+                num_patients += 1
+            except:
+                missing_patients +=1
+    print('Missing patients: {0}'.format(str(missing_patients),))
+    return float(total_charges)/float(num_patients)
+
+def average_los(filename):
+    data_type = get_data_type_ip_supplement()
+    LOS_IP_index = int(data_type.index('LOS_IP'))
+    los_total = 0
+    num_patients = 0
+    missing_patients = 0
+    with open(filename) as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            try:
+                los_total += float(line[LOS_IP_index])
+                num_patients += 1
+            except:
+                missing_patients +=1
+    print('Missing patients: {0}'.format(str(missing_patients),))
+    return float(los_total)/float(num_patients)

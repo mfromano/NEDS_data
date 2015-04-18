@@ -113,14 +113,12 @@ def cleaned_ip_supplement(data_entry):
             data_entry[i] = None
     return data_entry
 
-
 '''
-The next function separates the patient file into male patients with corpus
-collosum fractures and male patients without these fractures. USE CAUTION:
-this classifies a patient as having a corpus collosum fracture is any of his
-DX values qualify. Also, oddly, it appears as though 9 non-male patients
-have collosal fractures.....
-
+    The next function separates the patient file into male patients with corpus
+    collosum fractures and male patients without these fractures. USE CAUTION:
+    this classifies a patient as having a corpus collosum fracture is any of his
+    DX values qualify. Also, oddly, it appears as though 9 non-male patients
+    have collosal fractures.....
 '''
 
 def load_and_format():
@@ -132,7 +130,6 @@ def load_and_format():
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
     isfemale_index = int(data_type.index('FEMALE'))
-
 
     # open the Core Control file. We will write to this all of the patient
     # records that do not contain a broken penis DX*
@@ -165,11 +162,13 @@ def load_and_format():
     print(total_patients)
     return data_type
 
-''' The next function generates surrogate data.
+''' 
+    The next function generates surrogate data.
     TODO: make sure no missing vals
 '''
 
-''' This takes as input the name of a core data file and generates a list of
+''' 
+    This takes as input the name of a core data file and generates a list of
     supplement entries that correspond to the entries in the core data file
 '''
 def get_ed_supplement_from_core(filename):
@@ -205,6 +204,53 @@ def get_ed_supplement_from_core(filename):
             writer.writerow(item)
     return outputfile
 
+def divide_ip_supplement():
+    data_type = get_data_type()
+    key_ed_index_core = int(data_type.find('KEY_ED'))
+    key_ed_patients = []
+
+    with open('core_patients_cleaned.csv') as core_file:
+        reader = csv.reader(core_file)
+        for line in reader:
+            key_ed_patients.append(line[key_ed_index_core])
+
+    ip_data_type = get_data_type_ip_supplement() 
+    key_ed_index = int(ip_data_type.find('KEY_ED'))
+    with open('ip_cleaned.csv','r') as core_file:
+        read_file = csv.reader(core_file)
+        with open('ip_patients_cleaned.csv','w') as patient_file:
+            write_file = csv.writer(patient_file)
+            with open('ip_controls_cleaned.csv','w') as control_file:
+                write_control = csv.writer(control_files)
+                for line in read_file:
+                    if line[key_ed_index] in key_ed_patients:
+                        write_file.writerow(line)
+                    else:
+                        write_control.writerow(line)
+
+
+def divide_ed_supplement():
+    data_type = get_data_type()
+    key_ed_index_core = int(data_type.find('KEY_ED'))
+    ed_data_type = get_data_type_ed_supplement() 
+    key_ed_index = int(ed_data_type.find('KEY_ED'))
+    key_ed_patients = []
+    with open('core_patients_cleaned.csv') as core_file:
+        reader = csv.reader(core_file)
+        for line in reader:
+            key_ed_patients.append(line[key_ed_index_core])
+    with open('ed_cleaned.csv','r') as core_file:
+        read_file = csv.reader(core_file)
+        with open('ed_patients_cleaned.csv','w') as patient_file:
+            write_file = csv.writer(patient_file)
+            with open('ed_controls_cleaned.csv','w') as control_file:
+                write_control = csv.writer(control_files)
+                for line in read_file:
+                    if line[key_ed_index] in key_ed_patients:
+                        write_file.writerow(line)
+                    else:
+                        write_control.writerow(line)
+
 def make_surrogate_data(start,finish):
     samples = np.arange(start,finish)
     for i in samples:
@@ -218,7 +264,7 @@ def convert_core_to_supplement(start,finish):
         get_ed_supplement_from_core(filename)
 
 '''
-If a surrogate file is messed up, use this one.
+    If a surrogate file is messed up, use this one.
 '''
 def make_surrogate_replacement(num):
     def get_and_save_control_rows(indices,i):
@@ -235,7 +281,8 @@ def make_surrogate_replacement(num):
     get_and_save_control_rows(control_indices,num)
     return 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(num),str(TOTAL_FRACTURES))
 
-''' The next function returns a list containing the data types for each column
+''' 
+    The next function returns a list containing the data types for each column
     of the NEDS Core data file
 '''
 def get_data_type():
@@ -249,7 +296,8 @@ def get_data_type():
             data_type.append(currline[0])
     return data_type
 
-''' The next function returns a list containing the data types for each column
+''' 
+    The next function returns a list containing the data types for each column
     of the NEDS ED Supplement data file
 '''
 def get_data_type_ed_supplement():
@@ -272,7 +320,9 @@ def get_data_type_ip_supplement():
 
 
 def main():
-
+    load_and_format()
+    divide_ip_supplement()
+    divide_ed_supplement()
     # start, finish = int(sys.argv[1]), int(sys.argv[2])
     # make_surrogate_data(start,finish)
     # convert_core_to_supplement(start, finish)
