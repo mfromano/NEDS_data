@@ -222,8 +222,7 @@ def total_ed_event(filename, code):
                     total_patients += 1
             else:
                 missing_patients += 1
-    if missing_patients > 0:
-        print("Total number of missing patients: {0}".format(str(missing_patients),))
+    print("Total number of missing patients: {0}".format(str(missing_patients),))
 
     return total_patients
 
@@ -293,8 +292,7 @@ def total_payer2(filename,code):
             except:
                 if row[payer2_index] is None:
                     missing_patients += 1
-    if missing_patients > 0:
-        print("Total number of missing patients: {0}".format(missing_patients,))
+    print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients, len(choices)
 
 ''' 
@@ -496,7 +494,7 @@ def test_erectile_fracture_code():
     assert(total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index) == 390)
 
 def main():
-    print(total_ed_event('patient',1))
+    print(total_ed_event('patient',2))
     # print(test_erectile_fracture_code())
     # print(average_age('control'))
     # print(average_age('patient'))
