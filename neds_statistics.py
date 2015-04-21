@@ -344,18 +344,19 @@ def get_bootstrap_statistic(stat_func, code=None):
             #     print('Couldn\'t generate replacement')
             return None
         # print('Done with {0}'.format(str(i),))
-    numbins = 50
-    h = np.histogram(random_stat,bins=numbins)
-    lineheight = max(h[0])*1.25
-    plt.hist(random_stat,bins=numbins)
-    plt.plot([test_stat, test_stat], [0, lineheight])
-    x1, x2, y1, y2 = plt.axis()
-    plt.axis((x1,x2,0, lineheight))
-    plt.title('Distribution of bootstrapped stat')
-    plt.xlabel('Value')
-    plt.ylabel('Count')
+    print(random_stat)
+    # numbins = 50
+    # h = np.histogram(random_stat,bins=numbins)
+    # lineheight = max(h[0])*1.25
+    # plt.hist(random_stat,bins=numbins)
+    # plt.plot([test_stat, test_stat], [0, lineheight])
+    # x1, x2, y1, y2 = plt.axis()
+    # plt.axis((x1,x2,0, lineheight))
+    # plt.title('Distribution of bootstrapped stat')
+    # plt.xlabel('Value')
+    # plt.ylabel('Count')
 
-    plt.show()
+    # plt.show()
 
     return percentile(random_stat,test_stat)
 
