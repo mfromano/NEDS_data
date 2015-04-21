@@ -152,7 +152,6 @@ def load_and_format():
                         if line[isfemale_index] == '0':
                             num_patients += 1
                             filewriter.writerow(line)
-
                             total_patients += 1
                         else:
                             print('non-male patient!')
@@ -321,18 +320,19 @@ def get_data_type_ip_supplement():
 
 
 def main():
-    # load_and_format()
-    # divide_ip_supplement()
-    # divide_ed_supplement()
+    # clean_core_data()
+    # clean_ed_data()
+    # clean_ip_data()
+    load_and_format()
+    divide_ip_supplement()
+    divide_ed_supplement()
     # start, finish = int(sys.argv[1]), int(sys.argv[2])
     # make_surrogate_data(start,finish)
     # convert_core_to_supplement(start, finish)
     # stat = get_bootstrap_statistic(total_ed_event,1)
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
-    clean_core_data()
-    # clean_ed_data()
-    # clean_ip_data()
+
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
     # print((1-stat) < (0.025))
