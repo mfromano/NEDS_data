@@ -72,12 +72,14 @@ URETHRAL_INJURY_CODES = ('8670','8671')
 '''
     General getter method for a particular stat
 '''
-def total_with(filename, code, index_begin, index_end=None):
+def total_with(filename, code, index_begin, index_end=None, truncate=0):
 
     total_with_stat = 0
     total_missing = 0
     with open(filename) as inputfile:
             reader = csv.reader(inputfile)
+            for i in range(truncate):
+                reader.next()
             if index_end is None:
                 for line in reader:
                     try:
@@ -97,7 +99,7 @@ def total_with(filename, code, index_begin, index_end=None):
                             total_missing += 1
     if total_missing > 0:
         print('Total number of Nones: {0}'.format(str(total_missing),))
-    return total_with_stat
+    return total_with_stat, total_missing
 
 ''' 
     The next function returns a list containing the data types for each column
@@ -324,9 +326,9 @@ def total_payer2(filename,code):
 '''
 def get_bootstrap_statistic(stat_func, code=None):
     if code is not None:
-        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv', code)
+        test_stat, no_missing = stat_func('cleaned_data/core_patients_cleaned.csv', code)
     else:
-        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv')
+        test_stat, no_missing = stat_func('cleaned_data/core_patients_cleaned.csv')
     print("Test statistic: {0}".format(str(test_stat),))
     random_stat = []
 
@@ -334,9 +336,9 @@ def get_bootstrap_statistic(stat_func, code=None):
         try:
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
             if code is not None:
-                random_stat.append(stat_func(file_name,code))
+                random_stat.append(stat_func(file_name,code, no_missing))
             else:
-                random_stat.append(stat_func(file_name))
+                random_stat.append(stat_func(file_name, no_missing))
         except:
             # print('Couldnt load file!')
             # try:
@@ -395,37 +397,31 @@ def total_with_urethral_injury(filename):
     1) $1 - $38,999; (2) $39,000 - $47,999; (3) $48,000 - $62,999;
     and (4) $63,000 or more.
 '''
-def total_with_median_income(filename,code):
+def total_with_median_income(filename,code, no_missing=0):
 
     data_type = get_data_type()
     ZIPINC_QRTL_index = int(data_type.index('ZIPINC_QRTL'))
-    num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index)
+    num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index,None,no_missing)
     return num_with_zip_inc
 
 ''' 
 '''
-def total_in_quarter(filename,code):
+def total_in_quarter(filename,code, no_missing=0):
 
     data_type = get_data_type()
     DQTR_index = int(data_type.index('DQTR'))
-    num_in_dqtr = total_with(filename,code,DQTR_index)
+    num_in_dqtr = total_with(filename,code,DQTR_index,None,no_missing)
     return num_in_dqtr
 
 ''' 
     ICD-9-CM procedures performed in ED
 '''
-def total_with_procedure_ed(filename,code):
-    if filename == 'control':
-        filename = 'cleaned_data/ed_controls_cleaned'
-    elif filename == 'patient':
-        filename = 'cleaned_data/ed_patients_cleaned'
-    else:
-        print('Invalid filename')
-        return None
+def total_with_procedure_ed(filename,code, no_missing=0):
+
     data_type = get_data_type_ed_supplement()
     PR_ED1_index = int(data_type.index('PR_ED1'))
     PR_ED9_index = int(data_type.index('PR_ED9'))
-    num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index)
+    num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index, no_missing)
     return num_with_procedure
 
 ''' 
@@ -433,28 +429,14 @@ def total_with_procedure_ed(filename,code):
     Procedure may have been performed in the ED
     or during the hospital stay.
 '''
-def total_with_procedure_all(filename,code):
-    if filename == 'control':
-        filename = 'cleaned_data/ip_controls_cleaned'
-    elif filename == 'patient':
-        filename = 'cleaned_data/ip_patients_cleaned'
-    else:
-        print('Invalid filename')
-        return None
+def total_with_procedure_all(filename,code, no_missing=0):
     data_type = get_data_type_ip_supplement()
     PR_IP1_index = int(data_type.index('PR_IP1'))
     PR_IP9_index = int(data_type.index('PR_IP9'))
-    num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index)
+    num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index, no_missing)
     return num_with_procedure
 
 def average_charges_ip(filename):
-    if filename == 'control':
-        filename = 'cleaned_data/ip_controls_cleaned'
-    elif filename == 'patient':
-        filename = 'cleaned_data/ip_patients_cleaned'
-    else:
-        print('Invalid filename')
-        return None
     data_type = get_data_type_ip_supplement()
     TOTCHG_IP_index = int(data_type.index('TOTCHG_IP'))
     total_charges = 0
@@ -473,14 +455,6 @@ def average_charges_ip(filename):
     return float(total_charges)/float(num_patients)
 
 def average_los(filename):
-
-    if filename == 'control':
-        filename = 'cleaned_data/ip_controls_cleaned'
-    elif filename == 'patient':
-        filename = 'cleaned_data/ip_patients_cleaned'
-    else:
-        print('Invalid filename')
-        return None
     data_type = get_data_type_ip_supplement()
     LOS_IP_index = int(data_type.index('LOS_IP'))
     los_total = 0

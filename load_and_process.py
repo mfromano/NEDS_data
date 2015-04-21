@@ -26,7 +26,7 @@ urethral_injury_codes = ('8670','8671')
 '''
 
 def clean_core_data():
-    with open('NEDS_2012_CORE.csv') as raw_file:
+    with open('raw_data/NEDS_2012_CORE.csv') as raw_file:
         reader = csv.reader(raw_file)
         with open('core_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
@@ -35,7 +35,7 @@ def clean_core_data():
     print('Done with core!')
 
 def clean_ed_data():
-    with open('NEDS_2012_ED.csv') as raw_file:
+    with open('raw_data/NEDS_2012_ED.csv') as raw_file:
         reader = csv.reader(raw_file)
         with open('ed_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
@@ -44,7 +44,7 @@ def clean_ed_data():
     print('Done with ED!')
 
 def clean_ip_data():
-    with open('NEDS_2012_IP.csv') as raw_file:
+    with open('raw_data/NEDS_2012_IP.csv') as raw_file:
         reader = csv.reader(raw_file)
         with open('ip_cleaned.csv','w') as cleaned_file:
             writer = csv.writer(cleaned_file)
@@ -67,11 +67,12 @@ def cleaned_core(data_entry):
     # Go through list of entries and replace missing values with nones
     # Go through all of the indices in the list of missing value data types
     for i in range(len(label_list)):
+
         # get the corresponding index in the Core file for this data type
         core_index = data_type.index(label_list[i])
         # if the value in this index equals the 
         if data_entry[core_index] in null_vals[i]:
-            data_entry[i] = None
+            data_entry[core_index] = None
     return data_entry
 
 def cleaned_ed_supplement(data_entry):
@@ -90,7 +91,7 @@ def cleaned_ed_supplement(data_entry):
     for i in range(len(label_list)):
         ed_index = data_type.index(label_list[i])
         if data_entry[ed_index] in null_vals[i]:
-            data_entry[i] = None
+            data_entry[ed_index] = None
     return data_entry
 
 def cleaned_ip_supplement(data_entry):
@@ -110,7 +111,7 @@ def cleaned_ip_supplement(data_entry):
     for i in range(len(label_list)):
         ed_index = data_type.index(label_list[i])
         if data_entry[ed_index] in null_vals[i]:
-            data_entry[i] = None
+            data_entry[ed_index] = None
     return data_entry
 
 '''
@@ -288,7 +289,7 @@ def make_surrogate_replacement(num):
 def get_data_type():
     data_labels = {}
     data_type = []
-    with open('NEDS_2012_Labels_Core.txt','r') as read_file:
+    with open('raw_data/NEDS_2012_Labels_Core.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
@@ -302,7 +303,7 @@ def get_data_type():
 '''
 def get_data_type_ed_supplement():
     data_type = []
-    with open('NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
+    with open('raw_data/NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
@@ -311,7 +312,7 @@ def get_data_type_ed_supplement():
 
 def get_data_type_ip_supplement():
     data_type = []
-    with open('NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
+    with open('raw_data/NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
         for f in read_file:
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
@@ -321,15 +322,15 @@ def get_data_type_ip_supplement():
 
 def main():
     # load_and_format()
-    divide_ip_supplement()
-    divide_ed_supplement()
+    # divide_ip_supplement()
+    # divide_ed_supplement()
     # start, finish = int(sys.argv[1]), int(sys.argv[2])
     # make_surrogate_data(start,finish)
     # convert_core_to_supplement(start, finish)
     # stat = get_bootstrap_statistic(total_ed_event,1)
     # get_ed_supplement_from_core('NEDS_2012_CORE_Patients.csv')
     # choices for ed = [1, 2, 3, 9, 98, 99]
-    # clean_core_data()
+    clean_core_data()
     # clean_ed_data()
     # clean_ip_data()
     # stat = get_bootstrap_statistic(average_age)
