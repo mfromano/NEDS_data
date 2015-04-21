@@ -323,7 +323,7 @@ def main():
     # clean_core_data()
     # clean_ed_data()
     # clean_ip_data()
-    load_and_format()
+    # load_and_format()
     divide_ip_supplement()
     divide_ed_supplement()
     # start, finish = int(sys.argv[1]), int(sys.argv[2])

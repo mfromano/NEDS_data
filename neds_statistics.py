@@ -86,7 +86,8 @@ def total_with(filename, code, index_begin, index_end=None, truncate=0):
                         if code == int(line[index_begin]):
                             total_with_stat += 1
                         elif int(line[index_begin]) < 0:
-                            total_missing += 1
+                            print('Getting rid of Nones fucked up')
+                            sys.exit(1)
                     except:
                         if line[index_begin] is None or line[index_begin] == '':
                             total_missing += 1
@@ -478,31 +479,32 @@ def test_erectile_fracture_code():
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
     assert(total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index) == 390)
+    return '390'
 
 def main():
-    # choices = [1, 2, 3, 9, 98, 99]
-    # for choice in choices:
-    #     print(total_ed_event('patient',choice))
-
-    choices= [1, 2, 3, 4]
+    choices = [1, 2, 3, 9, 98, 99]
     for choice in choices:
-        print(get_bootstrap_statistic(total_with_median_income, choice))
+        print('Total ed event: {0}'.format(total_ed_event('patient',choice),))
 
-    # print(test_erectile_fracture_code())
-    # print(average_age('control'))
-    # print(average_age('patient'))
+    # choices= [1, 2, 3, 4]
+    # for choice in choices:
+    #     print(get_bootstrap_statistic(total_with_median_income, choice))
 
-    # print('Total in quarters:')
-    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
-    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
-    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
-    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
+    print(test_erectile_fracture_code())
+    print('Average age of control group: {0}'.format(average_age('cleaned_data/core_patients_cleaned.csv'),))
+    print('Average age of patient group: {0}'.format(average_age('patient'),))
 
-    # print('Total with median incomes:')
-    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
-    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
-    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
-    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
+    print('Total in quarters:')
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
+    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
+
+    print('Total with median incomes:')
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
+    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
 
 if __name__ == '__main__':
     main()
