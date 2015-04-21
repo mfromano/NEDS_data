@@ -140,7 +140,7 @@ def load_and_format():
         # records that do contain a broken penis DX
         with open('core_patients_cleaned.csv','w') as patient_file:
             filewriter = csv.writer(patient_file,delimiter=',')
-            with open('core_cleaned.csv','r') as data_file:
+            with open('cleaned_data/core_cleaned.csv','r') as data_file:
                 csv_reader = csv.reader(data_file)
                 # num_patients stores the number of patients with a broken penis
                 num_patients = 0
@@ -209,14 +209,14 @@ def divide_ip_supplement():
     key_ed_index_core = int(data_type.index('KEY_ED'))
     key_ed_patients = []
 
-    with open('core_patients_cleaned.csv') as core_file:
+    with open('cleaned_data/core_patients_cleaned.csv') as core_file:
         reader = csv.reader(core_file)
         for line in reader:
             key_ed_patients.append(line[key_ed_index_core])
 
     ip_data_type = get_data_type_ip_supplement() 
     key_ed_index = int(ip_data_type.index('KEY_ED'))
-    with open('ip_cleaned.csv','r') as core_file:
+    with open('cleaned_data/ip_cleaned.csv','r') as core_file:
         read_file = csv.reader(core_file)
         with open('ip_patients_cleaned.csv','w') as patient_file:
             write_file = csv.writer(patient_file)
@@ -235,11 +235,11 @@ def divide_ed_supplement():
     ed_data_type = get_data_type_ed_supplement() 
     key_ed_index = int(ed_data_type.index('KEY_ED'))
     key_ed_patients = []
-    with open('core_patients_cleaned.csv') as core_file:
+    with open('cleaned_data/core_patients_cleaned.csv') as core_file:
         reader = csv.reader(core_file)
         for line in reader:
             key_ed_patients.append(line[key_ed_index_core])
-    with open('ed_cleaned.csv','r') as core_file:
+    with open('cleaned_data/ed_cleaned.csv','r') as core_file:
         read_file = csv.reader(core_file)
         with open('ed_patients_cleaned.csv','w') as patient_file:
             write_file = csv.writer(patient_file)
