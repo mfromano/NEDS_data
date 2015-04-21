@@ -478,8 +478,7 @@ def test_erectile_fracture_code():
     filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
-    assert(total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index) == 390)
-    return '390'
+    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
 
 def main():
     choices = [1, 2, 3, 9, 98, 99]
