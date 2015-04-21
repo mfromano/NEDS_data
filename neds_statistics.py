@@ -344,7 +344,7 @@ def get_bootstrap_statistic(stat_func, code=None):
             #     print('Couldn\'t generate replacement')
             return None
         # print('Done with {0}'.format(str(i),))
-    print(random_stat)
+    # print(random_stat)
     # numbins = 50
     # h = np.histogram(random_stat,bins=numbins)
     # lineheight = max(h[0])*1.25
@@ -393,13 +393,7 @@ def total_with_urethral_injury(filename):
     and (4) $63,000 or more.
 '''
 def total_with_median_income(filename,code):
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
+
     data_type = get_data_type()
     ZIPINC_QRTL_index = int(data_type.index('ZIPINC_QRTL'))
     num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index)
@@ -408,13 +402,7 @@ def total_with_median_income(filename,code):
 ''' 
 '''
 def total_in_quarter(filename,code):
-    # if filename == 'control':
-    #     filename = 'cleaned_data/core_controls_cleaned.csv'
-    # elif filename == 'patient':
-    #     filename = 'cleaned_data/core_patients_cleaned.csv'
-    # else:
-    #     print('Invalid filename')
-    #     return None
+
     data_type = get_data_type()
     DQTR_index = int(data_type.index('DQTR'))
     num_in_dqtr = total_with(filename,code,DQTR_index)
