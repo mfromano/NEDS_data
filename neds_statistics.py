@@ -13,6 +13,10 @@ TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entri
 TOTAL_MALE_PATIENTS = 13797122   
 PENILE_FRACTURE_CODE = '95913'
 URETHRAL_INJURY_CODES = ('8670','8671')
+
+''' TOD0: is number of patients in each quarter significantly different? what about wealth?
+
+'''
 '''
     Number of entries in files:
     in ed_patients_cleaned: 268
@@ -26,6 +30,7 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     Average cost of stay: $24098.25 (3 missing patients)
 
     36 patients with closed urethral injury / 122 inpatients (can't check to see if nones....)
+    (None with open urethral injury)
 
     Total in quarters (1 missing val):
     Quarter 1: 91
@@ -316,9 +321,9 @@ def total_payer2(filename,code):
 '''
 def get_bootstrap_statistic(stat_func, code=None):
     if code is not None:
-        test_stat = stat_func('NEDS_2012_CORE_Patients.csv', code)
+        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv', code)
     else:
-        test_stat = stat_func('NEDS_2012_CORE_Patients.csv')
+        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv',)
     print("Test statistic: {0}".format(str(test_stat),))
     random_stat = []
 
@@ -509,9 +514,14 @@ def test_erectile_fracture_code():
     assert(total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index) == 390)
 
 def main():
-    choices = [1, 2, 3, 9, 98, 99]
+    # choices = [1, 2, 3, 9, 98, 99]
+    # for choice in choices:
+    #     print(total_ed_event('patient',choice))
+
+    choices= [1, 2, 3, 4]
     for choice in choices:
-        print(total_ed_event('patient',choice))
+        print(get_bootstrap_statistic(total_in_quarter, choice))
+
     # print(test_erectile_fracture_code())
     # print(average_age('control'))
     # print(average_age('patient'))
