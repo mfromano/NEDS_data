@@ -32,11 +32,11 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     36 patients with closed urethral injury / 122 inpatients (can't check to see if nones....)
     (None with open urethral injury)
 
-    Total in quarters (1 missing val):
-    Quarter 1: 91
-    Quarter 2: 105
-    Quarter 3: 114
-    Quarter 4: 79
+    Total in quarters (1 missing val for each):
+    Quarter 1: 91 (P=0.231)
+    Quarter 2: 105 (P=0.791)
+    Quarter 3: 114 (P=0.961)
+    Quarter 4: 79 (P=0.009) <- significantly fewer in Quarter 4; no change with others. Bonferroni factor of 4
 
     Median household income quartiles for patient's ZIP Code.
     For 2012, the median income quartiles are defined as:
@@ -510,7 +510,7 @@ def main():
 
     choices= [1, 2, 3, 4]
     for choice in choices:
-        print(get_bootstrap_statistic(total_in_quarter, choice))
+        print(get_bootstrap_statistic(total_with_median_income, choice))
 
     # print(test_erectile_fracture_code())
     # print(average_age('control'))
