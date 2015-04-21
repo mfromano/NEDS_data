@@ -408,13 +408,13 @@ def total_with_median_income(filename,code):
 ''' 
 '''
 def total_in_quarter(filename,code):
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
+    # if filename == 'control':
+    #     filename = 'cleaned_data/core_controls_cleaned.csv'
+    # elif filename == 'patient':
+    #     filename = 'cleaned_data/core_patients_cleaned.csv'
+    # else:
+    #     print('Invalid filename')
+    #     return None
     data_type = get_data_type()
     DQTR_index = int(data_type.index('DQTR'))
     num_in_dqtr = total_with(filename,code,DQTR_index)
