@@ -36,17 +36,17 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     Quarter 1: 91 (P=0.231)
     Quarter 2: 105 (P=0.791)
     Quarter 3: 114 (P=0.961)
-    Quarter 4: 79 (P=0.009) <- significantly fewer in Quarter 4; no change with others. Bonferroni factor of 4
+    Quarter 4: 79 (P=0.009) <- With Bonferroni correction, not significantly different
 
     Median household income quartiles for patient's ZIP Code.
     For 2012, the median income quartiles are defined as:
     1) $1 - $38,999; (2) $39,000 - $47,999; (3) $48,000 - $62,999;
     and (4) $63,000 or more.
-    Total with median incomes (9 missing vals):
-    1) 115
-    2) 106
-    3) 93
-    4) 67
+    Total with median incomes (9 missing vals) (None are significantly different from population):
+    1) 115 P=0.037
+    2) 106 P=0.784
+    3) 93 P=0.81
+    4) 67 P=0.47
     
     Average_age is 39.0 for patients, 37.6 for other patients (not significantly different.
         ***387 missing patients in control data set here***
@@ -83,8 +83,10 @@ def total_with(filename, code, index_begin, index_end=None):
                     try:
                         if code == int(line[index_begin]):
                             total_with_stat += 1
+                        elif int(line[index_begin]) < 0:
+                            total_missing += 1
                     except:
-                        if line[index_begin] is None or line[index_begin] == '' or line[index_begin < 0]:
+                        if line[index_begin] is None or line[index_begin] == '':
                             total_missing += 1
             else:
                 for line in reader:
@@ -261,13 +263,13 @@ def total_payer1(filename,code):
     total_patients = 0
     missing_patients = 0
 
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
+    # if filename == 'control':
+    #     filename = 'cleaned_data/core_controls_cleaned.csv'
+    # elif filename == 'patient':
+    #     filename = 'cleaned_data/core_patients_cleaned.csv'
+    # else:
+    #     print('Invalid filename')
+    #     return None
 
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
@@ -324,7 +326,7 @@ def get_bootstrap_statistic(stat_func, code=None):
     if code is not None:
         test_stat = stat_func('cleaned_data/core_patients_cleaned.csv', code)
     else:
-        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv',)
+        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv')
     print("Test statistic: {0}".format(str(test_stat),))
     random_stat = []
 
@@ -370,13 +372,13 @@ def total_with_urethral_injury(filename):
     DX15_index = int(data_type.index('DX15'))
     num_with_ui = [0,0]
 
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
+    # if filename == 'control':
+    #     filename = 'cleaned_data/core_controls_cleaned.csv'
+    # elif filename == 'patient':
+    #     filename = 'cleaned_data/core_patients_cleaned.csv'
+    # else:
+    #     print('Invalid filename')
+    #     return None
 
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
