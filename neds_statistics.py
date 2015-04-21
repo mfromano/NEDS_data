@@ -93,7 +93,8 @@ def total_with(filename, code, index_begin, index_end=None):
                             total_with_stat += 1
                     except:
                             total_missing += 1
-    print('Total number of Nones: {0}'.format(str(total_missing),))
+    if total_missing > 0:
+        print('Total number of Nones: {0}'.format(str(total_missing),))
     return total_with_stat
 
 ''' 
