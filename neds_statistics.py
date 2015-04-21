@@ -484,17 +484,13 @@ def test_erectile_fracture_code():
 def main():
     choices = [1, 2, 3, 9, 98, 99]
     for choice in choices:
-        print('Total ed event: {0}'.format(total_ed_event('patient',choice),))
-
-    # choices= [1, 2, 3, 4]
-    # for choice in choices:
-    #     print(get_bootstrap_statistic(total_with_median_income, choice))
+        print('Total ed event: {0}'.format(str(total_ed_event('patient',choice)),))
 
     print(test_erectile_fracture_code())
-    print('Average age of control group: {0}'.format(average_age('cleaned_data/core_patients_cleaned.csv'),))
-    print('Average age of patient group: {0}'.format(average_age('patient'),))
+    print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
 
-    print('Total in quarters:')
+    print('Total in each quarter:')
     print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
     print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
     print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
