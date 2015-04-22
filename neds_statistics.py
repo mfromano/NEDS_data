@@ -452,7 +452,7 @@ def main():
     print('Average length of stay:')
     print(average_los('cleaned_data/ip_patients_cleaned.csv'))
 
-    print('Total cost of stay:')jh
+    print('Total cost of stay:')
     print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
 
     print('Total in each quarter:')
