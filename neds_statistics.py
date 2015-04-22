@@ -156,14 +156,6 @@ def average_age(filename):
     num_patients = 0
     missing_patients = 0
 
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
-
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -172,7 +164,8 @@ def average_age(filename):
                 total_age+=int(row[age_index])
             else:
                 missing_patients += 1
-    print("Total number of missing patients: {0}".format(missing_patients,))
+    if missing_patients > 0:
+        print("Total number of missing patients: {0}".format(missing_patients,))
     return float(total_age)/float(num_patients)
 
 
@@ -195,13 +188,6 @@ def total_disposition(filename, code):
     total_patients = 0
     missing_patients = 0
 
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -233,13 +219,6 @@ def total_ed_event(filename, code):
     total_patients = 0
     missing_patients = 0
 
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
@@ -266,13 +245,7 @@ def total_payer1(filename,code):
     total_patients = 0
     missing_patients = 0
 
-    # if filename == 'control':
-    #     filename = 'cleaned_data/core_controls_cleaned.csv'
-    # elif filename == 'patient':
-    #     filename = 'cleaned_data/core_patients_cleaned.csv'
-    # else:
-    #     print('Invalid filename')
-    #     return None
+
 
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
@@ -300,14 +273,6 @@ def total_payer2(filename,code):
     payer2_index = int(data_type.index('PAY2'))
     total_patients = 0
     missing_patients = 0
-
-    if filename == 'control':
-        filename = 'cleaned_data/core_controls_cleaned.csv'
-    elif filename == 'patient':
-        filename = 'cleaned_data/core_patients_cleaned.csv'
-    else:
-        print('Invalid filename')
-        return None
 
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
