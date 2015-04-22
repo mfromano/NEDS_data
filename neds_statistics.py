@@ -227,7 +227,8 @@ def total_ed_event(filename, code):
                     total_patients += 1
             else:
                 missing_patients += 1
-    print("Total number of missing patients: {0}".format(str(missing_patients),))
+    if missing_patients > 0:
+        print("Total number of missing patients: {0}".format(str(missing_patients),))
 
     return total_patients
 
