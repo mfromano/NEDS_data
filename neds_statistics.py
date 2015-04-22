@@ -341,14 +341,6 @@ def total_with_urethral_injury(filename):
     DX15_index = int(data_type.index('DX15'))
     num_with_ui = [0,0]
 
-    # if filename == 'control':
-    #     filename = 'cleaned_data/core_controls_cleaned.csv'
-    # elif filename == 'patient':
-    #     filename = 'cleaned_data/core_patients_cleaned.csv'
-    # else:
-    #     print('Invalid filename')
-    #     return None
-
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
@@ -452,8 +444,16 @@ def main():
         print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
 
     print(test_erectile_fracture_code())
-    print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
-    print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
+    # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
+    print('Total number  of urethral fractures:')
+    print(total_with_urethral_injury('cleaned_data/ip_patients_cleaned.csv'))
+
+    print('Total length of stay:')
+    print(average_los('cleaned_data/ip_patients_cleaned.csv'))
+
+    print('Total cost of stay:')
+    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
 
     print('Total in each quarter:')
     print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
