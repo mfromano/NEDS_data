@@ -404,13 +404,15 @@ def average_charges_ip(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            if float(line[TOTCHG_IP_index]) >= 0:
-                total_charges += float(line[TOTCHG_IP_index])
-                print(float(line[TOTCHG_IP_index]))
-                num_patients += 1
-            else:
+            try:
+                if float(line[TOTCHG_IP_index]) >= 0:
+                    total_charges += float(line[TOTCHG_IP_index])
+                    num_patients += 1
+            except:
+                print(line[TOTCHG_IP_index])
                 missing_patients +=1
-    print('Missing patients: {0}'.format(str(missing_patients),))
+    if missing_patients > 0:
+        print('Missing patients: {0}'.format(str(missing_patients),))
     return float(total_charges)/float(num_patients)
 
 def average_los(filename):
@@ -423,12 +425,12 @@ def average_los(filename):
         reader = csv.reader(inputfile)
         for line in reader:
             try:
-                print(float(line[LOS_IP_index]))
                 los_total += float(line[LOS_IP_index])
                 num_patients += 1
             except:
                 missing_patients +=1
-    print('Missing patients: {0}'.format(str(missing_patients),))
+    if missing_patients > 0:
+        print('Missing patients: {0}'.format(str(missing_patients),))
     return float(los_total)/float(num_patients)
 
 def test_erectile_fracture_code():
