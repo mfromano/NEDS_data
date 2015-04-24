@@ -7,10 +7,10 @@ def make_parsed_core(data_name):
 
     with open('cleaned_data/core_control_cleaned.csv','r') as control_file:
         csv_reader = csv.reader(control_file)
-        with open('core_control_cleaned_{0}'.format(data_name,), 'w') as new_file:
+        with open('core_control_cleaned_{0}.csv'.format(data_name,), 'w') as new_file:
             csv_writer = csv.writer(new_file)
             for line in csv_reader:
-                if line[data_index] is not None and is not '':
+                if line[data_index] is not None and line[data_index] is not '':
                     csv_writer.writerow(line)
 
 if __name__ == '__main__':
