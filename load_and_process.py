@@ -268,18 +268,10 @@ def convert_core_to_supplement(start,finish):
 '''
 def make_surrogate_replacement(num, data_size, datum):
 
-    def has_vital_entry(line,datum):
-        data_type = get_data_type()
-        data_type_index = int(data_type.index(datum))
-        if line[data_type_index] is not None and line[data_type_index] is not '':
-            return True
-        else:
-            return False
-
     def get_and_save_control_rows(indices,i):
         with open('control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum),'w') as outputfile:
             outputwriter = csv.writer(outputfile)
-            with open('NEDS_2012_CORE_Control.csv','r') as control_file:
+            with open('cleaned_data/core_controls_cleaned_{0}.csv'.format(datum,),'r') as control_file:
                 control_reader = csv.reader(control_file)
                 line_number = 0
                 for line in control_reader:

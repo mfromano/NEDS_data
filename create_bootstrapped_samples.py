@@ -13,7 +13,14 @@ def make_parsed_core(data_name):
                 if line[data_index] is not None and line[data_index] is not '':
                     csv_writer.writerow(line)
 
+
+
 if __name__ == '__main__':
-    make_parsed_core('PAY1')
-    make_parsed_core('ZIPINC_QRTL')
-    make_parsed_core('DQTR')
+    # make_parsed_core('PAY1')
+    # make_parsed_core('ZIPINC_QRTL')
+    # make_parsed_core('DQTR')
+    make_surrogate_data(0,1000, 389, 'ZIPINC_QRTL')
+    print('Done with zipinc_qrtl')
+    make_surrogate_data(0,1000, 381, 'DQTR')
+    print('Done with dqtr')
+
