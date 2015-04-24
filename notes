@@ -1,0 +1,11 @@
+multifile selection so you can upload one or multiple files
+
+files and metadata
+doesn't care about content
+then python script that updates database with that information
+
+update page -> use modified version of addmodel.py to update the database and to move files where they need to be
+
+modify so pulls the file from the user -> put the files in the inbox -> use script to loop over and move them
+
+upload_dnsim calls python function to upload thingy to database

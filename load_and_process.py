@@ -251,11 +251,11 @@ def divide_ed_supplement():
                     else:
                         write_control.writerow(line)
 
-def make_surrogate_data(start,finish):
+def make_surrogate_data(start,finish, data_size, data_type):
     samples = np.arange(start,finish)
     for i in samples:
-        make_surrogate_replacement(i)
-        print("done with surrogate number {0}".format(str(i)))
+        make_surrogate_replacement(i, data_size, data_type)
+        print("done with surrogate number {0} for {1}".format(str(i),data_type))
 
 def convert_core_to_supplement(start,finish):
     samples = np.arange(start,finish)
@@ -266,20 +266,30 @@ def convert_core_to_supplement(start,finish):
 '''
     If a surrogate file is messed up, use this one.
 '''
-def make_surrogate_replacement(num):
+def make_surrogate_replacement(num, data_size, datum):
+
+    def has_vital_entry(line,datum):
+        data_type = get_data_type()
+        data_type_index = int(data_type.index(datum))
+        if line[data_type_index] is not None and line[data_type_index] is not '':
+            return True
+        else
+            return False
+
     def get_and_save_control_rows(indices,i):
-        with open('control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)),'w') as outputfile:
+        with open('control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum),'w') as outputfile:
             outputwriter = csv.writer(outputfile)
             with open('NEDS_2012_CORE_Control.csv','r') as control_file:
                 control_reader = csv.reader(control_file)
                 line_number = 0
                 for line in control_reader:
                     if line_number in indices:
-                        outputwriter.writerow(line)
+                        outputwriter.writerow(line)                            
                     line_number += 1
-    control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=TOTAL_FRACTURES)
+
+    control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=data_size)
     get_and_save_control_rows(control_indices,num)
-    return 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(num),str(TOTAL_FRACTURES))
+    return 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum)
 
 ''' 
     The next function returns a list containing the data types for each column
