@@ -273,7 +273,7 @@ def make_surrogate_replacement(num, data_size, datum):
         data_type_index = int(data_type.index(datum))
         if line[data_type_index] is not None and line[data_type_index] is not '':
             return True
-        else
+        else:
             return False
 
     def get_and_save_control_rows(indices,i):
