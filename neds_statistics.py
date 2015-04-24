@@ -24,51 +24,6 @@ URETHRAL_INJURY_CODES = ('8670','8671')
     in ip_patients_cleaned: 122 (=number of patients admitted to same hospital)
     in ip_controls_cleaned: 4473357
 '''
-''' Descriptive statistics
-    Average length of stay for admitted patients with erectile fracture: 1.38 days
-
-    Average cost of stay: $24098.25 (3 missing patients)
-
-    36 patients with closed urethral injury / 122 inpatients (can't check to see if nones....)
-    (None with open urethral injury)
-
-    Total in quarters (1 missing val for each):
-    Quarter 1: 91 (P=0.231)
-    Quarter 2: 105 (P=0.791)
-    Quarter 3: 114 (P=0.961)
-    Quarter 4: 79 (P=0.009) <- With Bonferroni correction, not significantly different
-
-    Median household income quartiles for patient's ZIP Code.
-    For 2012, the median income quartiles are defined as:
-    1) $1 - $38,999; (2) $39,000 - $47,999; (3) $48,000 - $62,999;
-    and (4) $63,000 or more.
-    Total with median incomes (9 missing vals) (None are significantly different from population):
-    1) 115 P=0.037
-    2) 106 P=0.784
-    3) 93 P=0.81
-    4) 67 P=0.47
-    
-    Average_age is 39.0 for patients, 37.6 for other patients (not significantly different.
-        ***387 missing patients in control data set here***
-
-    Type of ED event: (1) ED visit in which the patient is
-    treated and released, (2) ED visit in which the patient is
-    admitted to this same hospital, (3) ED visit in which the
-    patient is transferred to another short-term hospital, (9)
-    ED visit in which the patient died in the ED, (98) ED
-    visits in which patient was not admitted, destination
-    unknown, (99) ED visit in which patient was discharged
-    alive, destination unknown (but not admitted)
-
-    1) 233
-    2) 122
-    3) 34
-    9) 0
-    98) 1
-    99) 0
-
-'''
-
 '''
     General getter method for a particular stat
 '''
@@ -395,6 +350,26 @@ def total_with_procedure_all(filename,code, no_missing=0):
     num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index, no_missing)
     return num_with_procedure
 
+
+def average_charges_ed(filename):
+    data_type = get_data_type()
+    TOTCHG_ED_index = int(data_type.index('TOTCHG_ED'))
+    total_charges = 0
+    num_patients = 0
+    missing_patients = 0
+    with open(filename) as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            try:
+                if float(line[TOTCHG_ED_index]) >= 0:
+                    total_charges += float(line[TOTCHG_ED_index])
+                    num_patients += 1
+            except:
+                missing_patients +=1
+    if missing_patients > 0:
+        print('Missing patients: {0}'.format(str(missing_patients),))
+    return float(total_charges)/float(num_patients)
+
 def average_charges_ip(filename):
     data_type = get_data_type_ip_supplement()
     TOTCHG_IP_index = int(data_type.index('TOTCHG_IP'))
@@ -409,7 +384,6 @@ def average_charges_ip(filename):
                     total_charges += float(line[TOTCHG_IP_index])
                     num_patients += 1
             except:
-                print(line[TOTCHG_IP_index])
                 missing_patients +=1
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
@@ -446,7 +420,7 @@ def main():
         print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
 
     print(test_erectile_fracture_code())
-    # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
     # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
     print('Total number  of urethral fractures:')
     print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
@@ -454,8 +428,10 @@ def main():
     print('Average length of stay:')
     print(average_los('cleaned_data/ip_patients_cleaned.csv'))
 
-    print('Total cost of stay:')
+    print('Total cost of stay in IP:')
     print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
+    print('Total cost of stay in ED:')
+    print(average_charges_ed('cleaned_data/ed_patients_cleaned.csv'))
 
     print('Total in each quarter:')
     print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
