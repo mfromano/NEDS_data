@@ -279,7 +279,7 @@ def make_surrogate_replacement(num, data_size, datum):
                         outputwriter.writerow(line)                            
                     line_number += 1
 
-    control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-1,size=data_size)
+    control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-(TOTAL_FRACTURES-data_size)-1,size=data_size)
     get_and_save_control_rows(control_indices,num)
     return 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum)
 
