@@ -255,7 +255,7 @@ def get_bootstrap_statistic(stat_func, code=None):
     random_stat = []
 
     for i in range(1000):
-        if stat_func == average_age:
+        if stat_func == total_ed_event:
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
         else:
             print('invalid stat_func.')
