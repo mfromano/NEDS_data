@@ -440,8 +440,7 @@ def main():
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
 
-    print('Bootstrap statistic for average age:')
-    print(get_bootstrap_statistic(average_age))
+    
 
 if __name__ == '__main__':
     main()
