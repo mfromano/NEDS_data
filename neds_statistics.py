@@ -256,25 +256,15 @@ def get_bootstrap_statistic(stat_func, code=None):
 
     for i in range(1000):
         if stat_func == average_age:
-            print('yo')
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
         else:
             print('invalid stat_func.')
             sys.exit(1)
-        try:
-            if code is not None:
-                random_stat.append(stat_func(file_name,code, 0))
-            else:
-                random_stat.append(stat_func(file_name, 0))
-        except:
-            # print('Couldnt load file!')
-            # try:
-            #     print('Trying to generate a replacement file for iteration i= {0}'.format(str(i),) )
-            #     file_name = make_surrogate_replacement(i)
-            #     random_stat.append(stat_func(file_name,code))
-            # except:
-            #     print('Couldn\'t generate replacement')
-            return None
+        if code is not None:
+            random_stat.append(stat_func(file_name,code))
+        else:
+            random_stat.append(stat_func(file_name))
+
         # print('Done with {0}'.format(str(i),))
     # print(random_stat)
     # numbins = 50
