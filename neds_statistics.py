@@ -412,7 +412,8 @@ def main():
     choices = [1, 2, 3, 9, 98, 99]
     for choice in choices:
         # print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
-        print(get_bootstrap_statistic(total_ed_event,choice))
+        stat = get_bootstrap_statistic(total_ed_event,choice)
+        print('Statistic: {0}, is significant: {1}',format(str(stat),str(stat < (0.025/6)) )
     # print(test_erectile_fracture_code())
     # # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
     # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
