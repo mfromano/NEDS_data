@@ -430,8 +430,8 @@ def main():
 
     print('Total cost of stay in IP:')
     print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
-    print('Total cost of stay in ED:')
-    print(average_charges_ed('cleaned_data/ed_patients_cleaned.csv'))
+    # print('Total cost of stay in ED:')
+    # print(average_charges_ed('cleaned_data/ed_patients_cleaned.csv'))
 
     print('Total in each quarter:')
     print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
