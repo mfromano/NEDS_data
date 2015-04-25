@@ -256,6 +256,7 @@ def get_bootstrap_statistic(stat_func, code=None):
 
     for i in range(1000):
         if stat_func == average_age:
+            print('yo')
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
         else:
             print('invalid stat_func.')
@@ -419,35 +420,35 @@ def test_erectile_fracture_code():
     return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
 
 def main():
-    choices = [1, 2, 3, 9, 98, 99]
-    for choice in choices:
-        print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
+    # choices = [1, 2, 3, 9, 98, 99]
+    # for choice in choices:
+    #     print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
 
-    print(test_erectile_fracture_code())
-    # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
-    print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
-    print('Total number  of urethral fractures:')
-    print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
+    # print(test_erectile_fracture_code())
+    # # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
+    # print('Total number  of urethral fractures:')
+    # print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
 
-    print('Average length of stay:')
-    print(average_los('cleaned_data/ip_patients_cleaned.csv'))
+    # print('Average length of stay:')
+    # print(average_los('cleaned_data/ip_patients_cleaned.csv'))
 
-    print('Total cost of stay in IP:')
-    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
-    # print('Total cost of stay in ED:')
-    # print(average_charges_ed('cleaned_data/ed_patients_cleaned.csv'))
+    # print('Total cost of stay in IP:')
+    # print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
+    # # print('Total cost of stay in ED:')
+    # # print(average_charges_ed('cleaned_data/ed_patients_cleaned.csv'))
 
-    print('Total in each quarter:')
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
+    # print('Total in each quarter:')
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
+    # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
 
-    print('Total with median incomes:')
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
+    # print('Total with median incomes:')
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
+    # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
 
     print('Bootstrap statistic for average age:')
     print(get_bootstrap_statistic(average_age))
