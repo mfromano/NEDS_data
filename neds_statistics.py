@@ -326,7 +326,6 @@ def total_in_quarter(filename,code, no_missing=0):
     ICD-9-CM procedures performed in ED
 '''
 def total_with_procedure_ed(filename,code, no_missing=0):
-
     data_type = get_data_type_ed_supplement()
     PR_ED1_index = int(data_type.index('PR_ED1'))
     PR_ED9_index = int(data_type.index('PR_ED9'))
@@ -410,9 +409,10 @@ def test_erectile_fracture_code():
     return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
 
 def main():
-    # choices = [1, 2, 3, 9, 98, 99]
-    # for choice in choices:
-    #     print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
+    choices = [1, 2, 3, 9, 98, 99]
+    for choice in choices:
+        print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
+        print('Bootstrapped pval: {0}'.format(str(get_bootstrap_statistic(total_ed_event,choice)))
 
     # print(test_erectile_fracture_code())
     # # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
