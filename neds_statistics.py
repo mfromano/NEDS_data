@@ -255,12 +255,16 @@ def get_bootstrap_statistic(stat_func, code=None):
     random_stat = []
 
     for i in range(1000):
-        try:
+        if stat_func == average_age:
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
+        else:
+            print('invalid stat_func.')
+            sys.exit(1)
+        try:
             if code is not None:
-                random_stat.append(stat_func(file_name,code, no_missing))
+                random_stat.append(stat_func(file_name,code, 0))
             else:
-                random_stat.append(stat_func(file_name, no_missing))
+                random_stat.append(stat_func(file_name, 0))
         except:
             # print('Couldnt load file!')
             # try:
@@ -420,8 +424,8 @@ def main():
         print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
 
     print(test_erectile_fracture_code())
-    print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
-    # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
+    # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
     print('Total number  of urethral fractures:')
     print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
 
@@ -444,6 +448,9 @@ def main():
     print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
     print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
     print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
+
+    print('Bootstrap statistic for average age:')
+    print(get_bootstrap_statistic(average_age))
 
 if __name__ == '__main__':
     main()
