@@ -277,7 +277,7 @@ def getlength(f):
 '''
 def make_surrogate_replacement(num, data_size, datum,max_size):
 
-    data_file = 'cleaned_data/core_controls_cleaned_{0}.csv'.format(data_type,)
+    data_file = 'cleaned_data/core_controls_cleaned_{0}.csv'.format(datum,)
 
     with open(data_file,'r') as control_file:
         control_reader = csv.reader(control_file)
