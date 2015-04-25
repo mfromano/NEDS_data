@@ -253,8 +253,10 @@ def divide_ed_supplement():
 
 def make_surrogate_data(start,finish, data_size, data_type):
     samples = np.arange(start,finish)
+    data_file = 'cleaned_data/core_controls_cleaned_{0}.csv'.format(data_type,)
+    max_size = getlength(data_file)
     for i in samples:
-        make_surrogate_replacement(i, data_size, data_type)
+        make_surrogate_replacement(i, data_size, data_type,max_size)
         print("done with surrogate number {0} for {1}".format(str(i),data_type))
 
 def convert_core_to_supplement(start,finish):
@@ -263,24 +265,30 @@ def convert_core_to_supplement(start,finish):
         filename = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES)) 
         get_ed_supplement_from_core(filename)
 
+def getlength(f):
+    m = open(f)
+    reader = csv.reader(m)
+    count = 0
+    for line in reader:
+        count+=1
+    return count
 '''
     If a surrogate file is messed up, use this one.
 '''
-def make_surrogate_replacement(num, data_size, datum):
+def make_surrogate_replacement(num, data_size, datum,max_size):
 
-    def get_and_save_control_rows(indices,i):
+
+    with open(data_file,'r') as control_file:
+        control_reader = csv.reader(control_file)
+        control_indices = np.random.randint(0, max_size,size=data_size)
         with open('control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum),'w') as outputfile:
             outputwriter = csv.writer(outputfile)
-            with open('cleaned_data/core_controls_cleaned_{0}.csv'.format(datum,),'r') as control_file:
-                control_reader = csv.reader(control_file)
-                line_number = 0
-                for line in control_reader:
-                    if line_number in indices:
-                        outputwriter.writerow(line)                            
-                    line_number += 1
-
-    control_indices = np.random.randint(0,TOTAL_MALE_PATIENTS-TOTAL_FRACTURES-(TOTAL_FRACTURES-data_size)-1,size=data_size)
-    get_and_save_control_rows(control_indices,num)
+            line_number = 0
+            for line in control_reader:
+                while line_number in control_indices:
+                    outputwriter.writerow(line)   
+                    control_indices.pop(control_indices.index(line_number))                         
+                line_number += 1
     return 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum)
 
 ''' 
