@@ -288,7 +288,7 @@ def make_surrogate_replacement(num, data_size, datum,max_size):
             for line in control_reader:
                 while line_number in control_indices:
                     outputwriter.writerow(line)   
-                    control_indices=np.delete(control_indices,np.where(control_indices==line_number))
+                    control_indices=np.delete(control_indices,np.where(control_indices==line_number)[0][0])
                 line_number += 1
     return 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum)
 
