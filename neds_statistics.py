@@ -248,9 +248,9 @@ def total_payer2(filename,code):
 '''
 def get_bootstrap_statistic(stat_func, code=None):
     if code is not None:
-        test_stat, no_missing = stat_func('cleaned_data/core_patients_cleaned.csv', code)
+        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv', code)
     else:
-        test_stat, no_missing = stat_func('cleaned_data/core_patients_cleaned.csv')
+        test_stat = stat_func('cleaned_data/core_patients_cleaned.csv')
     print("Test statistic: {0}".format(str(test_stat),))
     random_stat = []
 
