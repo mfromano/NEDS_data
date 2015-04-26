@@ -22,5 +22,6 @@ if __name__ == '__main__':
     # make_parsed_core('AGE')
     # make_surrogate_data(0,1000, 389, 'ZIPINC_QRTL')
     # print('Done with zipinc_qrtl')
-    make_surrogate_data(42,44, 381, 'DQTR')
-    print('Done with dqtr')
+    # make_surrogate_data(42,44, 381, 'DQTR')
+    make_surrogate_data(0,1000, 390, 'AGE')
+    print('Done with AGE')

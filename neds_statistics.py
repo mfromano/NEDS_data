@@ -257,6 +257,10 @@ def get_bootstrap_statistic(stat_func, code=None):
     for i in range(1000):
         if stat_func == total_ed_event:
             file_name = 'control_surrogates/control_surrogate_{0}_numfracs_{1}.csv'.format(str(i),str(TOTAL_FRACTURES))
+        elif stat_func == total_with_median_income:
+            file_name = 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(i),'ZIPINC_QRTL')
+        elif stat_func == total_in_quarter:
+            file_name = 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(i),'DQTR')
         else:
             print('invalid stat_func.')
             sys.exit(1)
@@ -413,6 +417,21 @@ def main():
     for choice in choices:
         # print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
         stat = get_bootstrap_statistic(total_ed_event,choice)
+        print('Statistic: {0}',format(stat,))
+        print(stat > (1-0.025/float(6)))
+
+
+    print('TOTAL WITH MEDIAN INCOME')
+    choices = [1, 2, 3, 4]
+    for choice in choices:
+        stat = get_bootstrap_statistic(total_with_median_income,choice)
+        print('Statistic: {0}',format(stat,))
+        print(stat > (1-0.025/float(6)))
+
+    print('total in quarter')
+    choices = [1, 2, 3, 4]
+    for choice in choices:
+        stat = get_bootstrap_statistic(total_in_quarter,choice)
         print('Statistic: {0}',format(stat,))
         print(stat > (1-0.025/float(6)))
     # print(test_erectile_fracture_code())
