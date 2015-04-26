@@ -426,6 +426,10 @@ def odds_ratio_urethral_injury():
                 DNE += 1
             else:
                 HNE += 1
+    print('Number of urethral injuries in rest: ')
+    print(float(DNE))
+    print('Total number of other patients (test: ')
+    print(float(DNE+HNE))
     NE = DE+HE
     NNE = DNE+HNE
     return (float(DE)/float(HE))/(float(DNE)/float(HNE))
