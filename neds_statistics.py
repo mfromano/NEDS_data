@@ -286,23 +286,7 @@ def get_bootstrap_statistic(stat_func, code=None):
 
     return percentile(random_stat,test_stat)
 
-'''
-    Next function gets total with concomitant urethral injuries
-'''
-def total_with_urethral_injury(filename):
-    data_type = get_data_type()
-    DX1_index = int(data_type.index('DX1'))
-    DX15_index = int(data_type.index('DX15'))
-    num_with_ui = [0,0]
 
-    with open(filename) as inputfile:
-        reader = csv.reader(inputfile)
-        for line in reader:
-            if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
-                num_with_ui[0] += 1
-            elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
-                num_with_ui[1] += 1
-    return num_with_ui
 
 ''' 
     Median household income quartiles for patient's ZIP Code.
@@ -347,7 +331,6 @@ def total_with_procedure_all(filename,code, no_missing=0):
     PR_IP9_index = int(data_type.index('PR_IP9'))
     num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index, no_missing)
     return num_with_procedure
-
 
 def average_charges_ed(filename):
     data_type = get_data_type()
@@ -413,6 +396,56 @@ def test_erectile_fracture_code():
     DX15_index = int(data_type.index('DX15'))
     return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
 
+def odds_ratio_urethral_injury():
+    data_type = get_data_type()
+    patients_filename = 'cleaned_data/core_patients_cleaned.csv'
+    core_filename = 'cleaned_data/core_controls_cleaned.csv'
+    DX1_index = int(data_type.index('DX1'))
+    DX15_index = int(data_type.index('DX15'))
+
+    DE = 0
+    DNE = 0
+    HE = 0
+    HNE = 0
+
+    missing_patients = 0
+    missing_controls = 0
+
+
+    with open(patients_filename,'r') as patients:
+        reader = csv.reader(patients)
+        for line in reader:
+            if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
+                DE += 1
+            else:
+                HE += 1
+    with open(core_filename, 'r') as controls:
+        reader = csv.reader(controls)
+        for line in reader:
+            if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
+                DNE += 1
+            else:
+                HNE += 1
+    return (float(DE)/float(NE))/(float(DNE)/float(NNE))
+
+'''
+    Next function gets total with concomitant urethral injuries
+'''
+def total_with_urethral_injury(filename):
+    data_type = get_data_type()
+    DX1_index = int(data_type.index('DX1'))
+    DX15_index = int(data_type.index('DX15'))
+    num_with_ui = [0,0]
+
+    with open(filename) as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
+                num_with_ui[0] += 1
+            elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
+                num_with_ui[1] += 1
+    return num_with_ui
+
 def main():
     # choices = [1, 2, 3, 9, 98, 99]
     # for choice in choices:
@@ -444,10 +477,10 @@ def main():
     # print('Average length of stay:')
     # print(average_los('cleaned_data/ip_patients_cleaned.csv'))
 
-    print('Total cost of stay in IP:')
-    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
-    print('Total cost of stay in ED:')
-    print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
+    # print('Total cost of stay in IP:')
+    # print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
+    # print('Total cost of stay in ED:')
+    # print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
 
     # print('Total in each quarter:')
     # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
@@ -460,7 +493,8 @@ def main():
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
-
+    print('Odds ratio for urethral injury:')
+    print(total_with_urethral_injury())
     
 
 if __name__ == '__main__':
