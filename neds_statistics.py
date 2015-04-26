@@ -494,7 +494,7 @@ def main():
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
     print('Odds ratio for urethral injury:')
-    print(total_with_urethral_injury())
+    print(odds_ratio_urethral_injury())
     
 
 if __name__ == '__main__':
