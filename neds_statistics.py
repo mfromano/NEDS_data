@@ -364,6 +364,7 @@ def average_charges_ed(filename):
                     num_patients += 1
             except:
                 missing_patients +=1
+                print(line[TOTCHG_ED_index])
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
     return float(total_charges)/float(num_patients)
