@@ -428,7 +428,7 @@ def odds_ratio_urethral_injury():
                 HNE += 1
     NE = DE+HE
     NNE = DNE+HNE
-    return (float(DE)/float(NE))/(float(DNE)/float(NNE))
+    return (float(DE)/float(HE))/(float(DNE)/float(HNE))
 
 '''
     Next function gets total with concomitant urethral injuries
