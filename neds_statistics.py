@@ -413,27 +413,27 @@ def test_erectile_fracture_code():
     return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
 
 def main():
-    choices = [1, 2, 3, 9, 98, 99]
-    for choice in choices:
-        # print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
-        stat = get_bootstrap_statistic(total_ed_event,choice)
-        print('Statistic: {0}',format(stat,))
-        print(stat > (1-0.025/float(6)))
+    # choices = [1, 2, 3, 9, 98, 99]
+    # for choice in choices:
+    #     # print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
+    #     stat = get_bootstrap_statistic(total_ed_event,choice)
+    #     print('Statistic: {0}'.format(stat,))
+    #     print(stat > (1-0.025/float(6)))
 
 
-    print('TOTAL WITH MEDIAN INCOME')
-    choices = [1, 2, 3, 4]
-    for choice in choices:
-        stat = get_bootstrap_statistic(total_with_median_income,choice)
-        print('Statistic: {0}',format(stat,))
-        print(stat > (1-0.025/float(6)))
+    # print('TOTAL WITH MEDIAN INCOME')
+    # choices = [1, 2, 3, 4]
+    # for choice in choices:
+    #     stat = get_bootstrap_statistic(total_with_median_income,choice)
+    #     print('Statistic: {0}'.format(stat,))
+    #     print(stat > (1-0.025/float(6)))
 
-    print('total in quarter')
-    choices = [1, 2, 3, 4]
-    for choice in choices:
-        stat = get_bootstrap_statistic(total_in_quarter,choice)
-        print('Statistic: {0}',format(stat,))
-        print(stat > (1-0.025/float(6)))
+    # print('total in quarter')
+    # choices = [1, 2, 3, 4]
+    # for choice in choices:
+    #     stat = get_bootstrap_statistic(total_in_quarter,choice)
+    #     print('Statistic: {0}'.format(stat,))
+    #     print(stat > (1-0.025/float(6)))
     # print(test_erectile_fracture_code())
     # # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
     # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
@@ -443,10 +443,10 @@ def main():
     # print('Average length of stay:')
     # print(average_los('cleaned_data/ip_patients_cleaned.csv'))
 
-    # print('Total cost of stay in IP:')
-    # print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
-    # # print('Total cost of stay in ED:')
-    # # print(average_charges_ed('cleaned_data/ed_patients_cleaned.csv'))
+    print('Total cost of stay in IP:')
+    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
+    print('Total cost of stay in ED:')
+    print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
 
     # print('Total in each quarter:')
     # print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
