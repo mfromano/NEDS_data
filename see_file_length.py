@@ -1,5 +1,5 @@
 import csv
-import numpy
+import numpy as np
 
 def getlength(f):
     m = open(f)
