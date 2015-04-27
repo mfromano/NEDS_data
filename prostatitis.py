@@ -1,7 +1,7 @@
 import csv
 
-PROSTATITIS_CODE = '6019 '
 PROSTATITIS_CODE = '6019'
+CHRONIC_CODE = '6011'
 
 def get_data_type():
     data_labels = {}
@@ -18,10 +18,14 @@ if __name__ == "__main__":
     data_type = get_data_type()
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
+    CHRON1_index = int(data_type.index('CHRON1'))
+    CHRON15_index = int(data_type.index('CHRON15'))
     total_cases = 0
     with open('raw_data/NEDS_2012_CORE.csv') as raw_file:
         reader = csv.reader(raw_file)
         for line in reader:
             if PROSTATITIS_CODE in line[DX1_index:DX15_index]:
-                total_cases += 1
+                if CHRONIC_CODE not in line[DX1_index:DX15_index]:
+                    total_cases += 1
+
     print total_cases
