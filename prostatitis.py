@@ -1,6 +1,7 @@
 import csv
 
 PROSTATITIS_CODE = '6019 '
+PROSTATITIS_CODE = '6019'
 
 def get_data_type():
     data_labels = {}
