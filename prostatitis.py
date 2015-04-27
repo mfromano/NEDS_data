@@ -23,3 +23,4 @@ if __name__ == "__main__":
         for line in reader:
             if PROSTATITIS_CODE in line[DX1_index:DX15_index]:
                 total_cases += 1
+    print total_cases
