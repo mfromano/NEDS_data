@@ -1,5 +1,7 @@
 import csv
 
+10415
+
 PROSTATITIS_CODE = '6019'
 CHRONIC_CODE = '6011'
 
@@ -25,7 +27,7 @@ if __name__ == "__main__":
         reader = csv.reader(raw_file)
         for line in reader:
             if PROSTATITIS_CODE in line[DX1_index:DX15_index]:
-                if CHRONIC_CODE not in line[DX1_index:DX15_index]:
-                    total_cases += 1
+                # if CHRONIC_CODE not in line[DX1_index:DX15_index]:
+                total_cases += 1
 
     print total_cases
