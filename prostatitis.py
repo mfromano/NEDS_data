@@ -3,7 +3,7 @@ import csv
 # 10415 = total cases in 2012 without chronic prostatitis
 # 10418 = total cases in 2012 (including chronic prostatitis)
 
-
+TORSION_CODE = '6082'
 PROSTATITIS_CODE = '6019'
 CHRONIC_CODE = '6011'
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     with open('raw_data/NEDS_2012_CORE.csv') as raw_file:
         reader = csv.reader(raw_file)
         for line in reader:
-            if PROSTATITIS_CODE in line[DX1_index:DX15_index]:
+            if TORSION in line[DX1_index:DX15_index]:
                 # if CHRONIC_CODE not in line[DX1_index:DX15_index]:
                 total_cases += 1
 
