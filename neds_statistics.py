@@ -13,6 +13,8 @@ TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entri
 TOTAL_MALE_PATIENTS = 13797122   
 PENILE_FRACTURE_CODE = '95913'
 URETHRAL_INJURY_CODES = ('8670','8671')
+RETROGRADE_CYSTOURETHROGRAM = '8776'
+ULTRASOUND_URINARY = '8875'
 
 ''' TOD0: is number of patients in each quarter significantly different? what about wealth?
 
@@ -454,6 +456,22 @@ def total_with_urethral_injury(filename):
             elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
                 num_with_ui[1] += 1
     return num_with_ui
+
+def total_with_treatment(filename, treatment_code):
+    data_type = get_data_type_ed_supplement()
+    # CHECK THE NEXT FEW LINES!!!!!
+    # Which procedure code should we use?
+    CPT1_index = int(data_type.index('CPT1'))
+    CPT15_index = int(data_type.index('CPT15'))
+    total = 0
+    with open(filename) as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if treatment_code in line[CPT1_index:CPT15_index]
+                total += 1
+    return total
+
+
 
 def main():
 
