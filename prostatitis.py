@@ -28,7 +28,7 @@ if __name__ == "__main__":
     with open('raw_data/NEDS_2012_CORE.csv') as raw_file:
         reader = csv.reader(raw_file)
         for line in reader:
-            if TORSION in line[DX1_index:DX15_index]:
+            if TORSION_CODE in line[DX1_index:DX15_index]:
                 # if CHRONIC_CODE not in line[DX1_index:DX15_index]:
                 total_cases += 1
 
