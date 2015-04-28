@@ -458,16 +458,14 @@ def total_with_urethral_injury(filename):
     return num_with_ui
 
 def total_with_treatment(filename, treatment_code):
-    data_type = get_data_type_ed_supplement()
-    # CHECK THE NEXT FEW LINES!!!!!
-    # Which procedure code should we use?
-    CPT1_index = int(data_type.index('CPT1'))
-    CPT15_index = int(data_type.index('CPT15'))
+    data_type = get_data_type_ip_supplement()
+    PR_IP1_index = int(data_type.index('PR_IP1'))
+    PR_IP15_index = int(data_type.index('PR_IP15'))
     total = 0
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            if treatment_code in line[CPT1_index:CPT15_index]
+            if treatment_code in line[PR_IP1_index:PR_IP15_index]
                 total += 1
     return total
 
@@ -475,10 +473,10 @@ def total_with_treatment(filename, treatment_code):
 
 def main():
 
-    print('Average age')
-    stat = get_bootstrap_statistic(average_age)
-    print('Statistic: {0}'.format(stat,))
-    print(stat > (1-0.025/float(6)))
+    # print('Average age')
+    # stat = get_bootstrap_statistic(average_age)
+    # print('Statistic: {0}'.format(stat,))
+    # print(stat > (1-0.025/float(6)))
 
     # choices = [1, 2, 3, 9, 98, 99]
     # for choice in choices:
