@@ -261,6 +261,9 @@ def get_bootstrap_statistic(stat_func, code=None):
             file_name = 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(i),'ZIPINC_QRTL')
         elif stat_func == total_in_quarter:
             file_name = 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(i),'DQTR')
+        elif stat_func == average_age:
+            file_name = 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(i),'AGE')
+           
         else:
             print('invalid stat_func.')
             sys.exit(1)
@@ -453,6 +456,12 @@ def total_with_urethral_injury(filename):
     return num_with_ui
 
 def main():
+
+    print('Average age')
+    stat = get_bootstrap_statistic(average_age)
+    print('Statistic: {0}'.format(stat,))
+    print(stat > (1-0.025/float(6)))
+
     # choices = [1, 2, 3, 9, 98, 99]
     # for choice in choices:
     #     # print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
@@ -499,8 +508,9 @@ def main():
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
     # print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
-    print('Odds ratio for urethral injury:')
-    print(odds_ratio_urethral_injury())
+    # print('Odds ratio for urethral injury:')
+    # print(odds_ratio_urethral_injury())
+
     
 
 if __name__ == '__main__':

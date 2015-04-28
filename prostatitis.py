@@ -1,6 +1,8 @@
 import csv
 
-10415
+# 10415 = total cases in 2012 without chronic prostatitis
+# 10418 = total cases in 2012 (including chronic prostatitis)
+
 
 PROSTATITIS_CODE = '6019'
 CHRONIC_CODE = '6011'
