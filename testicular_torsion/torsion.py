@@ -68,7 +68,7 @@ def load_and_format():
                 # 
                 for line in csv_reader:
                     if line[isfemale_index] == '0':
-                        if any(t in line[DX1_index:DX15_index] for t in TORSION_CODES:
+                        if any(t in line[DX1_index:DX15_index] for t in TORSION_CODES):
                             num_patients += 1
                             filewriter.writerow(line)
                             total_patients += 1
