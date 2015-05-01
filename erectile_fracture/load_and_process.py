@@ -228,11 +228,11 @@ def divide_ip_supplement():
             write_file = csv.writer(patient_file)
             # with open('ip_controls_cleaned.csv','w') as control_file:
             #     write_control = csv.writer(control_file)
-                for line in read_file:
-                    if line[key_ed_index] in key_ed_patients:
-                        write_file.writerow(line)
-                    # elif line[key_ed_index] in key_ed_controls:
-                    #     write_control.writerow(line)
+            for line in read_file:
+                if line[key_ed_index] in key_ed_patients:
+                    write_file.writerow(line)
+                # elif line[key_ed_index] in key_ed_controls:
+                #     write_control.writerow(line)
 
 
 def divide_ed_supplement():
@@ -258,11 +258,11 @@ def divide_ed_supplement():
             write_file = csv.writer(patient_file)
             # with open('ed_controls_cleaned.csv','w') as control_file:
             #     write_control = csv.writer(control_file)
-                for line in read_file:
-                    if line[key_ed_index] in key_ed_patients:
-                        write_file.writerow(line)
-                    # elif line[key_ed_index] in key_ed_controls:
-                    #     write_control.writerow(line)
+            for line in read_file:
+                if line[key_ed_index] in key_ed_patients:
+                    write_file.writerow(line)
+                # elif line[key_ed_index] in key_ed_controls:
+                #     write_control.writerow(line)
 
 def make_surrogate_data(start,finish, data_size, data_type):
     samples = np.arange(start,finish)
