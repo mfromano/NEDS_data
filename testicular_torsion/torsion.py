@@ -1,6 +1,6 @@
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # 10415 = total cases in 2012 without chronic prostatitis
 # 10418 = total cases in 2012 (including chronic prostatitis)
 
