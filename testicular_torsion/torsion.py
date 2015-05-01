@@ -93,13 +93,5 @@ def get_total():
     print(total_cases)
 
 if __name__ == "__main__":
-    a, b = average_age('core_torsion_patients_cleaned.csv')
-    print(a)
-    numbins = 50
-    plt.hist(b,numbins)
-    plt.title('Distribution of Stat')
-    plt.xlabel('Value')
-    plt.ylabel('Count')
-
-    plt.show()
+    load_and_format()
     
