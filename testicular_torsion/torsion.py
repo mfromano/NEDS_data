@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 TORSION_CODES = ['60820','60821','60822','60823','60824']
 TORSION_TOTALS = [1936, 4, 40, 310, 75]
 PROSTATITIS_CODE = '6019'
-CHRONIC_CODE = '6011'
+CHRONIC_PROSTATITIS_CODE = '6011'
 
 def get_data_type():
     data_labels = {}

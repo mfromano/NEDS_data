@@ -215,10 +215,10 @@ def divide_ip_supplement():
         for line in reader:
             key_ed_patients.append(line[key_ed_index_core])
 
-    with open('cleaned_data/core_controls_cleaned.csv') as core_file:
-        reader = csv.reader(core_file)
-        for line in reader:
-            key_ed_controls.append(line[key_ed_index_core])
+    # with open('cleaned_data/core_controls_cleaned.csv') as core_file:
+    #     reader = csv.reader(core_file)
+    #     for line in reader:
+    #         key_ed_controls.append(line[key_ed_index_core])
 
     ip_data_type = get_data_type_ip_supplement() 
     key_ed_index = int(ip_data_type.index('KEY_ED'))
@@ -226,13 +226,13 @@ def divide_ip_supplement():
         read_file = csv.reader(core_file)
         with open('ip_patients_cleaned.csv','w') as patient_file:
             write_file = csv.writer(patient_file)
-            with open('ip_controls_cleaned.csv','w') as control_file:
-                write_control = csv.writer(control_file)
+            # with open('ip_controls_cleaned.csv','w') as control_file:
+            #     write_control = csv.writer(control_file)
                 for line in read_file:
                     if line[key_ed_index] in key_ed_patients:
                         write_file.writerow(line)
-                    elif line[key_ed_index] in key_ed_controls:
-                        write_control.writerow(line)
+                    # elif line[key_ed_index] in key_ed_controls:
+                    #     write_control.writerow(line)
 
 
 def divide_ed_supplement():
@@ -247,22 +247,22 @@ def divide_ed_supplement():
         for line in reader:
             key_ed_patients.append(line[key_ed_index_core])
 
-    with open('cleaned_data/core_controls_cleaned.csv') as core_file:
-        reader = csv.reader(core_file)
-        for line in reader:
-            key_ed_controls.append(line[key_ed_index_core])
+    # with open('cleaned_data/core_controls_cleaned.csv') as core_file:
+    #     reader = csv.reader(core_file)
+    #     for line in reader:
+    #         key_ed_controls.append(line[key_ed_index_core])
 
     with open('cleaned_data/ed_cleaned.csv','r') as core_file:
         read_file = csv.reader(core_file)
         with open('ed_patients_cleaned.csv','w') as patient_file:
             write_file = csv.writer(patient_file)
-            with open('ed_controls_cleaned.csv','w') as control_file:
-                write_control = csv.writer(control_file)
+            # with open('ed_controls_cleaned.csv','w') as control_file:
+            #     write_control = csv.writer(control_file)
                 for line in read_file:
                     if line[key_ed_index] in key_ed_patients:
                         write_file.writerow(line)
-                    elif line[key_ed_index] in key_ed_controls:
-                        write_control.writerow(line)
+                    # elif line[key_ed_index] in key_ed_controls:
+                    #     write_control.writerow(line)
 
 def make_surrogate_data(start,finish, data_size, data_type):
     samples = np.arange(start,finish)
