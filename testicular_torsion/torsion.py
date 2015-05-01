@@ -3,13 +3,34 @@ import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from scipy import stats
-
+'''
+   "610 " = "610 : SCROTUM & TUNICA I & D"
+   "6111" = "6111: SCROTUM & TUNICA BIOPSY"
+   "6119" = "6119: SCROT/TUNICA DX PROC NEC"
+   "612 " = "612 : EXCISION OF HYDROCELE"
+   "613 " = "613 : SCROTAL LES DESTRUCTION"
+   "6141" = "6141: SUTURE SCROTAL LACERAT"
+   "6142" = "6142: SCROTAL FISTULA REPAIR"
+   "6149" = "6149: SCROTUM/TUNIC REPAIR NEC"
+   "6191" = "6191: PERCUT TUNICA ASPIRATION"
+   "6192" = "6192: EXCISION TUNICA LES NEC"
+   "6199" = "6199: SCROTUM & TUNICA OP NEC"
+   "620 " = "620 : INCISION OF TESTES"
+   "6211" = "6211: CLOSED TESTICULAR BIOPSY"
+   "6212" = "6212: OPEN TESTICULAR BIOPSY"
+   "6219" = "6219: TESTES DX PROCEDURE NEC"
+   "622 " = "622 : TESTICULAR LES DESTRUCT"
+   "623 " = "623 : UNILATERAL ORCHIECTOMY"
+   "6241" = "6241: REMOVE BOTH TESTES"
+   "6242" = "6242: REMOVE SOLITARY TESTIS"
+   "625 " = "625 : ORCHIOPEXY"
+'''
 
 # import matplotlib.pyplot as plt
 # 10415 = total cases in 2012 without chronic prostatitis
 # 10418 = total cases in 2012 (including chronic prostatitis)
 
-
+ORCHIECTOMY_CODE = '623'
 TORSION_CODES = ['60820','60821','60822','60823','60824']
 TORSION_TOTALS = [1936, 4, 40, 310, 75]
 PROSTATITIS_CODE = '6019'
@@ -116,14 +137,33 @@ def get_total():
 
     print(total_cases)
 
-def has_orchiectomy(line):
+
+def make_proc_vs_age(code):
+    '''
+        1. Open both IP and Core patient files
+        2. Add whether or not orchiectomy to Y vector (has proc code)
+        3. Get key_ed
+        4. Add to key_ed list
+        5. Find key_ed in core patient file
+        6. Add patient age to appropriate time bin in X
+        7. calls fit_bino_glm
+    '''
+    with open('cleaned_data/ip_torsion_patients_cleaned.csv') as ip_file:
+        ip_reader = csv.reader(ip_file)
+        with open('cleaned_data/core_torsion_patients_cleaned.csv') as core_file:
+            core_reader = csv.reader(core_file)
+
+        
+
+
+def has_procedure_code(line, code):
     data_type = get_data_type_ip_supplement()
     PR_IP1_index = int(data_type.index('PR_IP1'))
     PR_IP9_index = int(data_type.index('PR_IP9'))
-
-
-    
-    return 
+    if code in line[PR_IP1_index:PR_IP9_index]:
+        return True
+    else:
+        return False
 
 def fit_bino_glm(Y, X):
     glm_binom = sm.GLM(X,Y,family=sm.families.Binomial())
