@@ -68,14 +68,13 @@ def load_and_format():
                 # 
                 for line in csv_reader:
                     if line[isfemale_index] == '0':
-                        for t in range(len(TORSION_CODES)):
-                            if TORSION_CODES[t] in line[DX1_index:DX15_index]:
-                                    num_patients += 1
-                                    filewriter.writerow(line)
-                                    total_patients += 1
-                            else:
-                                control_writer.writerow(line)
-                                total_patients += 1
+                        if any(t in line[DX1_index:DX15_index] for t in TORSION_CODES:
+                            num_patients += 1
+                            filewriter.writerow(line)
+                            total_patients += 1
+                        else:
+                            control_writer.writerow(line)
+                            total_patients += 1
     print(num_patients)
     print(total_patients)
 

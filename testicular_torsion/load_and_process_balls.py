@@ -61,6 +61,7 @@ def divide_ip_supplement():
             for line in read_file:
                 if line[key_ed_index] in key_ed_patients:
                     write_file.writerow(line)
+                    
                 # elif line[key_ed_index] in key_ed_controls:
                 #     write_control.writerow(line)
 
@@ -91,6 +92,7 @@ def divide_ed_supplement():
             for line in read_file:
                 if line[key_ed_index] in key_ed_patients:
                     write_file.writerow(line)
+                    
                 # elif line[key_ed_index] in key_ed_controls:
                 #     write_control.writerow(line)
 
