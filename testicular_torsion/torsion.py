@@ -1,8 +1,14 @@
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from scipy import stats
+
+
 # import matplotlib.pyplot as plt
 # 10415 = total cases in 2012 without chronic prostatitis
 # 10418 = total cases in 2012 (including chronic prostatitis)
+
 
 TORSION_CODES = ['60820','60821','60822','60823','60824']
 TORSION_TOTALS = [1936, 4, 40, 310, 75]
@@ -17,6 +23,24 @@ def get_data_type():
             currline = f.split('\"')[:2]
             currline[0] = currline[0].strip()
             data_labels[currline[0]] = currline[1]
+            data_type.append(currline[0])
+    return data_type
+
+def get_data_type_ed_supplement():
+    data_type = []
+    with open('raw_data/NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
+        for f in read_file:
+            currline = f.split('\"')[:2]
+            currline[0] = currline[0].strip()
+            data_type.append(currline[0])
+    return data_type
+
+def get_data_type_ip_supplement():
+    data_type = []
+    with open('raw_data/NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
+        for f in read_file:
+            currline = f.split('\"')[:2]
+            currline[0] = currline[0].strip()
             data_type.append(currline[0])
     return data_type
 
@@ -91,6 +115,21 @@ def get_total():
                     total_cases[t] += 1
 
     print(total_cases)
+
+def has_orchiectomy(line):
+    data_type = get_data_type_ip_supplement()
+    PR_IP1_index = int(data_type.index('PR_IP1'))
+    PR_IP9_index = int(data_type.index('PR_IP9'))
+
+
+    
+    return 
+
+def fit_bino_glm(Y, X):
+    glm_binom = sm.GLM(X,Y,family=sm.families.Binomial())
+    res = glm_binom.fit()
+    print(res.summary())
+
 
 if __name__ == "__main__":
     load_and_format()
