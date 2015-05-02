@@ -36,34 +36,6 @@ TORSION_TOTALS = [1936, 4, 40, 310, 75]
 PROSTATITIS_CODE = '6019'
 CHRONIC_PROSTATITIS_CODE = '6011'
 
-def get_data_type():
-    data_labels = {}
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_Core.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_labels[currline[0]] = currline[1]
-            data_type.append(currline[0])
-    return data_type
-
-def get_data_type_ed_supplement():
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_type.append(currline[0])
-    return data_type
-
-def get_data_type_ip_supplement():
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_type.append(currline[0])
-    return data_type
 
 def average_age(filename):
     data_type = get_data_type()
@@ -138,37 +110,9 @@ def get_total():
     print(total_cases)
 
 
-def make_proc_vs_age(code):
-    '''
-        1. Open both IP and Core patient files
-        2. Add whether or not orchiectomy to Y vector (has proc code)
-        3. Get key_ed
-        4. Add to key_ed list
-        5. Find key_ed in core patient file
-        6. Add patient age to appropriate time bin in X
-        7. calls fit_bino_glm
-    '''
-    with open('cleaned_data/ip_torsion_patients_cleaned.csv') as ip_file:
-        ip_reader = csv.reader(ip_file)
-        with open('cleaned_data/core_torsion_patients_cleaned.csv') as core_file:
-            core_reader = csv.reader(core_file)
-
-        
 
 
-def has_procedure_code(line, code):
-    data_type = get_data_type_ip_supplement()
-    PR_IP1_index = int(data_type.index('PR_IP1'))
-    PR_IP9_index = int(data_type.index('PR_IP9'))
-    if code in line[PR_IP1_index:PR_IP9_index]:
-        return True
-    else:
-        return False
 
-def fit_bino_glm(Y, X):
-    glm_binom = sm.GLM(X,Y,family=sm.families.Binomial())
-    res = glm_binom.fit()
-    print(res.summary())
 
 
 if __name__ == "__main__":
