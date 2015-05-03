@@ -137,7 +137,7 @@ def plot_odds(Y, age_list, numbins, proc_name):
     # first, get the bin centers to plot the bar graph
     bin_centers = list((bins[i]+bins[i-1])/2 for i,x in enumerate(bins) if i > 0)
     # calculate the fraction of patients in each age group who received the procedure
-    frac = list(float((x-patient_hist[i]))/float(x) for i,x in enumerate(age_hist))
+    frac = list(float((patient_hist[i]))/float(x) for i,x in enumerate(age_hist))
     # odds of patients in each age group who got procedure
     odds = list((float(patient_hist[i])/float(x-patient_hist[i])) for i,x in enumerate(age_hist))
     plt.bar(bin_centers,odds,width=(100/len(bin_centers)/2))
@@ -161,8 +161,7 @@ def make_proc_vs_age(code, numbins, proc_title):
     print('Got response vector')
     # now get list of ages for each key
     age_list, Y = ages_from_key_list(key_list, Y)
-    print('got age list')
-
+    print('ot age list')
     # Fit to age
     res = fit_bino_glm(Y,age_list,intercept=1)
 
