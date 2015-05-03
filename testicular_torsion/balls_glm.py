@@ -166,10 +166,6 @@ def make_proc_vs_age(code, numbins):
 
     plot_odds(Y,age_list, numbins)
 
-    # # get chi square statistic
-    print(stats.chisquare(np.sum(X,axis=0)))
-
-
 
 if __name__ == '__main__':
     make_proc_vs_age("623", 10)
