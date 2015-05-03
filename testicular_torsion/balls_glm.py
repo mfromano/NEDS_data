@@ -169,5 +169,5 @@ def make_proc_vs_age(code, numbins, proc_title):
 
 
 if __name__ == '__main__':
-    make_proc_vs_age("623", 10, 'Orchiectomy')
+    make_proc_vs_age("623", numbins=8, proc_title='Orchiectomy')
     # make_proc_vs_age("625", 10, 'Orchiopexy')
