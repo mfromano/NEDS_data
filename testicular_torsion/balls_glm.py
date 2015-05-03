@@ -68,7 +68,7 @@ def get_data_type_ip_supplement():
             data_type.append(currline[0])
     return data_type
 
-def fit_bino_glm(Y, X, intercept=0):
+def fit_bino_glm(Y, X, intercept=1):
     X = np.array(X)
     Y = np.array(Y)
     if intercept:
@@ -77,16 +77,6 @@ def fit_bino_glm(Y, X, intercept=0):
     res = glm_binom.fit()
     print(res.summary())
     return res
-
-def get_indicator_matrix(x, numbins):
-    X = np.zeros((len(x),numbins))
-    count, binlim = np.histogram(x,numbins)
-    for entry in range(len(x)):
-        for t in range(numbins):
-            if binlim[t] <= x[entry] < binlim[t+1]:
-                X[entry,t] = 1
-
-    return X
 
 def has_procedure_code(line, code):
     data_type = get_data_type_ip_supplement()
@@ -170,12 +160,8 @@ def make_proc_vs_age(code, numbins):
     # now get list of ages for each key
     age_list, Y = ages_from_key_list(key_list, Y)
     print('got age list')
-    X = get_indicator_matrix(age_list, numbins)
-    print('got indicator matrix')
 
-    # Fit to age bins?
-    # res = fit_bino_glm(Y,X)
-    # Or, fit to age?????
+    # Fit to age
     res = fit_bino_glm(Y,age_list,intercept=1)
 
     plot_odds(Y,age_list, numbins)
