@@ -110,11 +110,6 @@ def get_total():
     print(total_cases)
 
 
-
-
-
-
-
 if __name__ == "__main__":
     load_and_format()
     

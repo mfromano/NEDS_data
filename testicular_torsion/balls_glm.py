@@ -123,7 +123,7 @@ def ages_from_key_list(key_list, Y):
                 age_list.append(int(line[age_index]))
     return age_list, Y
 
-def plot_odds(Y, age_list, numbins):
+def plot_odds(Y, age_list, numbins, proc_name):
     # find indices at which patient got procedure
     indices = [i for i, x in enumerate(Y) if x == 1]
     # get ages of patients who got the procedure
@@ -139,12 +139,15 @@ def plot_odds(Y, age_list, numbins):
     # calculate the fraction of patients in each age group who received the procedure
     frac = list(float((x-patient_hist[i]))/float(x) for i,x in enumerate(age_hist))
     # odds of patients in each age group who got procedure
-    odds = list(math.log(float(patient_hist[i])/float(x-patient_hist[i])) for i,x in enumerate(age_hist))
+    odds = list((float(patient_hist[i])/float(x-patient_hist[i])) for i,x in enumerate(age_hist))
     plt.bar(bin_centers,odds,width=(100/len(bin_centers)/2))
+    plt.title(proc_name)
+    plt.xlabel('Age')
+    plt.ylabel('Odds (number with procedure/number without procedure)')
     plt.show()
 
 # MEAT of the file
-def make_proc_vs_age(code, numbins):
+def make_proc_vs_age(code, numbins, proc_title):
     '''
         1. Open both IP and Core patient files
         2. Add whether or not orchiectomy to Y vector (has proc code)
@@ -154,7 +157,6 @@ def make_proc_vs_age(code, numbins):
         6. Add patient age to appropriate time bin in X
         7. calls fit_bino_glm
     '''
-
     Y, key_list = age_response_vector(code)
     print('Got response vector')
     # now get list of ages for each key
@@ -164,8 +166,9 @@ def make_proc_vs_age(code, numbins):
     # Fit to age
     res = fit_bino_glm(Y,age_list,intercept=1)
 
-    plot_odds(Y,age_list, numbins)
+    plot_odds(Y,age_list, numbins, proc_title)
 
 
 if __name__ == '__main__':
-    make_proc_vs_age("623", 10)
+    make_proc_vs_age("623", 10, 'Orchiectomy')
+    # make_proc_vs_age("625", 10, 'Orchiopexy')
