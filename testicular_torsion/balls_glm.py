@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from scipy import stats
 import json
+import math
 '''
    "610 " = "610 : SCROTUM & TUNICA I & D"
    "6111" = "6111: SCROTUM & TUNICA BIOPSY"
@@ -67,10 +68,15 @@ def get_data_type_ip_supplement():
             data_type.append(currline[0])
     return data_type
 
-def fit_bino_glm(Y, X):
+def fit_bino_glm(Y, X, intercept=0):
+    X = np.array(X)
+    Y = np.array(Y)
+    if intercept:
+        X = sm.tools.tools.add_constant(X)
     glm_binom = sm.GLM(Y,X,family=sm.families.Binomial())
     res = glm_binom.fit()
     print(res.summary())
+    return res
 
 def get_indicator_matrix(x, numbins):
     X = np.zeros((len(x),numbins))
@@ -79,6 +85,7 @@ def get_indicator_matrix(x, numbins):
         for t in range(numbins):
             if binlim[t] <= x[entry] < binlim[t+1]:
                 X[entry,t] = 1
+
     return X
 
 def has_procedure_code(line, code):
@@ -107,7 +114,7 @@ def age_response_vector(code):
             key_list.append(line[ip_key_index])
     return Y, key_list
 
-def ages_from_key_list(key_list):
+def ages_from_key_list(key_list, Y):
     core_data_type = get_data_type()
     age_list = []
     age_index = int(core_data_type.index('AGE'))
@@ -118,7 +125,13 @@ def ages_from_key_list(key_list):
             for line in core_reader:
                 if key == line[core_key_index]:
                     age_list.append(int(line[age_index]))
-    return age_list
+    with open('cleaned_data/core_torsion_patients_cleaned.csv') as core_file:
+        core_reader = csv.reader(core_file)
+        for line in core_reader:
+            if line[core_key_index] not in key_list:
+                Y.append(0)
+                age_list.append(int(line[age_index]))
+    return age_list, Y
 
 def plot_odds(Y, age_list, numbins):
     # find indices at which patient got procedure
@@ -130,14 +143,14 @@ def plot_odds(Y, age_list, numbins):
     # get the counts for patients with the procedure
     patient_hist, bins = np.histogram(patient_ages,bins=bins)
     # now, plot odds
+
     # first, get the bin centers to plot the bar graph
     bin_centers = list((bins[i]+bins[i-1])/2 for i,x in enumerate(bins) if i > 0)
-
     # calculate the fraction of patients in each age group who received the procedure
     frac = list(float((x-patient_hist[i]))/float(x) for i,x in enumerate(age_hist))
     # odds of patients in each age group who got procedure
-    odds = list(float(patient_hist[i])/float(x-patient_hist[i]) for i,x in enumerate(age_hist))
-    plt.bar(bin_centers,odds,width=(100)/len(bin_centers)/2)
+    odds = list(math.log(float(patient_hist[i])/float(x-patient_hist[i])) for i,x in enumerate(age_hist))
+    plt.bar(bin_centers,odds,width=(100/len(bin_centers)/2))
     plt.show()
 
 # MEAT of the file
@@ -155,15 +168,15 @@ def make_proc_vs_age(code, numbins):
     Y, key_list = age_response_vector(code)
     print('Got response vector')
     # now get list of ages for each key
-    age_list = ages_from_key_list(key_list)
+    age_list, Y = ages_from_key_list(key_list, Y)
     print('got age list')
     X = get_indicator_matrix(age_list, numbins)
     print('got indicator matrix')
 
     # Fit to age bins?
-    # fit_bino_glm(Y,X)
+    # res = fit_bino_glm(Y,X)
     # Or, fit to age?????
-    # fit_bino_glm(Y,age_list)
+    res = fit_bino_glm(Y,age_list,intercept=1)
 
     plot_odds(Y,age_list, numbins)
 
