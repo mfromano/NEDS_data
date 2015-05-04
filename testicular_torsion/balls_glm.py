@@ -197,7 +197,7 @@ def make_proc_vs_age(code, numbins, proc_title):
     print('Got age list')
     # Fit to age
     # add location values to X and Y
-    key_list, X, Y = add_location_vals(key_list,X,Y)
+    # key_list, X, Y = add_location_vals(key_list,X,Y)
 
     res = fit_bino_glm(Y,X,intercept=1)
     
