@@ -5,6 +5,7 @@ import statsmodels.api as sm
 from scipy import stats
 import json
 import math
+import sys
 '''
    "610 " = "610 : SCROTUM & TUNICA I & D"
    "6111" = "6111: SCROTUM & TUNICA BIOPSY"
@@ -121,7 +122,8 @@ def ages_from_key_list(key_list, Y):
             if line[core_key_index] not in key_list:
                 Y.append(0)
                 age_list.append(int(line[age_index]))
-    return age_list, Y
+                key_list.append(line[core_key_index])
+    return age_list, Y, key_list
 
 def plot_odds(Y, age_list, numbins, proc_name):
     # find indices at which patient got procedure
@@ -146,6 +148,37 @@ def plot_odds(Y, age_list, numbins, proc_name):
     plt.ylabel('Odds (number with procedure/number without procedure)')
     plt.show()
 
+def add_area_code(key_list,X):
+    pass
+
+def add_location_vals(key_list,X,Y):
+    data_type = get_data_type()
+    location_index = int(data_type.index('PL_NCHS2006'))
+    key_index = int(data_type.index('KEY_ED'))
+    location_vals = np.zeros((len(key_list),6),)
+    for key in key_list:
+        with open('cleaned_data/core_torsion_patients_cleaned.csv') as core_file:
+            reader = csv.reader(core_file)
+            for line in reader:
+                if key == line[key_index]:
+                    location = int(key_list.index(key))
+                    location_value = line[location_index]
+                    if location_value == '':
+                        location_vals[location,:] = np.nan
+                    else:
+                        location_vals[location,int(location_value)-1] = 1
+    X = np.concatenate((np.array(X)[:,np.newaxis],location_vals),axis=1)
+    none_indices = np.where(np.isnan(X))
+    Y = np.array(Y)
+    Y = Y[:,np.newaxis]
+    for index in np.unique(none_indices[0])[::-1]:
+        X = np.delete(X,(index),axis=0)
+        Y = np.delete(Y,(index),axis=0)
+    none_indices = np.where(np.isnan(X))
+    return key_list, X, Y
+
+
+
 # MEAT of the file
 def make_proc_vs_age(code, numbins, proc_title):
     '''
@@ -160,14 +193,16 @@ def make_proc_vs_age(code, numbins, proc_title):
     Y, key_list = age_response_vector(code)
     print('Got response vector')
     # now get list of ages for each key
-    age_list, Y = ages_from_key_list(key_list, Y)
-    print('ot age list')
+    X, Y, key_list = ages_from_key_list(key_list, Y)
+    print('Got age list')
     # Fit to age
-    res = fit_bino_glm(Y,age_list,intercept=1)
+    # add location values to X and Y
+    key_list, X, Y = add_location_vals(key_list,X,Y)
 
-    plot_odds(Y,age_list, numbins, proc_title)
-
+    res = fit_bino_glm(Y,X,intercept=1)
+    
+    plot_odds(Y,X, numbins, proc_title)
 
 if __name__ == '__main__':
-    make_proc_vs_age("623", numbins=8, proc_title='Orchiectomy')
+    make_proc_vs_age("623", numbins=10, proc_title='Orchiectomy')
     # make_proc_vs_age("625", 10, 'Orchiopexy')
