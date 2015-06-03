@@ -1,6 +1,6 @@
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from scipy import stats
 import json
