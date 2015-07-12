@@ -41,20 +41,24 @@ def total_with(filename, code, index_begin, index_end=None, truncate=0):
                 for line in reader:
                     try:
                         if code == int(line[index_begin]):
-                            total_with_stat += 1
+                            # total_with_stat += 1
+                            total_with_stat += pt_weight(line)
                         elif int(line[index_begin]) < 0:
                             print('Getting rid of Nones fucked up')
                             sys.exit(1)
                     except:
                         if line[index_begin] is None or line[index_begin] == '':
-                            total_missing += 1
+                            # total_missing += 1
+                            total_missing += pt_weight(line)
             else:
                 for line in reader:
                     try:
                         if str(code) in line[index_begin:index_end]:
-                            total_with_stat += 1
+                            # total_with_stat += 1
+                            total_with_stat += pt_weight(line)
                     except:
-                            total_missing += 1
+                            # total_missing += 1
+                            total_missing += pt_weight(line)
     if total_missing > 0:
         print('Total number of Nones: {0}'.format(str(total_missing),))
     return total_with_stat, total_missing
@@ -95,6 +99,9 @@ def get_data_type_ip_supplement():
             currline[0] = currline[0].strip()
             data_type.append(currline[0])
     return data_type
+'''
+Make sure the next function works even with patient weightings
+'''
 
 def percentile(sample_list, value):
     num_below = 0
@@ -117,10 +124,13 @@ def average_age(filename):
         reader = csv.reader(currfile)
         for row in reader:
             if row[age_index] is not None and row[age_index] is not '':
-                num_patients +=1
-                total_age+=int(row[age_index])
+                # num_patients +=1
+                wt = pt_weight(row)
+                num_patients += wt
+                total_age+=float(row[age_index])*wt
             else:
-                missing_patients += 1
+                # missing_patients += 1
+                missing_patients += pt_weight(row)
     if missing_patients > 0:
         print("Total number of missing patients: {0}".format(missing_patients,))
     return float(total_age)/float(num_patients)
@@ -149,11 +159,13 @@ def total_disposition(filename, code):
         reader = csv.reader(currfile)
         for row in reader:
             # print(row[transfer_index])
+            wt = pt_weight(row)
             try:
                 if int(row[transfer_index]) == code:
-                    total_patients += 1
+                    # total_patients += 1
+                    total_patients += wt
             except:
-                missing_patients += 1
+                missing_patients += wt
     print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients
 
@@ -179,11 +191,14 @@ def total_ed_event(filename, code):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
+            wt = pt_weight(row)
             if row[edevent_index] is not None and row[edevent_index] > 0 and row[edevent_index] is not '':
                 if int(row[edevent_index]) == code:
-                    total_patients += 1
+                    # total_patients += 1
+                    total_patients == wt
             else:
-                missing_patients += 1
+                # missing_patients += 1
+                missing_patients += wt
     if missing_patients > 0:
         print("Total number of missing patients: {0}".format(str(missing_patients),))
 
@@ -208,12 +223,15 @@ def total_payer1(filename,code):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
+            wt = pt_weight(row)
             try:
                 if int(row[payer1_index]) == code:
-                    total_patients += 1
+                    # total_patients += 1
+                    total_patients += wt
             except:
                 if row[payer1_index] is None:
-                    missing_patients += 1
+                    # missing_patients += 1
+                    missing_patients += wt
     if missing_patients > 0:
         print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients, len(choices)
@@ -235,12 +253,15 @@ def total_payer2(filename,code):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
+            wt = pt_weight(row)
             try:
                 if int(row[payer2_index]) == code:
-                    total_patients += 1
+                    # total_patients += 1
+                    total_patients += wt
             except:
                 if row[payer2_index] is None:
-                    missing_patients += 1
+                    # missing_patients += 1
+                    missing_patients += wt
     print("Total number of missing patients: {0}".format(missing_patients,))
     return total_patients, len(choices)
 
@@ -346,12 +367,15 @@ def average_charges_ed(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
+            wt = pt_weight(line)
             try:
                 if float(line[TOTCHG_ED_index]) >= 0:
-                    total_charges += float(line[TOTCHG_ED_index])
-                    num_patients += 1
+                    total_charges += float(line[TOTCHG_ED_index])*wt
+                    # num_patients += 1
+                    num_patients += wt
             except:
-                missing_patients +=1
+                # missing_patients +=1
+                missing_patients += wt
                 print(line[TOTCHG_ED_index])
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
@@ -366,12 +390,15 @@ def average_charges_ip(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
+            wt = pt_weight(line)
             try:
                 if float(line[TOTCHG_IP_index]) >= 0:
-                    total_charges += float(line[TOTCHG_IP_index])
-                    num_patients += 1
+                    total_charges += float(line[TOTCHG_IP_index])*wt
+                    # num_patients += 1
+                    num_patients += wt
             except:
-                missing_patients +=1
+                # num_patients += 1
+                missing_patients += wt
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
     return float(total_charges)/float(num_patients)
@@ -385,11 +412,12 @@ def average_los(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
+            wt = pt_weight(line)
             try:
-                los_total += float(line[LOS_IP_index])
-                num_patients += 1
+                los_total += float(line[LOS_IP_index])*wt
+                num_patients += wt
             except:
-                missing_patients +=1
+                missing_patients +=wt
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
     return float(los_total)/float(num_patients)
@@ -420,17 +448,23 @@ def odds_ratio_urethral_injury():
     with open(patients_filename,'r') as patients:
         reader = csv.reader(patients)
         for line in reader:
+            wt = pt_weight(line)
             if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
-                DE += 1
+                # DE += 1
+                DE += wt
             else:
-                HE += 1
+                # HE += 1
+                HE += wt
     with open(core_filename, 'r') as controls:
         reader = csv.reader(controls)
         for line in reader:
+            wt = pt_weight(line)
             if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
-                DNE += 1
+                # DNE += 1
+                DNE += wt
             else:
-                HNE += 1
+                # HNE += 1
+                HNE += wt
     print('Number of urethral injuries in rest: ')
     print(float(DNE))
     print('Total number of other patients (test: ')
@@ -451,10 +485,13 @@ def total_with_urethral_injury(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
+            wt = pt_weight(line)
             if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
-                num_with_ui[0] += 1
+                # num_with_ui[0] += 1
+                num_with_ui[0] += wt
             elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
-                num_with_ui[1] += 1
+                # num_with_ui[1] += 1
+                num_with_ui[1] += wt
     return num_with_ui
 
 def total_with_treatment(filename, treatment_code):
@@ -465,10 +502,16 @@ def total_with_treatment(filename, treatment_code):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
+            wt = pt_weight(line)
             if treatment_code in line[PR_IP1_index:PR_IP15_index]
-                total += 1
+                # total += 1
+                total += wt
     return total
 
+def pt_weight(line):
+    data_type = get_data_type()
+    key_index_core = int(data_type.index('DISC_WT'))
+    return float(line[key_index_core])
 
 
 def main():
