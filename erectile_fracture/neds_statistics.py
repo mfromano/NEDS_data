@@ -511,7 +511,10 @@ def total_with_treatment(filename, treatment_code):
 def pt_weight(line):
     data_type = get_data_type()
     key_index_core = int(data_type.index('DISC_WT'))
-    return float(line[key_index_core])
+    if key_index_core is not None:
+   	 return float(line[key_index_core])
+    else:
+         return 0.0
 
 
 def main():
