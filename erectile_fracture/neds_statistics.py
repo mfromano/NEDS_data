@@ -546,7 +546,7 @@ def main():
         print('Statistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
     print(test_erectile_fracture_code())
-    # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
     print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
     print('Total number  of urethral fractures:')
     print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
