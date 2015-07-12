@@ -503,7 +503,7 @@ def total_with_treatment(filename, treatment_code):
         reader = csv.reader(inputfile)
         for line in reader:
             wt = pt_weight(line)
-            if treatment_code in line[PR_IP1_index:PR_IP15_index]
+            if treatment_code in line[PR_IP1_index:PR_IP15_index]:
                 # total += 1
                 total += wt
     return total
