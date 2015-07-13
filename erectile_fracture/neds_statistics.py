@@ -376,7 +376,6 @@ def average_charges_ed(filename):
             except:
                 # missing_patients +=1
                 missing_patients += wt
-                print(line[TOTCHG_ED_index])
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
     return float(total_charges)/float(num_patients)
@@ -467,7 +466,7 @@ def odds_ratio_urethral_injury():
                 HNE += wt
     print('Number of urethral injuries in rest: ')
     print(float(DNE))
-    print('Total number of other patients (test: ')
+    print('Total number of other patients: ')
     print(float(DNE+HNE))
     NE = DE+HE
     NNE = DNE+HNE
@@ -515,7 +514,7 @@ def pt_weight(line):
         try:
    	        return float(line[key_index_core])
         except:
-            print('Fucked up line: {0}'.format(line,))
+            print('Missing line: {0}'.format(line,))
             print(key_index_core)
             return 0.0
     else:
@@ -531,7 +530,7 @@ def main():
 
     choices = [1, 2, 3, 9, 98, 99]
     for choice in choices:
-        # print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
+        print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
         stat = get_bootstrap_statistic(total_ed_event,choice)
         print('Statistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
