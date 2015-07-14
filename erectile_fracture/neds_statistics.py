@@ -530,7 +530,7 @@ def main():
     choices = [1, 2, 3, 9, 98, 99]
     labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
     for choice in choices:
-        print('\t{0}: {1}'.format(labels[choice],str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice))))
+        print('\t{0}: {1}'.format(labels[choices.index(choice)],str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice))))
         stat = get_bootstrap_statistic(total_ed_event,choice)
         print('\tStatistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))

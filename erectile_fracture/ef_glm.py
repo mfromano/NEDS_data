@@ -9,6 +9,10 @@ import numpy as np
 import logging
 import re
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from scipy import stats
+import json
+import math
 
 TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
 TOTAL_MALE_PATIENTS = 13797122   
@@ -102,6 +106,13 @@ def pt_weight(line,data_type):
     else:
         return 0.0
 
+def open_core_file():
+    return open('cleaned_data/core_torsion_patients_cleaned.csv')
+
+def close_file(fi):
+    fi.close()
+    return
+
 def get_data_type():
     data_labels = {}
     data_type = []
@@ -134,4 +145,48 @@ def get_data_type_ip_supplement():
             currline[0] = currline[0].strip()
             data_type.append(currline[0])
     return data_type
+
+
 '''
+        1. Open both IP and Core patient files
+        2. Add whether or not orchiectomy to Y vector (has proc code)
+        3. Get key_ed
+        4. Add to key_ed list
+        5. Find key_ed in core patient file
+        6. Add patient age to appropriate time bin in X
+        7. calls fit_bino_glm
+'''
+def response_vector(fi,data_type):
+    reader = csv.reader(fi)
+    for line in reader:
+        cl,op,wt = has_urethral_injury(line)
+        
+    pass
+
+def predictor_matrix():
+    pass
+
+def solve_glm():
+    pass
+
+def foreach(fi,function):
+    pass
+
+def has_urethral_injury(line):
+    data_type = get_data_type()
+    DX1_index = int(data_type.index('DX1'))
+    DX15_index = int(data_type.index('DX15'))
+    wt = pt_weight(line,data_type)
+    num_with_ui = [0,0,wt]
+    if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
+        # num_with_ui[0] += 1
+        num_with_ui[0] += 1
+    elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
+        # num_with_ui[1] += 1
+        num_with_ui[1] += 1
+
+def perform_glm():
+    data_type = get_data_type()
+    fi = core_file()
+    Y = response_vector(fi,data_type)
+    pass
