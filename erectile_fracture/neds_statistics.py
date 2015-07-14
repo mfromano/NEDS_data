@@ -29,7 +29,7 @@ ULTRASOUND_URINARY = '8875'
 '''
     General getter method for a particular stat
 '''
-def total_with(filename, code, index_begin, index_end=None, truncate=0):
+def total_with(filename, code, index_begin, index_end=None, truncate=0,data_type=None):
 
     total_with_stat = 0
     total_missing = 0
@@ -42,23 +42,23 @@ def total_with(filename, code, index_begin, index_end=None, truncate=0):
                     try:
                         if code == int(line[index_begin]):
                             # total_with_stat += 1
-                            total_with_stat += pt_weight(line)
+                            total_with_stat += pt_weight(line,data_type)
                         elif int(line[index_begin]) < 0:
                             print('Getting rid of Nones fucked up')
                             sys.exit(1)
                     except:
                         if line[index_begin] is None or line[index_begin] == '':
                             # total_missing += 1
-                            total_missing += pt_weight(line)
+                            total_missing += pt_weight(line,data_type)
             else:
                 for line in reader:
                     try:
                         if str(code) in line[index_begin:index_end]:
                             # total_with_stat += 1
-                            total_with_stat += pt_weight(line)
+                            total_with_stat += pt_weight(line,data_type)
                     except:
                             # total_missing += 1
-                            total_missing += pt_weight(line)
+                            total_missing += pt_weight(line,data_type)
     if total_missing > 0:
         print('Total number of Nones: {0}'.format(str(total_missing),))
     return total_with_stat, total_missing
@@ -125,12 +125,12 @@ def average_age(filename):
         for row in reader:
             if row[age_index] is not None and row[age_index] is not '':
                 # num_patients +=1
-                wt = pt_weight(row)
+                wt = pt_weight(row,data_type)
                 num_patients += wt
                 total_age+=float(row[age_index])*wt
             else:
                 # missing_patients += 1
-                missing_patients += pt_weight(row)
+                missing_patients += pt_weight(row,data_type)
     if missing_patients > 0:
         print("Total number of missing patients: {0}".format(missing_patients,))
     return float(total_age)/float(num_patients)
@@ -159,7 +159,7 @@ def total_disposition(filename, code):
         reader = csv.reader(currfile)
         for row in reader:
             # print(row[transfer_index])
-            wt = pt_weight(row)
+            wt = pt_weight(row,data_type)
             try:
                 if int(row[transfer_index]) == code:
                     # total_patients += 1
@@ -191,7 +191,7 @@ def total_ed_event(filename, code):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
-            wt = pt_weight(row)
+            wt = pt_weight(row,data_type)
             if row[edevent_index] is not None and row[edevent_index] > 0 and row[edevent_index] is not '':
                 if int(row[edevent_index]) == code:
                     # total_patients += 1
@@ -223,7 +223,7 @@ def total_payer1(filename,code):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
-            wt = pt_weight(row)
+            wt = pt_weight(row,data_type)
             try:
                 if int(row[payer1_index]) == code:
                     # total_patients += 1
@@ -253,7 +253,7 @@ def total_payer2(filename,code):
     with open(filename,'r') as currfile:
         reader = csv.reader(currfile)
         for row in reader:
-            wt = pt_weight(row)
+            wt = pt_weight(row,data_type)
             try:
                 if int(row[payer2_index]) == code:
                     # total_patients += 1
@@ -324,7 +324,7 @@ def total_with_median_income(filename,code, no_missing=0):
 
     data_type = get_data_type()
     ZIPINC_QRTL_index = int(data_type.index('ZIPINC_QRTL'))
-    num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index,None,no_missing)
+    num_with_zip_inc = total_with(filename,code,ZIPINC_QRTL_index,None,no_missing,data_type)
     return num_with_zip_inc
 
 ''' 
@@ -333,7 +333,7 @@ def total_in_quarter(filename,code, no_missing=0):
 
     data_type = get_data_type()
     DQTR_index = int(data_type.index('DQTR'))
-    num_in_dqtr = total_with(filename,code,DQTR_index,None,no_missing)
+    num_in_dqtr = total_with(filename,code,DQTR_index,None,no_missing,data_type)
     return num_in_dqtr
 
 ''' 
@@ -343,7 +343,7 @@ def total_with_procedure_ed(filename,code, no_missing=0):
     data_type = get_data_type_ed_supplement()
     PR_ED1_index = int(data_type.index('PR_ED1'))
     PR_ED9_index = int(data_type.index('PR_ED9'))
-    num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index, no_missing)
+    num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index, no_missing,data_type)
     return num_with_procedure
 
 ''' 
@@ -355,7 +355,7 @@ def total_with_procedure_all(filename,code, no_missing=0):
     data_type = get_data_type_ip_supplement()
     PR_IP1_index = int(data_type.index('PR_IP1'))
     PR_IP9_index = int(data_type.index('PR_IP9'))
-    num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index, no_missing)
+    num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index, no_missing,data_type)
     return num_with_procedure
 
 def average_charges_ed(filename):
@@ -367,7 +367,7 @@ def average_charges_ed(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             try:
                 if float(line[TOTCHG_ED_index]) >= 0:
                     total_charges += float(line[TOTCHG_ED_index])*wt
@@ -389,7 +389,7 @@ def average_charges_ip(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             try:
                 if float(line[TOTCHG_IP_index]) >= 0:
                     total_charges += float(line[TOTCHG_IP_index])*wt
@@ -411,7 +411,7 @@ def average_los(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             try:
                 los_total += float(line[LOS_IP_index])*wt
                 num_patients += wt
@@ -426,7 +426,7 @@ def test_erectile_fracture_code():
     filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
-    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index)
+    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index,datatype)
 
 def odds_ratio_urethral_injury():
     data_type = get_data_type()
@@ -447,7 +447,7 @@ def odds_ratio_urethral_injury():
     with open(patients_filename,'r') as patients:
         reader = csv.reader(patients)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
                 # DE += 1
                 DE += wt
@@ -457,7 +457,7 @@ def odds_ratio_urethral_injury():
     with open(core_filename, 'r') as controls:
         reader = csv.reader(controls)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
                 # DNE += 1
                 DNE += wt
@@ -484,7 +484,7 @@ def total_with_urethral_injury(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             if URETHRAL_INJURY_CODES[0] in line[DX1_index:DX15_index]:
                 # num_with_ui[0] += 1
                 num_with_ui[0] += wt
@@ -501,14 +501,13 @@ def total_with_treatment(filename, treatment_code):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line)
+            wt = pt_weight(line,data_type)
             if treatment_code in line[PR_IP1_index:PR_IP15_index]:
                 # total += 1
                 total += wt
     return total
 
-def pt_weight(line):
-    data_type = get_data_type()
+def pt_weight(line,data_type):
     key_index_core = int(data_type.index('DISCWT'))
     if key_index_core is not '':
         try:
@@ -527,17 +526,29 @@ def main():
     stat = get_bootstrap_statistic(average_age)
     print('Statistic: {0}'.format(stat,))
     print(stat > (1-0.025/float(6)))
-
+    print('Total ED events')
     choices = [1, 2, 3, 9, 98, 99]
+    labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
+''' 
+    Type of ED event: (1) ED visit in which the patient is
+    treated and released, (2) ED visit in which the patient is
+    admitted to this same hospital, (3) ED visit in which the
+    patient is transferred to another short-term hospital, (9)
+    ED visit in which the patient died in the ED, (98) ED
+    visits in which patient was not admitted, destination
+    unknown, (99) ED visit in which patient was discharged
+    alive, destination unknown (but not admitted)
+'''
     for choice in choices:
-        print('Total ed event: {0}'.format(str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice)),))
+        print('\t{0}: {1}'.format(labels[choice],str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice))))
         stat = get_bootstrap_statistic(total_ed_event,choice)
-        print('Statistic: {0}'.format(stat,))
+        print('\tStatistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
 
 
     print('TOTAL WITH MEDIAN INCOME')
     choices = [1, 2, 3, 4]
+    labels = []
     for choice in choices:
         stat = get_bootstrap_statistic(total_with_median_income,choice)
         print('Statistic: {0}'.format(stat,))
@@ -549,7 +560,10 @@ def main():
         stat = get_bootstrap_statistic(total_in_quarter,choice)
         print('Statistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
+    
     print(test_erectile_fracture_code())
+
+
     print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
     print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
     print('Total number  of urethral fractures:')
@@ -563,17 +577,6 @@ def main():
     print('Total cost of stay in ED:')
     print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
 
-    print('Total in each quarter:')
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',1))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',2))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',3))
-    print(total_in_quarter('cleaned_data/core_patients_cleaned.csv',4))
-
-    print('Total with median incomes:')
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',1))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',2))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',3))
-    print(total_with_median_income('cleaned_data/core_patients_cleaned.csv',4))
     print('Odds ratio for urethral injury:')
     print(odds_ratio_urethral_injury())
 
