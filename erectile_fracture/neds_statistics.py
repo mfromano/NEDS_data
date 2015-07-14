@@ -529,16 +529,6 @@ def main():
     print('Total ED events')
     choices = [1, 2, 3, 9, 98, 99]
     labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
-''' 
-    Type of ED event: (1) ED visit in which the patient is
-    treated and released, (2) ED visit in which the patient is
-    admitted to this same hospital, (3) ED visit in which the
-    patient is transferred to another short-term hospital, (9)
-    ED visit in which the patient died in the ED, (98) ED
-    visits in which patient was not admitted, destination
-    unknown, (99) ED visit in which patient was discharged
-    alive, destination unknown (but not admitted)
-'''
     for choice in choices:
         print('\t{0}: {1}'.format(labels[choice],str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice))))
         stat = get_bootstrap_statistic(total_ed_event,choice)

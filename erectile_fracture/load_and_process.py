@@ -342,15 +342,13 @@ def get_data_type_ip_supplement():
             data_type.append(currline[0])
     return data_type
 
-
-
 def main():
     # clean_core_data()
     # clean_ed_data()
     # clean_ip_data()
     # load_and_format()
-    divide_ed_supplement()
-    divide_ip_supplement()
+    # divide_ed_supplement()
+    # divide_ip_supplement()
     # start, finish = int(sys.argv[1]), int(sys.argv[2])
     # make_surrogate_data(start,finish)
     # convert_core_to_supplement(start, finish)
