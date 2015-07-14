@@ -426,7 +426,7 @@ def test_erectile_fracture_code():
     filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
-    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index,datatype)
+    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index,data_type)
 
 def odds_ratio_urethral_injury():
     data_type = get_data_type()

@@ -160,7 +160,7 @@ def response_vector(fi,data_type):
     reader = csv.reader(fi)
     for line in reader:
         cl,op,wt = has_urethral_injury(line)
-        
+
     pass
 
 def predictor_matrix():
@@ -184,6 +184,7 @@ def has_urethral_injury(line):
     elif URETHRAL_INJURY_CODES[1] in line[DX1_index:DX15_index]:
         # num_with_ui[1] += 1
         num_with_ui[1] += 1
+    return num_with_ui
 
 def perform_glm():
     data_type = get_data_type()
