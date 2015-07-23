@@ -122,6 +122,23 @@ def cleaned_ip_supplement(data_entry):
     have collosal fractures.....
 '''
 
+def make_core_cleaned_male():
+    data_type = get_data_type()
+    isfemale_index = int(data_type.index('FEMALE'))
+    with open('core_male_cleaned.csv','w') as control_file:
+        control_writer = csv.writer(control_file,delimiter=',')
+        with open('cleaned_data/core_cleaned.csv','r') as data_file:
+                csv_reader = csv.reader(data_file)
+                # total_patients stores total male patients
+                total_patients = 0
+                # 
+                for line in csv_reader:
+                    if line[isfemale_index] == '0':
+                        control_writer.writerow(line)
+                        total_patients += 1
+    print(total_patients)
+    return data_type
+
 def load_and_format():
     # Next line gets the type of data for each entry in the core file
     data_type = get_data_type()
@@ -323,6 +340,7 @@ def main():
     # stat = get_bootstrap_statistic(average_age)
     # print(stat < 0.025)
     # print((1-stat) < (0.025))
+    make_core_cleaned_male()
 
 
 if __name__ == '__main__':
