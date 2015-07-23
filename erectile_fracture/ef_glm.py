@@ -13,6 +13,7 @@ import statsmodels.api as sm
 from scipy import stats
 import json
 import math
+from neds_utils import *
 
 TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
 TOTAL_MALE_PATIENTS = 13797122   
@@ -112,40 +113,6 @@ def open_core_file():
 def close_file(fi):
     fi.close()
     return
-
-def get_data_type():
-    data_labels = {}
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_Core.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_labels[currline[0]] = currline[1]
-            data_type.append(currline[0])
-    return data_type
-
-''' 
-    The next function returns a list containing the data types for each column
-    of the NEDS ED Supplement data file
-'''
-def get_data_type_ed_supplement():
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_type.append(currline[0])
-    return data_type
-
-def get_data_type_ip_supplement():
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_type.append(currline[0])
-    return data_type
-
 
 '''
         1. Open both IP and Core patient files

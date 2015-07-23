@@ -16,7 +16,7 @@ import re
 
 # 362 total patients with DX1 = penile fracture
 TOTAL_FRACTURES = 390  # so, 9 women had penile fractures???? Or messed up entries???
-TOTAL_MALE_PATIENTS = 13797122    
+TOTAL_MALE_PATIENTS = 13797122
 # TOTAL_ALL_PATIENTS = 31,091,020  # total patients
 penile_fracture_code = '95913'
 urethral_injury_codes = ('8670','8671')
@@ -305,42 +305,6 @@ def make_surrogate_replacement(num, data_size, datum,max_size):
                 line_number += 1
     return 'control_surrogates/core_surrogate_{0}_{1}.csv'.format(str(num),datum)
 
-''' 
-    The next function returns a list containing the data types for each column
-    of the NEDS Core data file
-'''
-def get_data_type():
-    data_labels = {}
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_Core.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_labels[currline[0]] = currline[1]
-            data_type.append(currline[0])
-    return data_type
-
-''' 
-    The next function returns a list containing the data types for each column
-    of the NEDS ED Supplement data file
-'''
-def get_data_type_ed_supplement():
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_ED_Supplement.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_type.append(currline[0])
-    return data_type
-
-def get_data_type_ip_supplement():
-    data_type = []
-    with open('raw_data/NEDS_2012_Labels_IP_Supplement.txt','r') as read_file:
-        for f in read_file:
-            currline = f.split('\"')[:2]
-            currline[0] = currline[0].strip()
-            data_type.append(currline[0])
-    return data_type
 
 def main():
     # clean_core_data()
