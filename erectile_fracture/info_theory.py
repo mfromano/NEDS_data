@@ -141,7 +141,7 @@ def has_dx(line,code):
 	return 0
 
 def main():
-	fname = 'cleaned_data/core_cleaned.csv'
+	fname = 'cleaned_data/core_male_cleaned.csv'
 	code1 = URETHRAL_INJURY_CODES[0]
 	code2 = PEYRONIES
 
