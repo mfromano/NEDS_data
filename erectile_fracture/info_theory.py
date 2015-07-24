@@ -88,7 +88,7 @@ def mi(data_mat):
 	return I
 
 def bootstrap_mi(data_mat):
-	return bootstrap(mi, data_mat,data_mat.shape[0],data_mat.shape[0])
+	return bootstrap(mi, data_mat,data_mat.shape[0]-1,data_mat.shape[0])
 
 def bootstrap(func,data_mat,max_int,size,num_samples=1000):
 	stats = np.empty(num_samples)
@@ -98,7 +98,7 @@ def bootstrap(func,data_mat,max_int,size,num_samples=1000):
 	return stats
 
 def resample_with_replacement(data_mat,max_int,size):
-	indices = np.random.randint(max_int,size=size)
+	indices = np.random.randint(0,max_int,size=size)
 	return data_mat[indices,:]
 
 def prob_marginal(data_mat):
