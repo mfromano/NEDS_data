@@ -211,6 +211,7 @@ def total_payer2(filename,code):
             try:
                 if int(row[payer2_index]) == code:
                     # total_patients += 1
+                    print(wt)
                     total_patients += wt
             except:
                 if row[payer2_index] is None:
