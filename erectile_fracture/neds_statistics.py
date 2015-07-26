@@ -381,7 +381,7 @@ def test_erectile_fracture_code():
     filename = 'cleaned_data/core_patients_cleaned.csv'
     DX1_index = int(data_type.index('DX1'))
     DX15_index = int(data_type.index('DX15'))
-    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index,data_type)
+    return total_with(filename,PENILE_FRACTURE_CODE,DX1_index,DX15_index,0,data_type)
 
 def odds_ratio_urethral_injury():
     data_type = get_data_type()
@@ -477,10 +477,10 @@ def pt_weight(line,data_type):
 
 def main():
 
-    print('Average age')
-    stat = get_bootstrap_statistic(average_age)
-    print('Statistic: {0}'.format(stat,))
-    print(stat > (1-0.025/float(6)))
+    # print('Average age')
+    # stat = get_bootstrap_statistic(average_age)
+    # print('Statistic: {0}'.format(stat,))
+    # print(stat > (1-0.025/float(6)))
     print('Total ED events')
     choices = [1, 2, 3, 9, 98, 99]
     labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
