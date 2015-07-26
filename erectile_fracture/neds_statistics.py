@@ -149,7 +149,7 @@ def total_ed_event(filename, code):
             if row[edevent_index] is not None and row[edevent_index] > 0 and row[edevent_index] is not '':
                 if int(row[edevent_index]) == code:
                     # total_patients += 1
-                    total_patients == wt
+                    total_patients += wt
             else:
                 # missing_patients += 1
                 missing_patients += wt
@@ -476,10 +476,10 @@ def pt_weight(line,data_type):
 
 def main():
 
-    # print('Average age')
-    # stat = get_bootstrap_statistic(average_age)
-    # print('Statistic: {0}'.format(stat,))
-    # print(stat > (1-0.025/float(6)))
+    print('Average age')
+    stat = get_bootstrap_statistic(average_age)
+    print('Statistic: {0}'.format(stat,))
+    print(stat > (1-0.025/float(6)))
     print('Total ED events')
     choices = [1, 2, 3, 9, 98, 99]
     labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
