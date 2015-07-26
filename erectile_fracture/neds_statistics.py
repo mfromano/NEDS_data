@@ -476,10 +476,10 @@ def pt_weight(line,data_type):
 
 def main():
 
-    print('Average age')
-    stat = get_bootstrap_statistic(average_age)
-    print('Statistic: {0}'.format(stat,))
-    print(stat > (1-0.025/float(6)))
+    # print('Average age')
+    # stat = get_bootstrap_statistic(average_age)
+    # print('Statistic: {0}'.format(stat,))
+    # print(stat > (1-0.025/float(6)))
     print('Total ED events')
     choices = [1, 2, 3, 9, 98, 99]
     labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
