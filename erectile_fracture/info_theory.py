@@ -3,6 +3,12 @@ import numpy as np
 import matplotlib.pyplot as pyplot
 import csv
 import math
+from numpy import genfromtxt
+'''
+Example: my_data = genfromtxt('my_file.csv', delimiter=',')
+
+'''
+
 
 data_type = get_data_type()
 DX1_INDEX = int(data_type.index('DX1'))
@@ -127,8 +133,7 @@ def binary_arrays(fname, code1, code2):
 	return pxpywt
 
 def dx_array(fname,code):
-	results = hasforeach(fname,has_dx,code)
-	return results
+	return hasforeach(fname,has_dx,code)
 
 def wt_array(fname):
 	return hasforeach(fname,get_wt,None)
@@ -156,6 +161,15 @@ def has_dx(line,code):
 	if code in line[DX1_INDEX:DX15_INDEX]:
 		return 1
 	return 0
+
+def count(f):
+    while 1:
+        block = f.read(65536)
+        if not block:
+             break
+        yield block.count(',')
+
+linecount = sum(count(f))
 
 def main():
 	fname = 'cleaned_data/core_male_cleaned.csv'
