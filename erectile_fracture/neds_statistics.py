@@ -355,6 +355,7 @@ def average_charges_ip(filename):
                 missing_patients += wt
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
+        print('Counted patients: {0}'.format(str(num_patients),))
     return float(total_charges)/float(num_patients)
 
 def average_los(filename):
@@ -374,6 +375,7 @@ def average_los(filename):
                 missing_patients +=wt
     if missing_patients > 0:
         print('Missing patients: {0}'.format(str(missing_patients),))
+        print('Counted patients: {0}'.format(str(num_patients),))
     return float(los_total)/float(num_patients)
 
 def test_erectile_fracture_code():
@@ -473,7 +475,6 @@ def pt_weight(line,data_type):
    	        return float(line[key_index_core])
         except:
             print('Missing line: {0}'.format(line,))
-            print(key_index_core)
             return 0.0
     else:
         return 0.0
