@@ -508,6 +508,7 @@ def main():
         stat = get_bootstrap_statistic(total_with_median_income,choice)
         print('Statistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
+        print(stat < (0.025/float(6)))
 
     print('total in quarter')
     choices = [1, 2, 3, 4]
@@ -515,6 +516,7 @@ def main():
         stat = get_bootstrap_statistic(total_in_quarter,choice)
         print('Statistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
+        print(stat < (0.025/float(6)))
     
     print(test_erectile_fracture_code())
 
