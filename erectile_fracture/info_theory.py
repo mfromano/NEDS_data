@@ -149,8 +149,8 @@ def main():
 	code2 = PEYRONIES
 	try:
 		data_mat = np.loadtxt('cleaned_data/pxpy.txt')
-		print('cannot load data, going to try generating...')
 	except:
+		print('cannot load data, going to try generating...')
 		data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
 	print(true_stat)
