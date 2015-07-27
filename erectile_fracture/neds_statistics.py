@@ -344,7 +344,7 @@ def average_charges_ip(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line,data_type)
+            wt = pt_weight_ip(line,data_type)
             try:
                 if float(line[TOTCHG_IP_index]) >= 0:
                     total_charges += float(line[TOTCHG_IP_index])*wt
@@ -366,7 +366,7 @@ def average_los(filename):
     with open(filename) as inputfile:
         reader = csv.reader(inputfile)
         for line in reader:
-            wt = pt_weight(line,data_type)
+            wt = pt_weight_ip(line,data_type)
             try:
                 los_total += float(line[LOS_IP_index])*wt
                 num_patients += wt
@@ -419,6 +419,10 @@ def odds_ratio_urethral_injury():
             else:
                 # HNE += 1
                 HNE += wt
+    print('Number of urethral injuries in EF patients: ')
+    print(float(DE))
+    print('Total number of other patients: ')
+    print(float(DE+HE))
     print('Number of urethral injuries in rest: ')
     print(float(DNE))
     print('Total number of other patients: ')
@@ -474,6 +478,23 @@ def pt_weight(line,data_type):
     else:
         return 0.0
 
+def core_by_key(key):
+    data_type = get_data_type()
+    key_index_core = int(data_type.index('KEY_ED'))
+    with open('cleaned_data/core_patients_cleaned.csv') as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if line[key_index_core] == key:
+                return line
+    return []
+
+def pt_weight_ip(line,data_type):
+    key_index = int(data_type.index('KEY_ED'))
+    pt = core_by_key(line[key_index])
+    if not pt:
+        return 0.0
+    return pt_weight(line,get_data_type())
+
 def total_patients():
     data_type = get_data_type()
     tp = 0
@@ -490,45 +511,45 @@ def main():
     # stat = get_bootstrap_statistic(average_age)
     # print('Statistic: {0}'.format(stat,))
     # print(stat > (1-0.025/float(6)))
-    print('Total patients: {0}'.format(total_patients()))
-    print('Total ED events')
-    choices = [1, 2, 3, 9, 98, 99]
-    labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
-    for choice in choices:
-        print('\t{0}: {1}'.format(labels[choices.index(choice)],str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice))))
-        stat = get_bootstrap_statistic(total_ed_event,choice)
-        print('\tStatistic: {0}'.format(stat,))
-        print(stat > (1-0.025/float(6)))
-        print(stat < (0.025/float(6)))
+    # print('Total patients: {0}'.format(total_patients()))
+    # print('Total ED events')
+    # choices = [1, 2, 3, 9, 98, 99]
+    # labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
+    # for choice in choices:
+    #     print('\t{0}: {1}'.format(labels[choices.index(choice)],str(total_ed_event('cleaned_data/core_patients_cleaned.csv',choice))))
+    #     stat = get_bootstrap_statistic(total_ed_event,choice)
+    #     print('\tStatistic: {0}'.format(stat,))
+    #     print(stat > (1-0.025/float(6)))
+    #     print(stat < (0.025/float(6)))
 
 
-    print('TOTAL WITH MEDIAN INCOME')
-    choices = [1, 2, 3, 4]
-    labels = []
-    for choice in choices:
-        stat = get_bootstrap_statistic(total_with_median_income,choice)
-        print('Statistic: {0}'.format(stat,))
-        print(stat > (1-0.025/float(6)))
-        print(stat < (0.025/float(6)))
+    # print('TOTAL WITH MEDIAN INCOME')
+    # choices = [1, 2, 3, 4]
+    # labels = []
+    # for choice in choices:
+    #     stat = get_bootstrap_statistic(total_with_median_income,choice)
+    #     print('Statistic: {0}'.format(stat,))
+    #     print(stat > (1-0.025/float(6)))
+    #     print(stat < (0.025/float(6)))
 
-    print('total in quarter')
-    choices = [1, 2, 3, 4]
-    for choice in choices:
-        stat = get_bootstrap_statistic(total_in_quarter,choice)
-        print('Statistic: {0}'.format(stat,))
-        print(stat > (1-0.025/float(6)))
-        print(stat < (0.025/float(6)))
+    # print('total in quarter')
+    # choices = [1, 2, 3, 4]
+    # for choice in choices:
+    #     stat = get_bootstrap_statistic(total_in_quarter,choice)
+    #     print('Statistic: {0}'.format(stat,))
+    #     print(stat > (1-0.025/float(6)))
+    #     print(stat < (0.025/float(6)))
     
-    print(test_erectile_fracture_code())
+    # print(test_erectile_fracture_code())
 
 
-    print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
-    print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
-    print('Total number  of urethral fractures:')
-    print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
+    # print('Average age of control group: {0}'.format(str(average_age('cleaned_data/core_controls_cleaned.csv')),))
+    # print('Average age of patient group: {0}'.format(str(average_age('cleaned_data/core_patients_cleaned.csv')),))
+    # print('Total number  of urethral fractures:')
+    # print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
 
-    print('Total cost of stay in ED:')
-    print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
+    # print('Total cost of stay in ED:')
+    # print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
 
     print('Odds ratio for urethral injury:')
     print(odds_ratio_urethral_injury())
