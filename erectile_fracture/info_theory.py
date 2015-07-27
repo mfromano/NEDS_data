@@ -128,7 +128,7 @@ def binary_arrays(fname, code1, code2):
 	px = px[:,np.newaxis]
 	py = py[:,np.newaxis]
 	wt = wt[:,np.newaxis]
-	pxpywt = np.concatenate((px,py,w),axis=1)
+	pxpywt = np.concatenate((px,py,wt),axis=1)
 	np.savetxt('cleaned_data/pxpywt.txt',pxpywt)
 	return pxpywt
 
@@ -144,10 +144,12 @@ and a code that provides the true value. Returns an np.array of 1s and 0s
 '''
 def hasforeach(fname,func,code):
 	outlist = np.asarray([])
-	with open(fname) as inputfile:
-		reader = csv.reader(inputfile)
-		for line in reader:
-			outlist = np.append(outlist,func(line,code))
+	f = open(fname,"rb")
+	table = f.read()
+	table = table.split("\n")
+	for line in table:
+		currline = line.split(",")
+		outlist = np.append(outlist,func(currline,code))
 	return outlist
 
 def get_wt(line,code):
@@ -162,14 +164,14 @@ def has_dx(line,code):
 		return 1
 	return 0
 
-def count(f):
-    while 1:
-        block = f.read(65536)
-        if not block:
-             break
-        yield block.count(',')
+# def count(f):
+#     while 1:
+#         block = f.read(65536)
+#         if not block:
+#              break
+#         yield block.count(',')
 
-linecount = sum(count(f))
+# linecount = sum(count(f))
 
 def main():
 	fname = 'cleaned_data/core_male_cleaned.csv'
