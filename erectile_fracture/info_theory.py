@@ -129,10 +129,13 @@ and a code that provides the true value. Returns an np.array of 1s and 0s
 '''
 def hasforeach(fname,func,code):
 	outlist = np.asarray([])
+	count = 0
 	with open(fname) as inputfile:
 		reader = csv.reader(inputfile)
 		for line in reader:
 			outlist = np.append(outlist,func(line,code))
+			count += 1
+			print(count)
 	return outlist
 
 def has_dx(line,code):
