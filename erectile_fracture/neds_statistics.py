@@ -499,6 +499,7 @@ def main():
         stat = get_bootstrap_statistic(total_ed_event,choice)
         print('\tStatistic: {0}'.format(stat,))
         print(stat > (1-0.025/float(6)))
+        print(stat < (0.025/float(6)))
 
 
     print('TOTAL WITH MEDIAN INCOME')
