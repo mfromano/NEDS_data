@@ -474,6 +474,15 @@ def pt_weight(line,data_type):
     else:
         return 0.0
 
+def total_patients():
+    data_type = get_data_type()
+    tp = 0
+    with open('cleaned_data/core_patients_cleaned.csv') as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            tp += pt_weight(line,data_type)
+    return tp
+
 
 def main():
 
@@ -481,6 +490,7 @@ def main():
     # stat = get_bootstrap_statistic(average_age)
     # print('Statistic: {0}'.format(stat,))
     # print(stat > (1-0.025/float(6)))
+    print('Total patients: {0}'.format(total_patients()))
     print('Total ED events')
     choices = [1, 2, 3, 9, 98, 99]
     labels = ['treated and released','admitted','transferred','died','destination unknown','discharged alive']
@@ -514,16 +524,20 @@ def main():
     print('Total number  of urethral fractures:')
     print(total_with_urethral_injury('cleaned_data/core_patients_cleaned.csv'))
 
-    print('Average length of stay:')
-    print(average_los('cleaned_data/ip_patients_cleaned.csv'))
-
-    print('Total cost of stay in IP:')
-    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
     print('Total cost of stay in ED:')
     print(average_charges_ed('cleaned_data/core_patients_cleaned.csv'))
 
     print('Odds ratio for urethral injury:')
     print(odds_ratio_urethral_injury())
+
+    print('Average length of stay:')
+    print(average_los('cleaned_data/ip_patients_cleaned.csv'))
+
+    print('Total cost of stay in IP:')
+    print(average_charges_ip('cleaned_data/ip_patients_cleaned.csv'))
+
+
+
 
     
 
