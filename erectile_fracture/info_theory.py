@@ -113,10 +113,13 @@ def prob_joint(data_mat):
 
 def binary_arrays(fname, code1, code2):
 	px = dx_array(fname,code1)
+	print('Done with px')
 	py = dx_array(fname,code2)
+	print('Done with py')
 	px = px[:,np.newaxis]
 	py = py[:,np.newaxis]
 	pxpy = np.concatenate((px,py),axis=1)
+	np.savetxt('cleaned_data/pxpy.txt',pxpy)
 	return pxpy
 
 def dx_array(fname,code):
@@ -129,13 +132,10 @@ and a code that provides the true value. Returns an np.array of 1s and 0s
 '''
 def hasforeach(fname,func,code):
 	outlist = np.asarray([])
-	count = 0
 	with open(fname) as inputfile:
 		reader = csv.reader(inputfile)
 		for line in reader:
 			outlist = np.append(outlist,func(line,code))
-			count += 1
-			print(count)
 	return outlist
 
 def has_dx(line,code):
@@ -147,8 +147,11 @@ def main():
 	fname = 'cleaned_data/core_male_cleaned.csv'
 	code1 = URETHRAL_INJURY_CODES[0]
 	code2 = PEYRONIES
-
-	data_mat = binary_arrays(fname,code1,code2)
+	try:
+		data_mat = np.loadtxt('cleaned_data/pxpy.txt')
+		print('cannot load data, going to try generating...')
+	except:
+		data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
 	print(true_stat)
 	# bootstrap_stats = bootstrap_mi(data_mat)
