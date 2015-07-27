@@ -109,22 +109,29 @@ def prob_marginal(data_mat):
 def prob_joint(data_mat):
 	col1 = np.squeeze(data_mat[:,0])
 	col2 = np.squeeze(data_mat[:,1])
-	return np.sum(np.multiply(col1,col2))/float(data_mat.shape[0])
+	col3 = np.squeeze(data_mat[:,2])
+	return np.sum(np.multiply(np.multiply(col1,col2),col3))/float(np.sum(col3))
 
 def binary_arrays(fname, code1, code2):
 	px = dx_array(fname,code1)
 	print('Done with px')
 	py = dx_array(fname,code2)
 	print('Done with py')
+	wt = wt_array(fname)
+	print('Done with wt')
 	px = px[:,np.newaxis]
 	py = py[:,np.newaxis]
-	pxpy = np.concatenate((px,py),axis=1)
-	np.savetxt('cleaned_data/pxpy.txt',pxpy)
-	return pxpy
+	wt = wt[:,np.newaxis]
+	pxpywt = np.concatenate((px,py,w),axis=1)
+	np.savetxt('cleaned_data/pxpywt.txt',pxpywt)
+	return pxpywt
 
 def dx_array(fname,code):
 	results = hasforeach(fname,has_dx,code)
 	return results
+
+def wt_array(fname):
+	return hasforeach(fname,get_wt,None)
 
 '''
 Pass in a filename to look through, a function that returns either a 1 or a 0,
@@ -137,6 +144,13 @@ def hasforeach(fname,func,code):
 		for line in reader:
 			outlist = np.append(outlist,func(line,code))
 	return outlist
+
+def get_wt(line,code):
+	wt = line[PT_WT_CORE]
+	if not wt:
+		return 0.0
+	return wt
+
 
 def has_dx(line,code):
 	if code in line[DX1_INDEX:DX15_INDEX]:
