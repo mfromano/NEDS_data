@@ -474,7 +474,6 @@ def pt_weight(line,data_type):
         try:
    	        return float(line[key_index_core])
         except:
-            print('Missing line: {0}'.format(line,))
             return 0.0
     else:
         return 0.0

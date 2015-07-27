@@ -148,9 +148,9 @@ def main():
 	data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
 	print(true_stat)
-	bootstrap_stats = bootstrap_mi(data_mat)
-	print(bootstrap_stats)
-	print(percentile(bootstrap_stats,true_stat))
+	# bootstrap_stats = bootstrap_mi(data_mat)
+	# print(bootstrap_stats)
+	# print(percentile(bootstrap_stats,true_stat))
 
 if __name__ == '__main__':
 	main()
