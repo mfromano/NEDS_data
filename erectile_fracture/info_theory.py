@@ -105,6 +105,17 @@ def mi(data_mat):
 def bootstrap_mi(data_mat):
 	return bootstrap(mi, data_mat,data_mat.shape[0]-1,data_mat.shape[0])
 
+def surrogate_mi(data_mat):
+	return surrogate(mi, data_mat,data_mat.shape[0]-1,data_mat.shape[0],500)
+
+def surrogate(func,data_mat,max_int,size,num_samples=500):
+	stats = np.empty(num_samples)
+	for i in range(num_samples):
+		curr_mat = generate_surrogate(data_mat)
+		stats[i] = func(curr_mat)
+		# print('done with iteration {0}'.format(str(i),))
+	return stats
+
 def bootstrap(func,data_mat,max_int,size,num_samples=500):
 	stats = np.empty(num_samples)
 	for i in range(num_samples):
@@ -112,6 +123,13 @@ def bootstrap(func,data_mat,max_int,size,num_samples=500):
 		stats[i] = func(curr_mat)
 		# print('done with iteration {0}'.format(str(i),))
 	return stats
+
+def generate_surrogate(data_mat):
+	max_int = data_mat.shape[0]-1
+	size = max_int+1
+	indices = np.random.randint(0,max_int,size=size)
+	data_mat[:,0] = data_mat[indices,:]
+	return data_mat
 
 def resample_with_replacement(data_mat,max_int,size,surrogate=False):
 	indices = np.random.randint(0,max_int,size=size)
@@ -222,9 +240,10 @@ def main():
 	print(true_stat)
 	# print(leaders(DXLIST))
 	bootstrap_stats = bootstrap_mi(data_mat)
+	surrogate_stats = surrogate_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
-	print(wald_test(true_stat, np.nanstd(bootstrap_stats)))
+	print(wald_test(true_stat, np.nanstd(bootstrap_stats), np.nanmean(surrogate_stats), np.nanstd(surrogate_stats)))
 
 if __name__ == '__main__':
 	main()
