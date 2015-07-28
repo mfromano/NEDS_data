@@ -212,12 +212,12 @@ def main():
 	PENILE_FRACTURE_CODE = '95913'
 	code1 = '95913'
 	code2 = '8670'
-	# try:
-	#  	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
-	# 	print('Done loading file! Starting analysis.')
-	# except:
-		# print('cannot load data, going to try generating...')
-	data_mat = binary_arrays(fname,code1,code2)
+	try:
+	 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
+		print('Done loading file! Starting analysis.')
+	except:
+		print('cannot load data, going to try generating...')
+		data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
 	print(true_stat)
 	# print(leaders(DXLIST))
