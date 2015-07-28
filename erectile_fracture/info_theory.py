@@ -110,6 +110,7 @@ def bootstrap(func,data_mat,max_int,size,num_samples=500):
 	for i in range(num_samples):
 		curr_mat = resample_with_replacement(data_mat,max_int,size)
 		stats[i] = func(curr_mat)
+		print('done with iteration {0}'.format(str(i),))
 	return stats
 
 def resample_with_replacement(data_mat,max_int,size):
@@ -176,6 +177,7 @@ def get_wt(line,code):
 
 
 def has_dx(line,code):
+			
 	if code in line[DX1_INDEX:DX15_INDEX]:
 		'''
 		if re.match(code,dx) for dx in line[DX1_INDEX:DX15_INDEX]:
@@ -210,19 +212,20 @@ def main():
 	PENILE_FRACTURE_CODE = '95913'
 	code1 = '95913'
 	code2 = '60785'
-	# try:
-	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
-	# except:
-		# print('cannot load data, going to try generating...')
-	data_mat = binary_arrays(fname,code1,code2)
+	try:
+	 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
+		print('Done loading file! Starting analysis.')
+	except:
+		print('cannot load data, going to try generating...')
+		data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
 	print(true_stat)
 	# print(leaders(DXLIST))
-	# bootstrap_stats = bootstrap_mi(data_mat)
+	bootstrap_stats = bootstrap_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
-	# print(bootstrap_stats)
-	# print(percentile(bootstrap_stats,true_stat))
+	print(bootstrap_stats)
+	print(percentile(bootstrap_stats,true_stat))
 
 if __name__ == '__main__':
 	main()
