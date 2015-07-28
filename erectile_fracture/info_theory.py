@@ -12,7 +12,7 @@ Example: my_data = genfromtxt('my_file.csv', delimiter=',')
 
 '''
 
-
+CORE_MALE_FILE_LENGTH = 13797512
 data_type = get_data_type()
 DX1_INDEX = int(data_type.index('DX1'))
 DX15_INDEX = int(data_type.index('DX15'))
@@ -155,14 +155,17 @@ Pass in a filename to look through, a function that returns either a 1 or a 0,
 and a code that provides the true value. Returns an np.array of 1s and 0s
 '''
 def hasforeach(fname,func,code):
-	outlist = np.asarray([])
+	outlist = np.empty(CORE_MALE_FILE_LENGTH)
 	f = open(fname,"r")
 	table = f.read()
 	table = table.split("\n")
+	print('Table split! Beginning file generation...')
+	position = 0
 	for line in table:
 		if len(line) > 1:
 			currline = line.split(",")
-			outlist = np.append(outlist,func(currline,code))
+			outlist[position] = func(currline,code)
+			position += 1
 	return outlist
 
 def get_wt(line,code):
@@ -208,15 +211,15 @@ def main():
 	# 	data_mat = np.loadtxt('cleaned_data/pxpy.txt')
 	# except:
 	# 	print('cannot load data, going to try generating...')
-	# data_mat = binary_arrays(fname,code1,code2)
-	# true_stat = mi(data_mat)
+	data_mat = binary_arrays(fname,code1,code2)
+	true_stat = mi(data_mat)
 	# print(true_stat)
 	# print(leaders(DXLIST))
 	# bootstrap_stats = bootstrap_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
 	# print(bootstrap_stats)
-	print(percentile(bootstrap_stats,true_stat))
+	# print(percentile(bootstrap_stats,true_stat))
 
 if __name__ == '__main__':
 	main()
