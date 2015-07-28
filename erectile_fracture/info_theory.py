@@ -188,7 +188,7 @@ def leaders(xs, top=10):
         counts[x] += 1
     return sorted(counts.items(), reverse=True, key=lambda tup: tup[1])[:top]
 
-def filelength(f):
+def filelength(fname):
 	f = open(fname,"r")
 	table = f.read()
 	table = table.split("\n")
@@ -199,7 +199,7 @@ def filelength(f):
 	return count
 
 def main():
-	# fname = 'cleaned_data/core_male_cleaned.csv'
+	fname = 'cleaned_data/core_male_cleaned.csv'
 	print(filelength(fname))
 	# fname = 'cleaned_data/core_patients_cleaned.csv'
 	# code1 = URETHRAL_INJURY_CODES[0]
