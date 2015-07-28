@@ -128,7 +128,7 @@ def generate_surrogate(data_mat):
 	max_int = data_mat.shape[0]-1
 	size = max_int+1
 	indices = np.random.randint(0,max_int,size=size)
-	data_mat[:,0] = data_mat[indices,:]
+	data_mat[:,0] = data_mat[indices,0]
 	return data_mat
 
 def resample_with_replacement(data_mat,max_int,size,surrogate=False):
@@ -195,8 +195,11 @@ def get_wt(line,code):
 
 
 def has_dx(line,code):
-			
-	if code in line[DX1_INDEX:DX15_INDEX]:
+	
+	# if code in line[DX1_INDEX:DX15_INDEX]:
+	for dx in line[DX1_INDEX:DX15_INDEX]:
+		if re.match(code,dx):
+			return int(1)
 		'''
 		if re.match(code,dx) for dx in line[DX1_INDEX:DX15_INDEX]:
 				if dx is not '':
@@ -204,7 +207,6 @@ def has_dx(line,code):
 		'''
 		return int(1)
 	return int(0)
-
 
 def leaders(xs, top=10):
     counts = defaultdict(int)
@@ -223,19 +225,19 @@ def filelength(fname):
 	return count
 
 def main():
-	fname = 'cleaned_data/core_male_cleaned.csv'
+	# fname = 'cleaned_data/core_male_cleaned.csv'
 	# print(filelength(fname))
-	# fname = 'cleaned_data/core_patients_cleaned.csv'
+	fname = 'cleaned_data/core_patients_cleaned.csv'
 	# code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
-	code1 = '95913'
-	code2 = '8670'
-	try:
-	 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
-		print('Done loading file! Starting analysis.')
-	except:
-		print('cannot load data, going to try generating...')
-		data_mat = binary_arrays(fname,code1,code2)
+	code1 = '60785'
+	code2 = '440.*'
+	# try:
+	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
+	# 	print('Done loading file! Starting analysis.')
+	# except:
+	print('cannot load data, going to try generating...')
+	data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
 	print(true_stat)
 	# print(leaders(DXLIST))
