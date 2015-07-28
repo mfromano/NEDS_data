@@ -141,7 +141,7 @@ def binary_arrays(fname, code1, code2):
 	py = py[:,np.newaxis]
 	wt = wt[:,np.newaxis]
 	pxpywt = np.concatenate((px,py,wt),axis=1)
-	np.savetxt('cleaned_data/pxpywt.txt',pxpywt,fmt='%s')
+	np.savetxt('cleaned_data/pxpywt.txt',pxpywt,fmt='%f')
 	return pxpywt
 
 def dx_array(fname,code):
@@ -178,8 +178,7 @@ def get_wt(line,code):
 def has_dx(line,code):
 	if code in line[DX1_INDEX:DX15_INDEX]:
 		'''
-		if re.match(code,dx):
-			for dx in line[DX1_INDEX:DX15_INDEX]:
+		if re.match(code,dx) for dx in line[DX1_INDEX:DX15_INDEX]:
 				if dx is not '':
 					DXLIST.append(dx)
 		'''
@@ -204,19 +203,19 @@ def filelength(fname):
 	return count
 
 def main():
-	fname = 'cleaned_data/core_male_cleaned.csv'
+	# fname = 'cleaned_data/core_male_cleaned.csv'
 	# print(filelength(fname))
-	# fname = 'cleaned_data/core_patients_cleaned.csv'
+	fname = 'cleaned_data/core_patients_cleaned.csv'
 	code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
 	code2 = '60785'
-	# # try:
-	# 	data_mat = np.loadtxt('cleaned_data/pxpy.txt')
+	# try:
+	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
 	# except:
-	# 	print('cannot load data, going to try generating...')
+		# print('cannot load data, going to try generating...')
 	data_mat = binary_arrays(fname,code1,code2)
 	true_stat = mi(data_mat)
-	# print(true_stat)
+	print(true_stat)
 	# print(leaders(DXLIST))
 	# bootstrap_stats = bootstrap_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
