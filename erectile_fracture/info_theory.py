@@ -206,8 +206,9 @@ def main():
 	# fname = 'cleaned_data/core_male_cleaned.csv'
 	# print(filelength(fname))
 	fname = 'cleaned_data/core_patients_cleaned.csv'
-	code1 = URETHRAL_INJURY_CODES[0]
+	# code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
+	code1 = '95913'
 	code2 = '60785'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
