@@ -199,7 +199,6 @@ def has_dx(line,code):
 	# if code in line[DX1_INDEX:DX15_INDEX]:
 	for dx in line[DX1_INDEX:DX15_INDEX]:
 		if re.match(code,dx):
-			print(dx)
 			return int(1)
 		'''
 		if re.match(code,dx) for dx in line[DX1_INDEX:DX15_INDEX]:
@@ -225,13 +224,13 @@ def filelength(fname):
 	return count
 
 def main():
-	# fname = 'cleaned_data/core_male_cleaned.csv'
+	fname = 'cleaned_data/core_male_cleaned.csv'
 	# print(filelength(fname))
-	fname = 'cleaned_data/core_patients_cleaned.csv'
+	# fname = 'cleaned_data/core_patients_cleaned.csv'
 	# code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
 	code1 = '60785'
-	code2 = '414.*'
+	code2 = '95913'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
 	# 	print('Done loading file! Starting analysis.')
@@ -241,8 +240,10 @@ def main():
 	true_stat = mi(data_mat)
 	print(true_stat)
 	# print(leaders(DXLIST))
-	bootstrap_stats = bootstrap_mi(data_mat)
+	print('beginning surrogate_stats')
 	surrogate_stats = surrogate_mi(data_mat)
+	print('beginning bootstrap_stats')
+	bootstrap_stats = bootstrap_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
 	print(wald_test(true_stat, np.nanstd(bootstrap_stats), np.nanmean(surrogate_stats), np.nanstd(surrogate_stats)))
