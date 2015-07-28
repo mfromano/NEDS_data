@@ -176,12 +176,14 @@ def get_wt(line,code):
 
 
 def has_dx(line,code):
-	for dx in line[DX1_INDEX:DX15_INDEX]:
+	if code in line[DX1_INDEX:DX15_INDEX]:
+		'''
 		if re.match(code,dx):
 			for dx in line[DX1_INDEX:DX15_INDEX]:
 				if dx is not '':
 					DXLIST.append(dx)
-			return int(1)
+		'''
+		return int(1)
 	return int(0)
 
 
@@ -205,8 +207,9 @@ def main():
 	fname = 'cleaned_data/core_male_cleaned.csv'
 	# print(filelength(fname))
 	# fname = 'cleaned_data/core_patients_cleaned.csv'
-	# code1 = URETHRAL_INJURY_CODES[0]
-	# code2 = '2720'
+	code1 = URETHRAL_INJURY_CODES[0]
+	PENILE_FRACTURE_CODE = '95913'
+	code2 = '60785'
 	# # try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpy.txt')
 	# except:
