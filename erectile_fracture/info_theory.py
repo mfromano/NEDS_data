@@ -1,9 +1,12 @@
 from neds_utils import *
 import numpy as np
-import matplotlib.pyplot as pyplot
+import matplotlib.pyplot as plt
 import csv
 import math
 from numpy import genfromtxt
+import re
+from collections import defaultdict
+
 '''
 Example: my_data = genfromtxt('my_file.csv', delimiter=',')
 
@@ -16,6 +19,8 @@ DX15_INDEX = int(data_type.index('DX15'))
 PT_WT_CORE = int(data_type.index('DISCWT'))
 URETHRAL_INJURY_CODES = ('8670','8671')
 PEYRONIES = "60785"
+TOBACCO_USE_DISORDER = "3051"
+DXLIST = []
 '''
 "6068 " = "6068 : MALE INFERTILITY NEC"
 "6069 " = "6069 : MALE INFERTILITY NOS"
@@ -82,7 +87,11 @@ PEYRONIES = "60785"
 def mi(data_mat):
 	px, py = prob_marginal(data_mat)
 	pxy = prob_joint(data_mat)
+
 	if px == 0 or py == 0 or pxy == 0:
+		# print(px)
+		# print(py)
+		# print(pxy)
 		return 0
 	else:
 		try:
@@ -96,7 +105,7 @@ def mi(data_mat):
 def bootstrap_mi(data_mat):
 	return bootstrap(mi, data_mat,data_mat.shape[0]-1,data_mat.shape[0])
 
-def bootstrap(func,data_mat,max_int,size,num_samples=1000):
+def bootstrap(func,data_mat,max_int,size,num_samples=500):
 	stats = np.empty(num_samples)
 	for i in range(num_samples):
 		curr_mat = resample_with_replacement(data_mat,max_int,size)
@@ -108,8 +117,11 @@ def resample_with_replacement(data_mat,max_int,size):
 	return data_mat[indices,:]
 
 def prob_marginal(data_mat):
-	px = float(np.sum(data_mat[:,0],axis=0))/float(data_mat.shape[0])
-	py = float(np.sum(data_mat[:,1],axis=0))/float(data_mat.shape[0])
+	numer = np.sum(np.squeeze(data_mat[:,0]))
+	denom = np.sum(np.squeeze(data_mat[:,2]))
+	px = numer / denom
+	numer = np.sum(np.squeeze(data_mat[:,1]))
+	py = numer / denom
 	return px,py
 
 def prob_joint(data_mat):
@@ -129,7 +141,7 @@ def binary_arrays(fname, code1, code2):
 	py = py[:,np.newaxis]
 	wt = wt[:,np.newaxis]
 	pxpywt = np.concatenate((px,py,wt),axis=1)
-	np.savetxt('cleaned_data/pxpywt.txt',pxpywt)
+	np.savetxt('cleaned_data/pxpywt.txt',pxpywt,fmt='%s')
 	return pxpywt
 
 def dx_array(fname,code):
@@ -144,40 +156,67 @@ and a code that provides the true value. Returns an np.array of 1s and 0s
 '''
 def hasforeach(fname,func,code):
 	outlist = np.asarray([])
-	f = open(fname,"rb")
+	f = open(fname,"r")
 	table = f.read()
 	table = table.split("\n")
 	for line in table:
-		currline = line.split(",")
-		outlist = np.append(outlist,func(currline,code))
+		if len(line) > 1:
+			currline = line.split(",")
+			outlist = np.append(outlist,func(currline,code))
 	return outlist
 
 def get_wt(line,code):
-	wt = line[PT_WT_CORE]
+	wt = float(line[PT_WT_CORE])
 	if not wt:
 		return 0.0
 	return wt
 
 
 def has_dx(line,code):
-	if code in line[DX1_INDEX:DX15_INDEX]:
-		return 1
-	return 0
+	for dx in line[DX1_INDEX:DX15_INDEX]:
+		if re.match(code,dx):
+			for dx in line[DX1_INDEX:DX15_INDEX]:
+				if dx is not '':
+					DXLIST.append(dx)
+			return int(1)
+	return int(0)
+
+
+def leaders(xs, top=10):
+    counts = defaultdict(int)
+    for x in xs:
+        counts[x] += 1
+    return sorted(counts.items(), reverse=True, key=lambda tup: tup[1])[:top]
+
+def filelength(f):
+	f = open(fname,"r")
+	table = f.read()
+	table = table.split("\n")
+	count = 0
+	for line in table:
+		if len(line) > 1:
+			count += 1
+	return count
 
 def main():
-	fname = 'cleaned_data/core_male_cleaned.csv'
-	code1 = URETHRAL_INJURY_CODES[0]
-	code2 = PEYRONIES
-	try:
-		data_mat = np.loadtxt('cleaned_data/pxpy.txt')
-	except:
-		print('cannot load data, going to try generating...')
-		data_mat = binary_arrays(fname,code1,code2)
-	true_stat = mi(data_mat)
-	print(true_stat)
+	# fname = 'cleaned_data/core_male_cleaned.csv'
+	print(filelength(fname))
+	# fname = 'cleaned_data/core_patients_cleaned.csv'
+	# code1 = URETHRAL_INJURY_CODES[0]
+	# code2 = '2720'
+	# # try:
+	# 	data_mat = np.loadtxt('cleaned_data/pxpy.txt')
+	# except:
+	# 	print('cannot load data, going to try generating...')
+	# data_mat = binary_arrays(fname,code1,code2)
+	# true_stat = mi(data_mat)
+	# print(true_stat)
+	# print(leaders(DXLIST))
 	# bootstrap_stats = bootstrap_mi(data_mat)
+	# plt.hist(bootstrap_stats,50)
+	# plt.show()
 	# print(bootstrap_stats)
-	# print(percentile(bootstrap_stats,true_stat))
+	print(percentile(bootstrap_stats,true_stat))
 
 if __name__ == '__main__':
 	main()
