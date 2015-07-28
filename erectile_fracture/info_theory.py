@@ -113,7 +113,7 @@ def bootstrap(func,data_mat,max_int,size,num_samples=500):
 		print('done with iteration {0}'.format(str(i),))
 	return stats
 
-def resample_with_replacement(data_mat,max_int,size):
+def resample_with_replacement(data_mat,max_int,size,surrogate=False):
 	indices = np.random.randint(0,max_int,size=size)
 	return data_mat[indices,:]
 

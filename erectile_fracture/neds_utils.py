@@ -8,6 +8,8 @@ import csv
 import numpy as np
 import logging
 import re
+import math
+import scipy
 
 
 ''' 
@@ -53,3 +55,10 @@ def percentile(sample_list, value):
         if sample < value:
             num_below += 1
     return float(num_below)/float(len(sample_list))
+
+def wald_stat(mean1,std1,mean2,std2):
+    return (mean1-mean2)/math.sqrt(std1**2 +std2**2)
+
+def wald_test(mean1,std1,mean2,std2):
+    w = wald_stat(mean1,std1,mean2,std2)
+    return scipy.special.ndtr(w)
