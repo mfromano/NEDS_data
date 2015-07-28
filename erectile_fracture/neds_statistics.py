@@ -298,7 +298,7 @@ def total_with_procedure_ed(filename,code, no_missing=0):
     data_type = get_data_type_ed_supplement()
     PR_ED1_index = int(data_type.index('PR_ED1'))
     PR_ED9_index = int(data_type.index('PR_ED9'))
-    num_with_procedure = total_with(filaname,code,PR_ED1_index,PR_ED9_index, no_missing,data_type)
+    num_with_procedure = total_with(filename,code,PR_ED1_index,PR_ED9_index, no_missing,data_type)
     return num_with_procedure
 
 ''' 
@@ -310,7 +310,7 @@ def total_with_procedure_all(filename,code, no_missing=0):
     data_type = get_data_type_ip_supplement()
     PR_IP1_index = int(data_type.index('PR_IP1'))
     PR_IP9_index = int(data_type.index('PR_IP9'))
-    num_with_procedure = total_with(filaname,code,PR_IP1_index,PR_IP9_index, no_missing,data_type)
+    num_with_procedure = total_with(filename,code,PR_IP1_index,PR_IP9_index, no_missing,data_type)
     return num_with_procedure
 
 def average_charges_ed(filename):

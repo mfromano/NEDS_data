@@ -164,15 +164,6 @@ def has_dx(line,code):
 		return 1
 	return 0
 
-# def count(f):
-#     while 1:
-#         block = f.read(65536)
-#         if not block:
-#              break
-#         yield block.count(',')
-
-# linecount = sum(count(f))
-
 def main():
 	fname = 'cleaned_data/core_male_cleaned.csv'
 	code1 = URETHRAL_INJURY_CODES[0]
