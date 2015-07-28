@@ -224,8 +224,7 @@ def main():
 	bootstrap_stats = bootstrap_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
-	print(bootstrap_stats)
-	print(percentile(bootstrap_stats,true_stat))
+	print(wald_stat(true_stat, np.nanstd(bootstrap_stats)))
 
 if __name__ == '__main__':
 	main()

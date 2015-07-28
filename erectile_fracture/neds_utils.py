@@ -56,9 +56,9 @@ def percentile(sample_list, value):
             num_below += 1
     return float(num_below)/float(len(sample_list))
 
-def wald_stat(mean1,std1,mean2,std2):
+def wald_stat(mean1,std1,mean2=0,std2=0):
     return (mean1-mean2)/math.sqrt(std1**2 +std2**2)
 
-def wald_test(mean1,std1,mean2,std2):
+def wald_test(mean1,std1,mean2=0,std2=0):
     w = wald_stat(mean1,std1,mean2,std2)
     return scipy.special.ndtr(w)
