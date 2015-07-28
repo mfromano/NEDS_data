@@ -110,7 +110,7 @@ def bootstrap(func,data_mat,max_int,size,num_samples=500):
 	for i in range(num_samples):
 		curr_mat = resample_with_replacement(data_mat,max_int,size)
 		stats[i] = func(curr_mat)
-		print('done with iteration {0}'.format(str(i),))
+		# print('done with iteration {0}'.format(str(i),))
 	return stats
 
 def resample_with_replacement(data_mat,max_int,size,surrogate=False):
@@ -224,7 +224,7 @@ def main():
 	bootstrap_stats = bootstrap_mi(data_mat)
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
-	print(wald_stat(true_stat, np.nanstd(bootstrap_stats)))
+	print(wald_test(true_stat, np.nanstd(bootstrap_stats)))
 
 if __name__ == '__main__':
 	main()

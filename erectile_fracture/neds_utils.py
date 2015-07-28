@@ -9,7 +9,7 @@ import numpy as np
 import logging
 import re
 import math
-import scipy
+import scipy.special
 
 
 ''' 
@@ -60,5 +60,7 @@ def wald_stat(mean1,std1,mean2=0,std2=0):
     return (mean1-mean2)/math.sqrt(std1**2 +std2**2)
 
 def wald_test(mean1,std1,mean2=0,std2=0):
+    if (not std1 and not std2):
+        return np.nan
     w = wald_stat(mean1,std1,mean2,std2)
     return scipy.special.ndtr(w)

@@ -21,13 +21,16 @@ Initialize global variables
 
 data_type = get_data_type()
 data_type_ip = get_data_type_ip_supplement()
+PAYER1_INDEX = int(data_type.index('PAY1'))
 KEY_INDEX = int(data_type.index('KEY_ED'))
 KEY_INDEX_IP = int(data_type_ip.index('KEY_ED'))
+DISP_INDEX = int(data_type.index('DISP_ED'))
 age_index = int(data_type.index('AGE'))
 DQTR_index = int(data_type.index('DQTR'))
 DX1_INDEX = int(data_type.index('DX1'))
 DX15_INDEX = int(data_type.index('DX15'))
 PT_WT_CORE = int(data_type.index('DISCWT'))
+TOTCHG_ED_index = int(data_type.index('TOTCHG_ED'))
 TOTCHG_IP_index = int(data_type_ip.index('TOTCHG_IP'))
 ZIPINC_QRTL_index = int(data_type.index('ZIPINC_QRTL'))
 URETHRAL_INJURY_CODES = ('8670','8671')
@@ -156,6 +159,91 @@ def get_total_in_quarter(filehandle,code,std=False):
         stats = bootstrap(total_in_quarter,data,len(data)-1, len(data), 1000, code)
     return total_in_quarter(data,code), np.nanstd(stats), np.nanmean(stats)
 
+''' 
+    Disposition from ED: (1) routine, (2) transfer to shortterm
+    hospital, (5) other transfers, including skilled
+    nursing facility, intermediate care, and another type of
+    facility, (6) home health care, (7) against medical
+    advice, (9) admitted as an inpatient to this hospital, (20)
+    died in ED, (21) Discharged/transferred to court/law
+    enforcement , (98) not admitted, destination unknown,
+    (99) discharged alive, destination unknown (but not
+    admitted)
+'''
+
+def total_disp(data,code):
+    total = 0
+    total_pts = 0
+    missing_patients = 0
+    for line in data:
+        if len(line) > 1:
+            wt = pt_weight(line)
+            try:
+                if int(line[DISP_INDEX]) == code:
+                    total += wt
+                total_pts += wt
+            except:
+                missing_patients += wt
+    # if missing_patients > 0:
+    #     print('Missing patients: {0}'.format(str(missing_patients),))
+    return float(total)/float(total_pts)
+
+def get_total_disp(filehandle,code,std=False):
+    data = loaddata(filehandle)
+    stats = np.nan
+    if std:
+        stats = bootstrap(total_disp,data,len(data)-1,len(data), 1000, code)
+    return total_disp(data,code), np.nanstd(stats), np.nanmean(stats)
+
+def average_charges_ed(data):
+    total_charges = 0
+    num_patients = 0
+    missing_patients = 0
+    for line in data:
+        wt = pt_weight(line)
+        try:
+            if float(line[TOTCHG_ED_index]) >= 0:
+                total_charges += float(line[TOTCHG_ED_index])*wt
+                num_patients += wt
+        except:
+            # missing_patients +=1
+            missing_patients += wt
+    # if missing_patients > 0:
+    #     print('Missing patients: {0}'.format(str(missing_patients),))
+    return float(total_charges)/float(num_patients)
+
+def get_average_charges_ed(filehandle,std=False):
+    data = loaddata(filehandle)
+    stats = np.nan
+    if std:
+        stats = bootstrap(average_charges_ed,data,len(data)-1,len(data), 1000, None)
+    return average_charges_ed(data), np.nanstd(stats), np.nanmean(stats)
+
+def total_payer1(data,code):
+    total = 0
+    total_pts = 0
+    missing_patients = 0
+    for line in data:
+        if len(line) > 1:
+            wt = pt_weight(line)
+            try:
+                if int(line[PAYER1_INDEX]) == code:
+                    total += wt
+                total_pts += wt
+            except:
+                missing_patients += wt
+    # if missing_patients > 0:
+    #     print('Missing patients: {0}'.format(str(missing_patients),))
+    return float(total)/float(total_pts)
+
+def get_total_payer1(filehandle,code,std=False):
+    data = loaddata(filehandle)
+    stats = np.nan
+    if std:
+        stats = bootstrap(total_payer1,data,len(data)-1,len(data), 1000, code)
+    return total_payer1(data,code), np.nanstd(stats), np.nanmean(stats)
+
+
 '''
 
 
@@ -218,6 +306,8 @@ def pt_weight_ip(line,data_type=data_type_ip):
     if not pt:
         return 0.0
     return pt_weight(line,get_data_type())
+
+
 '''
 def split_by_urethral_fracture(filehandle):
     data_type = get_data_type()
@@ -259,58 +349,111 @@ def split_by_urethral_fracture_ip(filehandle):
                         nouf_writer.writerow(currline)
 '''
 def main():
-    '''
+    
     uf = open('cleaned_data/core_patients_cleaned_uf.csv','r')
     no_uf = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
-    print(avg_age(uf,1))
-    print(avg_age(no_uf,1))
+    mean1,std1 = avg_age(uf,1)
+    mean2,std2 = avg_age(no_uf,1)
+    print('Mean age for uf patients: {0} +/- {1}'.format(str(mean1),str(std1),))
+    print('Mean age for no-uf patients: {0} +/- {1}'.format(str(mean2),str(std2),))
+    print('Age p-value (uf - no_uf): {0}\n'.format(str(wald_test(mean1,std1,mean2,std2))))
+    print("\n")
 
     for i in [1, 2, 3, 4]:
         uf = open('cleaned_data/core_patients_cleaned_uf.csv','r')
         no_uf = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
-        print(proportion_with_income(uf,i,1))
-        print(proportion_with_income(no_uf,i,1))
-    '''
-    '''
-    # f = open('cleaned_data/ip_patients_cleaned_uf.csv','r')
-    # print(get_average_los(f,1))
-    # f = open('cleaned_data/ip_patients_cleaned_no_uf.csv','r')
-    # print(get_average_los(f,1))
+        mean1,std1,other = proportion_with_income(uf,i,1)
+        mean2,std2,other = proportion_with_income(no_uf,i,1)
+        print('Proportion uf patients with income {0}: {1} +/- {2}'.format(str(i),str(mean1),str(std1),))
+        print('Proportion no-uf patients with income {0}: {1} +/- {2}'.format(str(i),str(mean2),str(std2),))
+        print('Income {0} p-value (uf - no_uf): {1}\n'.format(str(i), str(wald_test(mean1,std1,mean2,std2))))
 
-    Results:
-    (1.3852565636026553, 0.33257123228775143, 1.3739200592005396)
-    (1.3104457078589253, 0.12300279919850013, 1.3102100680086051)
-
-    '''
-    '''
+    print("\n")
     uf = open('cleaned_data/ip_patients_cleaned_uf.csv','r')
-    print(get_average_charges_ip(uf,1))
     no_uf = open('cleaned_data/ip_patients_cleaned_no_uf.csv','r')
-    print(get_average_charges_ip(no_uf,1))
+    mean1,std1,other = get_average_los(uf,1)
+    mean2,std2,other = get_average_los(no_uf,1)
+    print('Mean length of stay for uf patients: {0} +/- {1}'.format(str(mean1),str(std1),))
+    print('Mean length of stay for no-uf patients: {0} +/- {1}'.format(str(mean2),str(std2),))
+    print('Length of stay p-value (uf - no_uf): {0}\n'.format(str(wald_test(mean1,std1,mean2,std2))))
+    print("\n")
 
-    results:
-    (25957.623945936248, 3770.8267806642266, 26018.075265601037)
-    (24053.334909953413, 1730.6620820702638, 24105.3718470364)
+    uf = open('cleaned_data/ip_patients_cleaned_uf.csv','r')
+    no_uf = open('cleaned_data/ip_patients_cleaned_no_uf.csv','r')
+    mean1,std1,other = get_average_charges_ip(uf,1)
+    mean2,std2,other = get_average_charges_ip(no_uf,1)
+    print('Mean IP charges for uf patients: {0} +/- {1}'.format(str(mean1),str(std1),))
+    print('Mean IP charges for no-uf patients: {0} +/- {1}'.format(str(mean2),str(std2),))
+    print('IP charges p-value (uf - no_uf): {0}\n'.format(str(wald_test(mean1,std1,mean2,std2))))
+    print("\n")
 
-    '''
+
     for quarter in [1, 2, 3, 4]:
-        f = open('cleaned_data/core_patients_cleaned_uf.csv','r')
-        print('Quarter {0} for urethral fractures: {1}'.format(str(quarter),str(get_total_in_quarter(f,quarter,1)),))
-        f = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
-        print('Quarter {0} for non-urethral fractures: {1}'.format(str(quarter),str(get_total_in_quarter(f,quarter,1)),))
+        uf = open('cleaned_data/core_patients_cleaned_uf.csv','r')
+        no_uf = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
+        mean1,std1,other = get_total_in_quarter(uf,quarter,1)
+        mean2,std2,other = get_total_in_quarter(no_uf,quarter,1)
+        print('Proportion uf patients in quarter {0}: {1} +/- {2}'.format(str(quarter),str(mean1),str(std1),))
+        print('Proportion no-uf patients in quarter {0}: {1} +/- {2}'.format(str(quarter),str(mean2),str(std2),))
+        print('Income {0} p-value (uf - no_uf): {1}\n'.format(str(i), str(wald_test(mean1,std1,mean2,std2))))
 
-    '''
-    Quarter 1 for urethral fractures: (0.22903066731519597, 0.06810571802475085, 0.23140388894479119)
-    Quarter 1 for non-urethral fractures: (0.22640423214421407, 0.024015952558090827, 0.22586610095899673)
-    Quarter 2 for urethral fractures: (0.2553422604123565, 0.073562934347024031, 0.2551065482705987)
-    Quarter 2 for non-urethral fractures: (0.2922457089672853, 0.025422477292863066, 0.29174102091696275)
-    Quarter 3 for urethral fractures: (0.27067430682929383, 0.070802866457861352, 0.27108968049809024)
-    Quarter 3 for non-urethral fractures: (0.28983899372191385, 0.025423987474402852, 0.29018609342546359)
-    Quarter 4 for urethral fractures: (0.24495276544315392, 0.072831618626388095, 0.24322737425873014)
-    Quarter 4 for non-urethral fractures: (0.19151106516658642, 0.022132580084108282, 0.19273848546435088)
-
-    '''
     
+    disp_codes = [1, 2, 5, 6, 7, 9, 20, 21, 98, 99]
+    for code in disp_codes:
+        f = open('cleaned_data/core_patients_cleaned_uf.csv','r')
+        mean1,std1,other1 = get_total_disp(f,code,1)
+        f = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
+        mean2,std2,other2 = get_total_disp(f,code,1)
+        print('Proportion uf patients with dispo {0}: {1} +/- {2}'.format(str(code),str(mean1),str(std1),))
+        print('Proportion no-uf patients with dispo {0}: {1} +/- {2}'.format(str(code),str(mean2),str(std2),))
+        print('Disp {0} for p-value: {1}\n'.format(str(code),str(wald_test(mean1,std1,mean2,std2))))
+
+    '''
+    Disp 1 for p-value: 0.00884769895944
+    Disp 2 for p-value: 0.00671030440287
+    Disp 5 for p-value: 0.0230632291823
+    Disp 6 for p-value: 0.151082757681
+    Disp 7 for p-value: 0.00241310069598
+    Disp 9 for p-value: 0.999851356752
+    Disp 20 for p-value: nan
+    Disp 21 for p-value: nan
+    Disp 98 for p-value: 0.161672911723
+    Disp 99 for p-value: nan
+    '''
+    print("\n\n")
+    f = open('cleaned_data/core_patients_cleaned_uf.csv','r')
+    mean1,std1,other1 = get_average_charges_ed(f,1)
+    f = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
+    mean2,std2,other2 = get_average_charges_ed(f,1)
+    print('Mean ED charges for uf patients: {0} +/- {1}'.format(str(mean1),str(std1),))
+    print('Mean ED charges for no-uf patients: {0} +/- {1}'.format(str(mean2),str(std2),))
+    print('Average charges ED p-value: {0}\n'.format(str(wald_test(mean1,std1,mean2,std2))))
+    print("\n")
+
+    uf = open('cleaned_data/ip_patients_cleaned_uf.csv','r')
+    mean1,std1,other1 = get_average_charges_ip(uf,1)
+    no_uf = open('cleaned_data/ip_patients_cleaned_no_uf.csv','r')
+    mean2,std2,other2 = get_average_charges_ip(no_uf,1)
+    print('Mean IP charges for uf patients: {0} +/- {1}'.format(str(mean1),str(std1),))
+    print('Mean IP charges for no-uf patients: {0} +/- {1}'.format(str(mean2),str(std2),))
+    print('Average charges IP p-value: {0}\n'.format(str(wald_test(mean1,std1,mean2,std2))))
+    
+    '''
+        Expected primary payer, uniform: (1) Medicare, (2)
+        Medicaid, (3) private including HMO, (4) self-pay, (5) no
+        charge, (6) other
+    '''
+    print("\n")
+    for code in [1, 2, 3, 4, 5, 6]:
+        uf = open('cleaned_data/core_patients_cleaned_uf.csv','r')
+        mean1,std1,other1 = get_total_payer1(uf,code,std=True)
+        no_uf = open('cleaned_data/core_patients_cleaned_no_uf.csv','r')
+        mean2,std2,other2 = get_total_payer1(no_uf,code,std=True)
+        print('Proportion uf patients with payer1 {0}: {1} +/- {2}'.format(str(code),str(mean1),str(std1),))
+        print('Proportion no-uf patients with payer1 {0}: {1} +/- {2}'.format(str(code),str(mean2),str(std2),))
+      
+        print('Proportion of patients with payer1 {0} p-value: {1}'.format(str(code),str(wald_test(mean1,std1,mean2,std2))))
+   
 
 if __name__ == "__main__":
     main()
