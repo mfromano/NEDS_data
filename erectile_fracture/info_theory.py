@@ -252,7 +252,7 @@ def main():
 	if not sys.argv[1]:
 		print('Please enter an argument')
 		sys.exit(0)
-	code1 = sys.argv[1]
+	code1 = str(sys.argv[1])
 	code2 = '95913'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
