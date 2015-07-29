@@ -163,7 +163,7 @@ def binary_arrays(fname, code1, code2, chronic=False):
 	py = py[:,np.newaxis]
 	wt = wt[:,np.newaxis]
 	pxpywt = np.concatenate((px,py,wt),axis=1)
-	# np.savetxt('cleaned_data/pxpywt.txt',pxpywt,fmt='%f')
+	# 
 	return pxpywt
 
 def dx_array(fname,code, chronic):
@@ -267,6 +267,8 @@ def main():
 	surrogate_stats = surrogate_mi(data_mat)
 	print('beginning bootstrap_stats')
 	bootstrap_stats = bootstrap_mi(data_mat)
+	np.savetxt('cleaned_data/{0}surrogate_stats.txt'.format(str(sys.argv[2]),),surrogate_stats,fmt='%f')
+	np.savetxt('cleaned_data/{0}bootstrap_stats.txt'.format(str(sys.argv[2]),),bootstrap_stats,fmt='%f')
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
 	print(wald_test(true_stat, np.nanstd(bootstrap_stats), np.nanmean(surrogate_stats), np.nanstd(surrogate_stats)))
