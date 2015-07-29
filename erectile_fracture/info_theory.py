@@ -167,7 +167,7 @@ def binary_arrays(fname, code1, code2, chronic=False):
 
 def dx_array(fname,code, chronic):
 	if chronic:
-		return hasforeach(fname,has_chronic_dx,code)
+		return hasforeach(fname,has_any_dx,code)
 	return hasforeach(fname,has_dx,code)
 
 def wt_array(fname):
@@ -197,6 +197,15 @@ def get_wt(line,code):
 		return 0.0
 	return wt
 
+def has_any_dx(line, code):
+	for dx in line[CHRON1_INDEX:DX15_INDEX]:
+		if re.match(code,dx):
+			return int(1)
+	for dx in line[DX1_INDEX:DX15_INDEX]:
+		if re.match(code,dx):
+			return int(1)
+	return int(0)
+
 def has_chronic_dx(line, code):
 	for dx in line[CHRON1_INDEX:DX15_INDEX]:
 		if re.match(code,dx):
@@ -208,6 +217,7 @@ def has_dx(line,code):
 	# if code in line[DX1_INDEX:DX15_INDEX]:
 	for dx in line[DX1_INDEX:DX15_INDEX]:
 		if re.match(code,dx):
+			print(dx)
 			return int(1)
 		'''
 		if re.match(code,dx) for dx in line[DX1_INDEX:DX15_INDEX]:
@@ -238,7 +248,7 @@ def main():
 	fname = 'cleaned_data/core_patients_cleaned.csv'
 	# code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
-	code1 = '606.*'
+	code1 = '60784'
 	code2 = '95913'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
