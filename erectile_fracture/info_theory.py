@@ -233,12 +233,12 @@ def filelength(fname):
 	return count
 
 def main():
-	fname = 'cleaned_data/core_male_cleaned.csv'
+	# fname = 'cleaned_data/core_male_cleaned.csv'
 	# print(filelength(fname))
-	# fname = 'cleaned_data/core_patients_cleaned.csv'
+	fname = 'cleaned_data/core_patients_cleaned.csv'
 	# code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
-	code1 = '4019'
+	code1 = '606.*'
 	code2 = '95913'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
