@@ -238,14 +238,14 @@ def main():
 	# fname = 'cleaned_data/core_patients_cleaned.csv'
 	# code1 = URETHRAL_INJURY_CODES[0]
 	PENILE_FRACTURE_CODE = '95913'
-	code1 = '60785'
+	code1 = '4019'
 	code2 = '95913'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
 	# 	print('Done loading file! Starting analysis.')
 	# except:
 	print('cannot load data, going to try generating...')
-	data_mat = binary_arrays(fname,code1,code2)
+	data_mat = binary_arrays(fname,code1,code2,1)
 	true_stat = mi(data_mat)
 	print(true_stat)
 	# print(leaders(DXLIST))
