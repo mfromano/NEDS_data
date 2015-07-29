@@ -17,6 +17,8 @@ data_type = get_data_type()
 DX1_INDEX = int(data_type.index('DX1'))
 DX15_INDEX = int(data_type.index('DX15'))
 PT_WT_CORE = int(data_type.index('DISCWT'))
+CHRON1_INDEX = int(data_type.index('CHRON1'))
+CHRON15_INDEX = int(data_type.index('CHRON15'))
 URETHRAL_INJURY_CODES = ('8670','8671')
 PEYRONIES = "60785"
 TOBACCO_USE_DISORDER = "3051"
@@ -149,10 +151,10 @@ def prob_joint(data_mat):
 	col3 = np.squeeze(data_mat[:,2])
 	return np.sum(np.multiply(np.multiply(col1,col2),col3))/float(np.sum(col3))
 
-def binary_arrays(fname, code1, code2):
-	px = dx_array(fname,code1)
+def binary_arrays(fname, code1, code2, chronic=False):
+	px = dx_array(fname,code1, chronic)
 	print('Done with px')
-	py = dx_array(fname,code2)
+	py = dx_array(fname,code2, chronic)
 	print('Done with py')
 	wt = wt_array(fname)
 	print('Done with wt')
@@ -163,7 +165,9 @@ def binary_arrays(fname, code1, code2):
 	# np.savetxt('cleaned_data/pxpywt.txt',pxpywt,fmt='%f')
 	return pxpywt
 
-def dx_array(fname,code):
+def dx_array(fname,code, chronic):
+	if chronic:
+		return hasforeach(fname,has_chronic_dx,code)
 	return hasforeach(fname,has_dx,code)
 
 def wt_array(fname):
@@ -193,6 +197,11 @@ def get_wt(line,code):
 		return 0.0
 	return wt
 
+def has_chronic_dx(line, code):
+	for dx in line[CHRON1_INDEX:DX15_INDEX]:
+		if re.match(code,dx):
+			return int(1)
+	return int(0)
 
 def has_dx(line,code):
 	
