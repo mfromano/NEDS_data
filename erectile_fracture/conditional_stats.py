@@ -21,9 +21,11 @@ Initialize global variables
 
 data_type = get_data_type()
 data_type_ip = get_data_type_ip_supplement()
+data_type_ed = get_data_type_ed_supplement()
 PAYER1_INDEX = int(data_type.index('PAY1'))
 KEY_INDEX = int(data_type.index('KEY_ED'))
 KEY_INDEX_IP = int(data_type_ip.index('KEY_ED'))
+KEY_INDEX_ED = int(data_type_ed.index('KEY_ED'))
 DISP_INDEX = int(data_type.index('DISP_ED'))
 age_index = int(data_type.index('AGE'))
 DQTR_index = int(data_type.index('DQTR'))

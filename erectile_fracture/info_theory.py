@@ -15,8 +15,19 @@ Example: my_data = genfromtxt('my_file.csv', delimiter=',')
 
 CORE_MALE_FILE_LENGTH = 13797512
 data_type = get_data_type()
+data_type_ip = get_data_type_ip()
+data_type_ed = get_data_type_ed()
+KEY_INDEX = int(data_type.index('KEY_ED'))
+KEY_INDEX_IP = int(data_type_ip.index('KEY_ED'))
+KEY_INDEX_ED = int(data_type_ed.index('KEY_ED'))
+
 DX1_INDEX = int(data_type.index('DX1'))
 DX15_INDEX = int(data_type.index('DX15'))
+PR_IP1_index = int(data_type_ip.index('PR_IP1'))
+PR_IP15_index = int(data_type_ip.index('PR_IP15'))
+PR_ED1_index = int(data_type_ed.index('PR_ED1'))
+PR_ED9_index = int(data_type_ed.index('PR_ED9'))
+age_index = int(data_type.index('AGE'))
 PT_WT_CORE = int(data_type.index('DISCWT'))
 CHRON1_INDEX = int(data_type.index('CHRON1'))
 CHRON15_INDEX = int(data_type.index('CHRON15'))
@@ -199,13 +210,30 @@ def get_wt(line,code):
 	return wt
 
 def has_any_dx(line, code):
-	for dx in line[CHRON1_INDEX:DX15_INDEX]:
-		if re.match(code,dx):
-			return int(1)
+	if int(line[age_index]) < 1:
+		return int(0)
+	
+
+
+	if not has_balls_pr(line):
+		return int(0)
+
+	for dx in line[CHRON1_INDEX:CHRON15_INDEX]:
+		if re.match('^6082[2-4]',dx):
+			return int(0)
+	for dx in line[DX1_INDEX:DX15_INDEX]:
+		if re.match('^6082[2-4]',dx):
+			return int(0)
+
 	for dx in line[DX1_INDEX:DX15_INDEX]:
 		if re.match(code,dx):
 			return int(1)
+	for dx in line[CHRON1_INDEX:CHRON15_INDEX]:
+		if re.match(code,dx):
+			return int(1)
 	return int(0)
+
+
 
 def has_chronic_dx(line, code):
 	for dx in line[CHRON1_INDEX:DX15_INDEX]:
@@ -218,7 +246,6 @@ def has_dx(line,code):
 	# if code in line[DX1_INDEX:DX15_INDEX]:
 	for dx in line[DX1_INDEX:DX15_INDEX]:
 		if re.match(code,dx):
-			print(dx)
 			return int(1)
 		'''
 		if re.match(code,dx) for dx in line[DX1_INDEX:DX15_INDEX]:
@@ -227,11 +254,59 @@ def has_dx(line,code):
 		'''
 	return int(0)
 
+def has_balls_pr(line):
+	key = line[KEY_INDEX]
+	edline = ed_by_key(key)
+	for dx in edline[PR_ED1_index:PR_ED9_index]:
+		if dx == '623' or dx == '625' or dx == '6352':
+			return True
+	ipline = ip_by_key(key)
+	for dx in epline[PR_IP1_index:PR_IP15_index]:
+		if dx == '623' or dx == '625' or dx == '6352':
+			return True
+	return False
+
+
 def leaders(xs, top=10):
     counts = defaultdict(int)
     for x in xs:
         counts[x] += 1
     return sorted(counts.items(), reverse=True, key=lambda tup: tup[1])[:top]
+
+def pt_weight(line,data_type=data_type):
+    key_index_core = int(data_type.index('DISCWT'))
+    if key_index_core is not '':
+        try:
+               return float(line[key_index_core])
+        except:
+            return 0.0
+    else:
+        return 0.0
+
+def ed_by_key(key):
+    with open('cleaned_data/ip_patients_cleaned.csv') as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if line[KEY_INDEX_ED] == key:
+                return line
+    return []
+
+def ip_by_key(key):
+    with open('cleaned_data/ip_patients_cleaned.csv') as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if line[KEY_INDEX_IP] == key:
+                return line
+    return []
+
+def core_by_key(key,data_type=data_type):
+    key_index_core = int(data_type.index('KEY_ED'))
+    with open('cleaned_data/core_patients_cleaned.csv') as inputfile:
+        reader = csv.reader(inputfile)
+        for line in reader:
+            if line[key_index_core] == key:
+                return line
+    return []
 
 def filelength(fname):
 	f = open(fname,"r")
@@ -252,8 +327,8 @@ def main():
 	if not sys.argv[1]:
 		print('Please enter an argument')
 		sys.exit(0)
-	code1 = str(sys.argv[1])
-	code2 = '95913'
+	code1 = '3051';
+	code2 = '^6082[01]'
 	# try:
 	# 	data_mat = np.loadtxt('cleaned_data/pxpywt.txt')
 	# 	print('Done loading file! Starting analysis.')
@@ -267,8 +342,8 @@ def main():
 	surrogate_stats = surrogate_mi(data_mat)
 	print('beginning bootstrap_stats')
 	bootstrap_stats = bootstrap_mi(data_mat)
-	np.savetxt('cleaned_data/{0}surrogate_stats.txt'.format(str(sys.argv[2]),),surrogate_stats,fmt='%f')
-	np.savetxt('cleaned_data/{0}bootstrap_stats.txt'.format(str(sys.argv[2]),),bootstrap_stats,fmt='%f')
+	np.savetxt('cleaned_data/{0}surrogate_stats.txt'.format(str(sys.argv[1]),),surrogate_stats,fmt='%f')
+	np.savetxt('cleaned_data/{0}bootstrap_stats.txt'.format(str(sys.argv[1]),),bootstrap_stats,fmt='%f')
 	# plt.hist(bootstrap_stats,50)
 	# plt.show()
 	print(wald_test(true_stat, np.nanstd(bootstrap_stats), np.nanmean(surrogate_stats), np.nanstd(surrogate_stats)))
