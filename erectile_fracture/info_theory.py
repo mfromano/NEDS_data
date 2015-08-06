@@ -15,8 +15,8 @@ Example: my_data = genfromtxt('my_file.csv', delimiter=',')
 
 CORE_MALE_FILE_LENGTH = 13797512
 data_type = get_data_type()
-data_type_ip = get_data_type_ip()
-data_type_ed = get_data_type_ed()
+data_type_ip = get_data_type_ip_supplement()
+data_type_ed = get_data_type_ed)_supplement()
 KEY_INDEX = int(data_type.index('KEY_ED'))
 KEY_INDEX_IP = int(data_type_ip.index('KEY_ED'))
 KEY_INDEX_ED = int(data_type_ed.index('KEY_ED'))
