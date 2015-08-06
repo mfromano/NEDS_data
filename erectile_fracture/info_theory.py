@@ -141,9 +141,9 @@ def resample_with_replacement(data_mat,max_int,size,surrogate=False):
 def prob_marginal(data_mat):
 	numer = np.sum(np.squeeze(data_mat[:,0]))
 	denom = np.sum(np.squeeze(data_mat[:,2]))
-	px = numer / denom
+	px = float(numer) / float(denom)
 	numer = np.sum(np.squeeze(data_mat[:,1]))
-	py = numer / denom
+	py = float(numer) / float(denom)
 	return px,py
 
 def prob_joint(data_mat):
@@ -199,7 +199,7 @@ def get_wt(line,code):
 	return wt
 
 def has_any_dx(line, code):
-	for dx in line[CHRON1_INDEX:DX15_INDEX]:
+	for dx in line[CHRON1_INDEX:CHRON15_INDEX]:
 		if re.match(code,dx):
 			return int(1)
 	for dx in line[DX1_INDEX:DX15_INDEX]:
