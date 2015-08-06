@@ -152,16 +152,16 @@ def resample_with_replacement(data_mat,max_int,size,surrogate=False):
 def prob_marginal(data_mat):
 	numer = np.sum(np.squeeze(data_mat[:,0]))
 	denom = np.sum(np.squeeze(data_mat[:,2]))
-	px = numer / denom
+	px = float(numer) / float(denom)
 	numer = np.sum(np.squeeze(data_mat[:,1]))
-	py = numer / denom
+	py = float(numer) / float(denom)
 	return px,py
 
 def prob_joint(data_mat):
 	col1 = np.squeeze(data_mat[:,0])
 	col2 = np.squeeze(data_mat[:,1])
 	col3 = np.squeeze(data_mat[:,2])
-	return np.sum(np.multiply(np.multiply(col1,col2),col3))/float(np.sum(col3))
+	return float(np.sum(np.multiply(np.multiply(col1,col2),col3)))/float(np.sum(col3))
 
 def binary_arrays(fname, code1, code2, chronic=False):
 	px = dx_array(fname,code1, chronic)
